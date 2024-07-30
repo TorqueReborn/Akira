@@ -37,7 +37,7 @@ class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatAct
         holder.episodePageTextView.text = page
         holder.episodePageTextView.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                AllAnimeParser().episodeDetails("ReooPAxPMsHM4KPMY", Constants.groupedEpisodes[position])
+                AllAnimeParser().episodeDetails(Constants.anime.id, Constants.groupedEpisodes[position])
                 withContext(Dispatchers.Main) {
                     recycler.adapter = EpisodeAdapter(activity)
                     recycler.layoutManager = LinearLayoutManager(recycler.context)
