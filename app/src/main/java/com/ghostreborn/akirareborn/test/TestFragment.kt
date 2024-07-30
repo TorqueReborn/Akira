@@ -1,4 +1,4 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.test
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.ghostreborn.akirareborn.R
 
 class TestFragment : Fragment() {
 

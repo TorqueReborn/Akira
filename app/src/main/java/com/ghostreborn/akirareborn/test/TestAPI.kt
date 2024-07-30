@@ -1,4 +1,4 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.test
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
