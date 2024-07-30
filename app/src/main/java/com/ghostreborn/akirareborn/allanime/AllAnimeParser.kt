@@ -1,8 +1,10 @@
 package com.ghostreborn.akirareborn.allanime
 
 import android.util.Log
+import androidx.core.text.HtmlCompat
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.model.Anime
+import com.ghostreborn.akirareborn.model.AnimeDetails
 import com.ghostreborn.akirareborn.model.Episode
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -33,6 +35,28 @@ class AllAnimeParser {
             val thumbnail = edge.getString("thumbnail")
             Constants.animeList.add(Anime(id, name, englishName, thumbnail, episodes))
         }
+    }
+
+    fun animeDetails(animeId: String) {
+        val show: JSONObject = JSONObject(AllAnimeNetwork().animeDetails(animeId).toString())
+            .getJSONObject("data")
+            .getJSONObject("show")
+        val name = show.getString("name")
+        val thumbnail = show.getString("thumbnail")
+        val description =
+            HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
+                .toString()
+        val banner = show.getString("banner")
+        var prequel = ""
+        var sequel = ""
+        val relatedShows = show.getJSONArray("relatedShows")
+        for (i in 0 until relatedShows.length()) {
+            val relatedShow = relatedShows.getJSONObject(i)
+            val relation = relatedShow.getString("relation")
+            if ("prequel" == relation) prequel = relatedShow.getString("showId")
+            if ("sequel" == relation) sequel = relatedShow.getString("showId")
+        }
+        Constants.animeDetails = AnimeDetails(name, thumbnail, description, banner, prequel, sequel)
     }
 
     fun episodes(id: String) {

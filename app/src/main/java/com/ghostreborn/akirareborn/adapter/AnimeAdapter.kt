@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.AnimeDetailsActivity
 import com.ghostreborn.akirareborn.Constants
-import com.ghostreborn.akirareborn.ui.EpisodeActivity
 import com.ghostreborn.akirareborn.R
 import com.squareup.picasso.Picasso
 
-class AnimeAdapter(private val context: Context):RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>(){
+class AnimeAdapter(private val context: Context) :
+    RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val animeImageView: ImageView = itemView.findViewById(R.id.animeImageView)
         val animeNameTextView: TextView = itemView.findViewById(R.id.anime_name_text_view)
@@ -34,7 +35,7 @@ class AnimeAdapter(private val context: Context):RecyclerView.Adapter<AnimeAdapt
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
             Constants.anime = anime
-            context.startActivity(Intent(context, EpisodeActivity::class.java))
+            context.startActivity(Intent(context, AnimeDetailsActivity::class.java))
         }
     }
 

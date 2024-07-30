@@ -29,7 +29,7 @@ class TestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.Main) {
-                testText.text = "Done"
+                testText.text = ""
             }
         }
     }

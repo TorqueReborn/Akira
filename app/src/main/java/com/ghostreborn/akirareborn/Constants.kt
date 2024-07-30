@@ -1,10 +1,12 @@
 package com.ghostreborn.akirareborn
 
 import com.ghostreborn.akirareborn.model.Anime
+import com.ghostreborn.akirareborn.model.AnimeDetails
 import com.ghostreborn.akirareborn.model.Episode
 
 object Constants {
     lateinit var anime: Anime
+    lateinit var animeDetails: AnimeDetails
     lateinit var episodeUrl: String
     lateinit var animeList: ArrayList<Anime>
     lateinit var parsedEpisodes: ArrayList<Episode>
