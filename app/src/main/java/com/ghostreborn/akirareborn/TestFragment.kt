@@ -27,7 +27,7 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val result = TestAPI().connectAllAnime()
+            val result = TestAPI().queryPopular()
             withContext(Dispatchers.Main) {
                 testText.text = result
             }
