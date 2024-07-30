@@ -5,10 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 
-class EpisodeAdapter() : RecyclerView.Adapter<EpisodeAdapter.AnimeViewHolder>() {
+class EpisodeAdapter(val episodeList: ArrayList<String>) :
+    RecyclerView.Adapter<EpisodeAdapter.AnimeViewHolder>() {
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeTitleTextView = itemView.findViewById<TextView>(R.id.episode_title_text_view)
     }
@@ -19,11 +19,11 @@ class EpisodeAdapter() : RecyclerView.Adapter<EpisodeAdapter.AnimeViewHolder>() 
     }
 
     override fun getItemCount(): Int {
-        return Constants.episodeList.size
+        return episodeList.size
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val episode = Constants.episodeList[position]
+        val episode = episodeList[position]
         holder.episodeTitleTextView.text = episode
     }
 
