@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             AllAnimeParser().queryPopular()
             withContext(Dispatchers.Main) {
-                homeRecycler.adapter = AnimeAdapter()
+                homeRecycler.adapter = AnimeAdapter(requireContext())
                 homeRecycler.layoutManager = GridLayoutManager(requireContext(), 3)
             }
         }
