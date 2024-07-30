@@ -41,9 +41,11 @@ class AnimeDetailsActivity : AppCompatActivity() {
                 }
                 if (Constants.animeDetails.sequel.isNotEmpty()) {
                     animeDetailsBinding.sequelButton.visibility = View.VISIBLE
-                    Constants.anime.id = Constants.animeDetails.sequel
-                    startActivity(Intent(baseContext, AnimeDetailsActivity::class.java))
-                    finish()
+                    animeDetailsBinding.sequelButton.setOnClickListener {
+                        Constants.anime.id = Constants.animeDetails.sequel
+                        startActivity(Intent(baseContext, AnimeDetailsActivity::class.java))
+                        finish()
+                    }
                 }
                 animeDetailsBinding.watchFab.setOnClickListener {
                     startActivity(Intent(baseContext, EpisodeActivity::class.java))
