@@ -2,6 +2,7 @@ package com.ghostreborn.akirareborn
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 
 class TestAPI {
 
@@ -35,6 +36,21 @@ class TestAPI {
         val query =
             "queryPopular(type:\$type,size:\$size,dateRange:\$dateRange,page:\$page,allowAdult:\$allowAdult,allowUnknown:\$allowUnknown){total,recommendations{anyCard{_id,name,englishName,thumbnail}}}"
         return connectAllAnime(variables, queryTypes, query)!!
+    }
+
+    fun scrapeQueryPopular(){
+        val recommendationsArray = JSONObject(queryPopular())
+            .getJSONObject("data")
+            .getJSONObject("queryPopular")
+            .getJSONArray("recommendations")
+        for (i in 0 until recommendationsArray.length()){
+            val recommendation = recommendationsArray.getJSONObject(i)
+                .getJSONObject("anyCard")
+            val id = recommendation.getString("_id")
+            val name = recommendation.getString("name")
+            val englishName = recommendation.getString("englishName")
+            val thumbnail = recommendation.getString("thumbnail")
+        }
     }
 
 }
