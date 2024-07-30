@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
-import com.ghostreborn.akirareborn.EpisodeActivity
+import com.ghostreborn.akirareborn.ui.EpisodeActivity
 import com.ghostreborn.akirareborn.R
 import com.squareup.picasso.Picasso
 

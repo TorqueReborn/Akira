@@ -1,9 +1,10 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.EpisodeAdapter
 import com.ghostreborn.akirareborn.adapter.EpisodeGroupAdapter
 import com.ghostreborn.akirareborn.allanime.AllAnimeParser
