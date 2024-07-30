@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.ghostreborn.akira"
-    compileSdk = 34
+    namespace = "com.ghostreborn.akirareborn"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ghostreborn.akira"
+        applicationId = "com.ghostreborn.akirareborn"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
