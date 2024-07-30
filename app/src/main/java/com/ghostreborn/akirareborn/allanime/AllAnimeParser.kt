@@ -1,10 +1,12 @@
 package com.ghostreborn.akirareborn.allanime
 
+import com.ghostreborn.akirareborn.model.Anime
 import org.json.JSONObject
 
 class AllAnimeParser {
 
-    fun scrapeQueryPopular(){
+    fun scrapeQueryPopular():ArrayList<Anime>{
+        val popularAnime = ArrayList<Anime>()
         val recommendationsArray = JSONObject(AllAnimeNetwork().queryPopular())
             .getJSONObject("data")
             .getJSONObject("queryPopular")
@@ -16,7 +18,9 @@ class AllAnimeParser {
             val name = recommendation.getString("name")
             val englishName = recommendation.getString("englishName")
             val thumbnail = recommendation.getString("thumbnail")
+            popularAnime.add(Anime(id, name, englishName, thumbnail))
         }
+        return popularAnime
     }
 
 }
