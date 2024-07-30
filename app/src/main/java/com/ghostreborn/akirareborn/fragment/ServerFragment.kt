@@ -32,7 +32,7 @@ class ServerFragment(val episodeNumber: String) : DialogFragment() {
         CoroutineScope(Dispatchers.IO).launch {
             AllAnimeParser().getSourceUrls(Constants.animeID, episodeNumber)
             withContext(Dispatchers.Main) {
-                fragmentRecyclerView.adapter = ServerAdapter()
+                fragmentRecyclerView.adapter = ServerAdapter(requireContext())
             }
         }
 

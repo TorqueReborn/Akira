@@ -104,6 +104,9 @@ class AllAnimeParser {
         for (source in sources) {
             try {
                 val rawJSON: String = getJSON(source)
+                if (rawJSON == "error"){
+                    continue
+                }
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
                 for (j in 0 until linksArray.length()) {
                     Constants.episodeUrls.add(linksArray.getJSONObject(j).getString("link"))

@@ -18,6 +18,9 @@
             android:name=".ui.EpisodeActivity"
             android:exported="false" />
         <activity
+            android:name=".PlayEpisodeActivity"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
