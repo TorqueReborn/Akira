@@ -2,6 +2,7 @@ package com.ghostreborn.akirareborn.allanime
 
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.model.Anime
+import com.ghostreborn.akirareborn.model.Episode
 import org.json.JSONObject
 
 class AllAnimeParser {
@@ -44,6 +45,26 @@ class AllAnimeParser {
             Constants.groupedEpisodes.add(ArrayList(episodeList.subList(startIndex, endIndex)))
             startIndex = endIndex
         }
+    }
+
+    private fun episodeDetail(id:String, episode:String):Episode{
+        val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode).toString())
+            .getJSONObject("data")
+            .getJSONObject("episode")
+        val episodeNumber = episodeDetails.getString("episodeString")
+        val episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
+        val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com"+
+            episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
+        return Episode(episodeNumber, episodeName, episodeThumbnail)
+    }
+
+    fun episodeDetails(id:String, episodes:ArrayList<String>):ArrayList<Episode>{
+        val episodeList = ArrayList<Episode>()
+        for (episode in episodes){
+            val episodeDetail = episodeDetail(id, episode)
+            episodeList.add(episodeDetail)
+        }
+        return episodeList
     }
 
 }

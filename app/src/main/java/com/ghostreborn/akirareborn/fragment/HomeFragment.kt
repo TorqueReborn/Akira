@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.AnimeAdapter
-import com.ghostreborn.akirareborn.allanime.AllAnimeParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +30,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().queryPopular()
             withContext(Dispatchers.Main) {
                 homeRecycler.adapter = AnimeAdapter(requireContext())
                 homeRecycler.layoutManager = GridLayoutManager(requireContext(), 3)
