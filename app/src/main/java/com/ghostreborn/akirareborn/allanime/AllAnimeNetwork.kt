@@ -3,6 +3,7 @@ package com.ghostreborn.akirareborn.allanime
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
+
 class AllAnimeNetwork {
 
     private fun connectAllAnime(
@@ -12,7 +13,7 @@ class AllAnimeNetwork {
     ): String? {
         val client = OkHttpClient()
         val url =
-            "https://api.allanime.day/api?variables={" + variables + "}&query=query(" + queryTypes + "){" + query + "}"
+            "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val request = Request.Builder()
             .url(url)
             .header("Referer", "https://allanime.to")
@@ -27,14 +28,22 @@ class AllAnimeNetwork {
         return responseBody
     }
 
-    fun queryPopular():String{
+    fun searchAnime(anime:String): String? {
         val variables =
-            "\"size\":30,\"type\":\"anime\",\"dateRange\":1,\"page\":1,\"allowAdult\":true,\"allowUnknown\":true"
+            "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
         val queryTypes =
-            "\$size:Int!,\$type:VaildPopularTypeEnumType!,\$dateRange:Int!,\$page:Int!,\$allowAdult:Boolean!,\$allowUnknown:Boolean!"
+            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
         val query =
-            "queryPopular(type:\$type,size:\$size,dateRange:\$dateRange,page:\$page,allowAdult:\$allowAdult,allowUnknown:\$allowUnknown){total,recommendations{anyCard{_id,name,englishName,thumbnail}}}"
-        return connectAllAnime(variables, queryTypes, query)!!
+            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,englishName,thumbnail}}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
+    fun episodes(id: String): String? {
+        val variables = "\"showId\":\"$id\""
+        val queryTypes = "\$showId:String!"
+        val query =
+            "show(_id:\$showId){availableEpisodesDetail}"
+        return connectAllAnime(variables, queryTypes, query)
     }
 
     fun episodeDetails(id: String, episode: String): String? {

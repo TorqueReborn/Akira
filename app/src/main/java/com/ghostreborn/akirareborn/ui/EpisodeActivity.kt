@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.EpisodeAdapter
 import com.ghostreborn.akirareborn.adapter.EpisodeGroupAdapter
@@ -22,7 +23,7 @@ class EpisodeActivity : AppCompatActivity() {
         val episodeGroupRecycler: RecyclerView = findViewById(R.id.episode_group_recycler_view)
 
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().episodes("ReooPAxPMsHM4KPMY")
+            AllAnimeParser().episodes(Constants.animeID)
             withContext(Dispatchers.Main) {
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)

@@ -31,7 +31,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().queryPopular()
+            AllAnimeParser().searchAnime("")
             withContext(Dispatchers.Main) {
                 homeRecycler.adapter = AnimeAdapter(requireContext())
                 homeRecycler.layoutManager = GridLayoutManager(requireContext(), 3)

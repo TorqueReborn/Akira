@@ -13,19 +13,18 @@ import java.io.IOException
 
 class AllAnimeParser {
 
-    fun queryPopular() {
+    fun searchAnime(anime:String) {
         Constants.animeList = ArrayList()
-        val recommendationsArray = JSONObject(AllAnimeNetwork().queryPopular().toString())
+        val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
             .getJSONObject("data")
-            .getJSONObject("queryPopular")
-            .getJSONArray("recommendations")
-        for (i in 0 until recommendationsArray.length()) {
-            val recommendation = recommendationsArray.getJSONObject(i)
-                .getJSONObject("anyCard")
-            val id = recommendation.getString("_id")
-            val name = recommendation.getString("name")
-            val englishName = recommendation.getString("englishName")
-            val thumbnail = recommendation.getString("thumbnail")
+            .getJSONObject("shows")
+            .getJSONArray("edges")
+        for (i in 0 until edgesArray.length()) {
+            val edge = edgesArray.getJSONObject(i)
+            val id = edge.getString("_id")
+            val name = edge.getString("name")
+            val englishName = edge.getString("englishName")
+            val thumbnail = edge.getString("thumbnail")
             Constants.animeList.add(Anime(id, name, englishName, thumbnail))
         }
     }

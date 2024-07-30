@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
-import com.ghostreborn.akirareborn.allanime.AllAnimeParser
+import com.ghostreborn.akirareborn.allanime.AllAnimeNetwork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +29,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().getSourceUrls("ReooPAxPMsHM4KPMY", "1")
+            val test = AllAnimeNetwork().searchAnime("")
             withContext(Dispatchers.Main) {
-                testText.text = Constants.episodeUrls[0]
+                testText.text = test
             }
         }
     }
