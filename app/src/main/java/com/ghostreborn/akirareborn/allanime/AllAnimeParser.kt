@@ -1,5 +1,6 @@
 package com.ghostreborn.akirareborn.allanime
 
+import android.util.Log
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.Episode
@@ -50,10 +51,14 @@ class AllAnimeParser {
 
     private fun episodeDetail(id: String, episode: String): Episode {
         val rawJSON = AllAnimeNetwork().episodeDetails(id, episode).toString()
+        Log.e("TAG", rawJSON)
         val episodeDetails = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("episode")
         val episodeNumber = episodeDetails.getString("episodeString")
+        if(episodeDetails.isNull("episodeInfo")){
+            return Episode(episodeNumber, "Episode ${episodeNumber}", Constants.animeThumbnail)
+        }
         val episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
         val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
                 episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
