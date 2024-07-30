@@ -27,4 +27,10 @@ class EpisodeAdapter(val episodeList: ArrayList<String>) :
         holder.episodeTitleTextView.text = episode
     }
 
+    fun updateList(newList: ArrayList<String>) {
+        episodeList.clear()
+        episodeList.addAll(newList)
+        notifyDataSetChanged()
+    }
+
 }
