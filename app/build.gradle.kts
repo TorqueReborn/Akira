@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.picasso)
     implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
