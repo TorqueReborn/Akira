@@ -1,7 +1,5 @@
 package com.ghostreborn.akirareborn
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
@@ -16,9 +14,9 @@ class MainActivity : AppCompatActivity() {
         loginAnilist()
     }
 
-    fun loginAnilist(){
-        Constants.akiraSharedPreferences = getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
-        startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+    fun loginAnilist() {
+        Constants.akiraSharedPreferences =
+            getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
     }
 
 }
