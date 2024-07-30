@@ -23,9 +23,9 @@ class EpisodeActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             AllAnimeParser().episodes("ReooPAxPMsHM4KPMY")
             withContext(Dispatchers.Main) {
-                episodeRecycler.adapter = EpisodeAdapter()
+                episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)
-                episodeGroupRecycler.adapter = EpisodeGroupAdapter(episodeRecycler)
+                episodeGroupRecycler.adapter = EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity)
                 episodeGroupRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity, LinearLayoutManager.HORIZONTAL, false)
             }
         }

@@ -56,7 +56,6 @@ class AllAnimeParser {
 
     private fun episodeDetail(id: String, episode: String): Episode {
         val rawJSON = AllAnimeNetwork().episodeDetails(id, episode).toString()
-        Log.e("TAG", rawJSON)
         val episodeDetails = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("episode")

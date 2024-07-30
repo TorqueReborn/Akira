@@ -20,7 +20,7 @@ class ServerAdapter() :
     }
 
     override fun getItemCount(): Int {
-        return Constants.parsedEpisodes.size
+        return Constants.episodeUrls.size
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {

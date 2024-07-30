@@ -3,6 +3,7 @@ package com.ghostreborn.akirareborn.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
@@ -14,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EpisodeGroupAdapter(val recycler: RecyclerView) :
+class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatActivity) :
     RecyclerView.Adapter<EpisodeGroupAdapter.AnimeViewHolder>() {
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodePageTextView =
@@ -38,7 +39,7 @@ class EpisodeGroupAdapter(val recycler: RecyclerView) :
             CoroutineScope(Dispatchers.IO).launch {
                 AllAnimeParser().episodeDetails("ReooPAxPMsHM4KPMY", Constants.groupedEpisodes[position])
                 withContext(Dispatchers.Main) {
-                    recycler.adapter = EpisodeAdapter()
+                    recycler.adapter = EpisodeAdapter(activity)
                     recycler.layoutManager = LinearLayoutManager(recycler.context)
                 }
             }
