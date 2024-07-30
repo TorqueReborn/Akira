@@ -9,4 +9,5 @@ object Constants {
     lateinit var animeList: ArrayList<Anime>
     lateinit var parsedEpisodes: ArrayList<Episode>
     lateinit var groupedEpisodes: ArrayList<ArrayList<String>>
+    lateinit var episodeUrls: ArrayList<String>
 }
