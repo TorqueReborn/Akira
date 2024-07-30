@@ -27,8 +27,15 @@ class EpisodeActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)
-                episodeGroupRecycler.adapter = EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity)
-                episodeGroupRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity, LinearLayoutManager.HORIZONTAL, false)
+                if (Constants.groupedEpisodes.size > 1) {
+                    episodeGroupRecycler.adapter =
+                        EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity)
+                    episodeGroupRecycler.layoutManager = LinearLayoutManager(
+                        this@EpisodeActivity,
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                }
             }
         }
     }

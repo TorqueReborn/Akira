@@ -92,7 +92,10 @@ class AllAnimeParser {
         if (episodeDetails.isNull("episodeInfo")) {
             return Episode(episodeNumber, "Episode ${episodeNumber}", Constants.anime.thumbnail)
         }
-        val episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
+        var episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
+        if (episodeName=="null") {
+            episodeName = "Episode ${episodeNumber}"
+        }
         val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
                 episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
         return Episode(episodeNumber, episodeName, episodeThumbnail)

@@ -1,12 +1,12 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.allanime.AllAnimeParser
 import com.ghostreborn.akirareborn.databinding.ActivityAnimeDetailsBinding
-import com.ghostreborn.akirareborn.ui.EpisodeActivity
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

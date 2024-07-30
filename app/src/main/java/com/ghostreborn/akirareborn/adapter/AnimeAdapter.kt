@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akirareborn.AnimeDetailsActivity
+import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.squareup.picasso.Picasso
