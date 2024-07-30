@@ -23,7 +23,7 @@ class EpisodeActivity : AppCompatActivity() {
         val episodeGroupRecycler: RecyclerView = findViewById(R.id.episode_group_recycler_view)
 
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().episodes(Constants.animeID)
+            AllAnimeParser().episodes(Constants.anime.id)
             withContext(Dispatchers.Main) {
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)

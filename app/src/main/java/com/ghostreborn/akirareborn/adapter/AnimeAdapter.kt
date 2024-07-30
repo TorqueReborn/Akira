@@ -33,8 +33,7 @@ class AnimeAdapter(private val context: Context):RecyclerView.Adapter<AnimeAdapt
         holder.animeNameTextView.text = anime.name
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
-            Constants.animeID = anime.id
-            Constants.animeThumbnail = anime.thumbnail
+            Constants.anime = anime
             context.startActivity(Intent(context, EpisodeActivity::class.java))
         }
     }

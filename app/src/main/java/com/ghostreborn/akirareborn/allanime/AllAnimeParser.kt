@@ -13,7 +13,7 @@ import java.io.IOException
 
 class AllAnimeParser {
 
-    fun searchAnime(anime:String) {
+    fun searchAnime(anime: String) {
         Constants.animeList = ArrayList()
         val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
             .getJSONObject("data")
@@ -21,11 +21,17 @@ class AllAnimeParser {
             .getJSONArray("edges")
         for (i in 0 until edgesArray.length()) {
             val edge = edgesArray.getJSONObject(i)
+            val availableEpisodesArray = edge.getJSONObject("availableEpisodesDetail")
+                .getJSONArray("sub")
+            val episodes: ArrayList<String> = ArrayList()
+            for (j in availableEpisodesArray.length() - 1 downTo 0) {
+                episodes.add(availableEpisodesArray.getString(j))
+            }
             val id = edge.getString("_id")
             val name = edge.getString("name")
             val englishName = edge.getString("englishName")
             val thumbnail = edge.getString("thumbnail")
-            Constants.animeList.add(Anime(id, name, englishName, thumbnail))
+            Constants.animeList.add(Anime(id, name, englishName, thumbnail, episodes))
         }
     }
 
@@ -60,7 +66,7 @@ class AllAnimeParser {
             .getJSONObject("episode")
         val episodeNumber = episodeDetails.getString("episodeString")
         if (episodeDetails.isNull("episodeInfo")) {
-            return Episode(episodeNumber, "Episode ${episodeNumber}", Constants.animeThumbnail)
+            return Episode(episodeNumber, "Episode ${episodeNumber}", Constants.anime.thumbnail)
         }
         val episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
         val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
@@ -103,7 +109,7 @@ class AllAnimeParser {
         for (source in sources) {
             try {
                 val rawJSON: String = getJSON(source)
-                if (rawJSON == "error"){
+                if (rawJSON == "error") {
                     continue
                 }
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
