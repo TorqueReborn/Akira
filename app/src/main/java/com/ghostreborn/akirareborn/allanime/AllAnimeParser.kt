@@ -34,10 +34,10 @@ class AllAnimeParser {
         for (i in episodesArray.length() - 1 downTo 0) {
             episodeList.add(episodesArray.getString(i))
         }
-        groupEpisodes(episodeList)
+        groupEpisodes(id, episodeList)
     }
 
-    private fun groupEpisodes(episodeList: ArrayList<String>) {
+    private fun groupEpisodes(id: String, episodeList: ArrayList<String>) {
         Constants.groupedEpisodes = ArrayList()
         var startIndex = 0
         while (startIndex < episodeList.size) {
@@ -45,26 +45,27 @@ class AllAnimeParser {
             Constants.groupedEpisodes.add(ArrayList(episodeList.subList(startIndex, endIndex)))
             startIndex = endIndex
         }
+        episodeDetails(id, Constants.groupedEpisodes[0])
     }
 
-    private fun episodeDetail(id:String, episode:String):Episode{
-        val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode).toString())
+    private fun episodeDetail(id: String, episode: String): Episode {
+        val rawJSON = AllAnimeNetwork().episodeDetails(id, episode).toString()
+        val episodeDetails = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("episode")
         val episodeNumber = episodeDetails.getString("episodeString")
         val episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
-        val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com"+
-            episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
+        val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
+                episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
         return Episode(episodeNumber, episodeName, episodeThumbnail)
     }
 
-    fun episodeDetails(id:String, episodes:ArrayList<String>):ArrayList<Episode>{
-        val episodeList = ArrayList<Episode>()
-        for (episode in episodes){
+    fun episodeDetails(id: String, episodes: ArrayList<String>) {
+        Constants.parsedEpisodes = ArrayList()
+        for (episode in episodes) {
             val episodeDetail = episodeDetail(id, episode)
-            episodeList.add(episodeDetail)
+            Constants.parsedEpisodes.add(episodeDetail)
         }
-        return episodeList
     }
 
 }

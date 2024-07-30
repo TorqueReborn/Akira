@@ -7,7 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.allanime.AllAnimeParser
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EpisodeGroupAdapter(val recycler: RecyclerView) :
     RecyclerView.Adapter<EpisodeGroupAdapter.AnimeViewHolder>() {
@@ -30,8 +35,13 @@ class EpisodeGroupAdapter(val recycler: RecyclerView) :
         val page = "${position + 1}"
         holder.episodePageTextView.text = page
         holder.episodePageTextView.setOnClickListener {
-            recycler.adapter = EpisodeAdapter(Constants.groupedEpisodes[position])
-            recycler.layoutManager = LinearLayoutManager(recycler.context)
+            CoroutineScope(Dispatchers.IO).launch {
+                AllAnimeParser().episodeDetails("ReooPAxPMsHM4KPMY", Constants.groupedEpisodes[position])
+                withContext(Dispatchers.Main) {
+                    recycler.adapter = EpisodeAdapter()
+                    recycler.layoutManager = LinearLayoutManager(recycler.context)
+                }
+            }
         }
     }
 
