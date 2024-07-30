@@ -6,7 +6,7 @@ import org.json.JSONObject
 
 class AllAnimeParser {
 
-    fun scrapeQueryPopular(){
+    fun queryPopular(){
         Constants.animeList = ArrayList()
         val recommendationsArray = JSONObject(AllAnimeNetwork().queryPopular())
             .getJSONObject("data")
