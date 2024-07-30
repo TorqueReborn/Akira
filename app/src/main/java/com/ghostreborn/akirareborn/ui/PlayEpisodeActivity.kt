@@ -1,4 +1,4 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.ui
 
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -10,6 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.R
 
 
 class PlayEpisodeActivity : AppCompatActivity() {

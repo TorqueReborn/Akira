@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
-import com.ghostreborn.akirareborn.PlayEpisodeActivity
+import com.ghostreborn.akirareborn.ui.PlayEpisodeActivity
 import com.ghostreborn.akirareborn.R
 
 class ServerAdapter(val context: Context) :

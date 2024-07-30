@@ -18,7 +18,7 @@
             android:name=".ui.EpisodeActivity"
             android:exported="false" />
         <activity
-            android:name=".PlayEpisodeActivity"
+            android:name=".ui.PlayEpisodeActivity"
             android:exported="false"/>
         <activity
             android:name=".MainActivity"
