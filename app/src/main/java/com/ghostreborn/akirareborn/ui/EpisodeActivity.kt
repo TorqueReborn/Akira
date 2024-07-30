@@ -1,6 +1,7 @@
 package com.ghostreborn.akirareborn.ui
 
 import android.os.Bundle
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,15 +22,17 @@ class EpisodeActivity : AppCompatActivity() {
 
         val episodeRecycler: RecyclerView = findViewById(R.id.episode_recycler_view)
         val episodeGroupRecycler: RecyclerView = findViewById(R.id.episode_group_recycler_view)
+        val episodeProgressBar: ProgressBar = findViewById(R.id.episode_progress_bar)
 
         CoroutineScope(Dispatchers.IO).launch {
             AllAnimeParser().episodes(Constants.anime.id)
             withContext(Dispatchers.Main) {
+                episodeProgressBar.visibility = ProgressBar.GONE
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)
                 if (Constants.groupedEpisodes.size > 1) {
                     episodeGroupRecycler.adapter =
-                        EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity)
+                        EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity, episodeProgressBar)
                     episodeGroupRecycler.layoutManager = LinearLayoutManager(
                         this@EpisodeActivity,
                         LinearLayoutManager.HORIZONTAL,

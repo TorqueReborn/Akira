@@ -3,6 +3,7 @@ package com.ghostreborn.akirareborn.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatActivity) :
+class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatActivity, val progressBar: ProgressBar) :
     RecyclerView.Adapter<EpisodeGroupAdapter.AnimeViewHolder>() {
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodePageTextView =
@@ -36,9 +37,11 @@ class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatAct
         val page = "${position + 1}"
         holder.episodePageTextView.text = page
         holder.episodePageTextView.setOnClickListener {
+            progressBar.visibility = ProgressBar.VISIBLE
             CoroutineScope(Dispatchers.IO).launch {
                 AllAnimeParser().episodeDetails(Constants.anime.id, Constants.groupedEpisodes[position])
                 withContext(Dispatchers.Main) {
+                    progressBar.visibility = ProgressBar.GONE
                     recycler.adapter = EpisodeAdapter(activity)
                     recycler.layoutManager = LinearLayoutManager(recycler.context)
                 }
