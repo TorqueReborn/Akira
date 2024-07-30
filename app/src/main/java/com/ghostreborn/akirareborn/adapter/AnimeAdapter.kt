@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
+import com.squareup.picasso.Picasso
 
 class AnimeAdapter():RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>(){
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,6 +28,7 @@ class AnimeAdapter():RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>(){
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = Constants.animeList[position]
         holder.animeNameTextView.text = anime.name
+        Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
     }
 
 }
