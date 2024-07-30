@@ -6,11 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/anime_search_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:queryHint="@string/search_anime_here"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_anime_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/anime_search_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
