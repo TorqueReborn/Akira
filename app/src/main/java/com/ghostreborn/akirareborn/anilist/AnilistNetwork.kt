@@ -33,6 +33,9 @@ class AnilistNetwork {
                 "        id" +
                 "        media{" +
                 "          idMal" +
+                "          title{" +
+                "            native" +
+                "          }" +
                 "        }" +
                 "        progress" +
                 "      }" +
