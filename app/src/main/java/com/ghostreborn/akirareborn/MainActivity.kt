@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.Constants.preferences
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
+import com.ghostreborn.akirareborn.fragment.AllAnimeFragment
 import com.ghostreborn.akirareborn.fragment.MainFragment
-import com.ghostreborn.akirareborn.test.TestFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         if (uri != null) {
             val code = uri.getQueryParameter("code")
             CoroutineScope(Dispatchers.IO).launch {
-                AnilistUtils().getToken(code!!)
+                AnilistUtils().getToken(code!!, baseContext)
             }
         }
     }
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     private fun replaceFragment() {
         if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, TestFragment())
+                .replace(R.id.main_fragment_layout, AllAnimeFragment())
                 .commit()
         } else {
             supportFragmentManager.beginTransaction()
