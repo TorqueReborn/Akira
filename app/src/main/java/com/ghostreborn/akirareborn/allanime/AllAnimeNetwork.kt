@@ -77,4 +77,14 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
+    fun allAnimeIdWithMalId(anime:String): String? {
+        val variables =
+            "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
+        val queryTypes =
+            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query =
+            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,malId}}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
 }
