@@ -36,11 +36,13 @@ class AnilistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
-            AnilistParser().getAnimeList("ANIME", "CURRENT")
-            withContext(Dispatchers.Main) {
-                anilistRecyclerView.adapter = AnilistAdapter(requireContext())
-                anilistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+            CoroutineScope(Dispatchers.IO).launch {
+                AnilistParser().getAnimeList("ANIME", "CURRENT")
+                withContext(Dispatchers.Main) {
+                    anilistRecyclerView.adapter = AnilistAdapter(requireContext())
+                    anilistRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                }
             }
         }
     }

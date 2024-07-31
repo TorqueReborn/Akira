@@ -34,6 +34,8 @@ class AnilistAdapter(private val context: Context) :
         holder.animeNameTextView.text = anime.title
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
+            Constants.anilistAnime = anime
+            Constants.isAnilist = true
             context.startActivity(Intent(context, AnimeDetailsActivity::class.java))
         }
     }

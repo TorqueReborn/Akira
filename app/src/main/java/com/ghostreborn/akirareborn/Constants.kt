@@ -32,4 +32,7 @@ object Constants {
     lateinit var anilistUserID: String
 
     lateinit var anilistAnimeList: ArrayList<Anilist>
+    lateinit var anilistAnime: Anilist
+    lateinit var allAnimeID: String
+    var isAnilist: Boolean = false
 }

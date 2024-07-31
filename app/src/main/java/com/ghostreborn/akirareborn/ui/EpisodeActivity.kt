@@ -25,7 +25,7 @@ class EpisodeActivity : AppCompatActivity() {
         val episodeProgressBar: ProgressBar = findViewById(R.id.episode_progress_bar)
 
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().episodes(Constants.anime.id)
+            AllAnimeParser().episodes(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 episodeProgressBar.visibility = ProgressBar.GONE
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
