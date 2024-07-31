@@ -3,9 +3,9 @@ package com.ghostreborn.akirareborn
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
-import com.ghostreborn.akirareborn.adapter.MainViewPagerAdapter
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
+import com.ghostreborn.akirareborn.fragment.HomeFragment
+import com.ghostreborn.akirareborn.fragment.MainFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,13 +32,16 @@ class MainActivity : AppCompatActivity() {
 
         setData()
         getToken()
-        setViewPager()
-    }
 
-    private fun setViewPager() {
-        val viewPager: ViewPager2 = findViewById(R.id.main_view_pager)
-        viewPager.adapter = MainViewPagerAdapter(supportFragmentManager, lifecycle)
-        viewPager.currentItem = 1
+        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, HomeFragment())
+                .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, MainFragment())
+                .commit()
+        }
     }
 
     private fun setData() {
