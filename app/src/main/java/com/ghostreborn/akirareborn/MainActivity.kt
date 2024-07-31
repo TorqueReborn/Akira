@@ -2,15 +2,10 @@ package com.ghostreborn.akirareborn
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import com.ghostreborn.akirareborn.adapter.MainViewPagerAdapter
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
-import com.ghostreborn.akirareborn.fragment.AnilistFragment
-import com.ghostreborn.akirareborn.fragment.HomeFragment
-import com.ghostreborn.akirareborn.test.TestFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,34 +19,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setBottomNavigation()
         setData()
         getToken()
+        setViewPager()
     }
 
-    private fun setBottomNavigation(){
-        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_layout, HomeFragment()).commit()
-        bottomNavigationView.selectedItemId = R.id.nav_anime
-        bottomNavigationView.setOnItemSelectedListener { item: MenuItem ->
-            val selectedFragment: Fragment
-            val id = item.itemId
-            selectedFragment = when (id) {
-                R.id.nav_anime -> {
-                    HomeFragment()
-                }
-                R.id.nav_user -> {
-                    AnilistFragment()
-                }
-                else -> {
-                    TestFragment()
-                }
-            }
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, selectedFragment).commit()
-            true
-        }
+    private fun setViewPager() {
+        val viewPager: ViewPager2 = findViewById(R.id.main_view_pager)
+        viewPager.adapter = MainViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.currentItem = 1
     }
 
     private fun setData() {
@@ -61,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             Constants.akiraSharedPreferences.getString(Constants.AKIRA_TOKEN, "")!!
         Constants.anilistUserID =
             Constants.akiraSharedPreferences.getString(Constants.AKIRA_USER_ID, "")!!
-        Log.e("TAG", Constants.anilistUserID)
     }
 
     private fun getToken() {
