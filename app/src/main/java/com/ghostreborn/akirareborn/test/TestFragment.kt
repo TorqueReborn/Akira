@@ -29,8 +29,8 @@ class TestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
             val url =
-                "https://api.allanime.day/api?variables={%22pageSearch%22:{%22type%22:%22all%22,%22pageId%22:%2266a5aa26cee2deeaa733520e%22,%22pageType%22:%22ep_cp%22,%22allowSameShow%22:true,%22allowAdult%22:false,%22allowUnknown%22:false}}&extensions={%22persistedQuery%22:{%22version%22:1,%22sha256Hash%22:%2245167ede14941284b6ffe7c1b8dd81f56a197f600e48c2c92e256c489f1563d5%22}}"
-            val test = TestAPI().connectAllAnime(url)
+                "https://allanime.day/apivtwo/vidcdn.json?id=7d2473746a243c246e727276753c2929636b6472676d73287674692975727463676b6f686128766e76396f623b4b6c4f354952573420726f726a633b4968632d566f6365632d43766f756962632d3737373420727f76637573643b555344242a2475727463676b63744f62243c24706f62636975727463676b6f69242a2462677263243c24343634322b36312b35375237353c37373c3636283636365c247b&referer="
+            val test = TestAPI().getJSON(url)
             withContext(Dispatchers.Main) {
                 testText.text = test
             }
