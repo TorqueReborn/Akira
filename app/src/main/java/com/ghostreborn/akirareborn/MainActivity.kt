@@ -21,6 +21,11 @@ class MainActivity : AppCompatActivity() {
     // TODO get anilist locally ie save it in database
     // TODO if saved in database, it is easy to call for non anilist checking
     // TODO show setting screen to change sub or dub
+
+    // TODO IDEA - Login with Anilist upon app opening
+    // TODO store list of entries in local database
+    // TODO use the mediaListEntryID to save progress to cloud
+    // TODO thus Anilist API is not spammed with requests
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
