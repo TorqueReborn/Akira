@@ -1,8 +1,8 @@
 package com.ghostreborn.akirareborn.test
 
-import android.util.Log
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.allanime.AllAnimeParser
+import com.ghostreborn.akirareborn.model.Anilist
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -50,6 +50,7 @@ class TestAPI {
 
     fun getAnilist(): String {
         val rawJSON = getAnimeList()
+        Constants.anilistTest = ArrayList()
         val entries = JSONObject(rawJSON.toString())
             .getJSONObject("data")
             .getJSONObject("MediaListCollection")
@@ -61,12 +62,9 @@ class TestAPI {
             val id = entry.getString("id")
             val malId = entry.getJSONObject("media").getString("idMal")
             val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
-            val progress = entry.getInt("progress")
+            val progress = entry.getString("progress")
             val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
-            Log.e(
-                "TAG",
-                "ID: $id, allAnimeId: $allAnimeId,MAL ID: $malId, Title: $title, Progress: $progress"
-            )
+            Constants.anilistTest.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         return entries.toString()
     }

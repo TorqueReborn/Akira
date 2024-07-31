@@ -33,9 +33,9 @@ class TestFragment : Fragment() {
                 Constants.preferences.getString(Constants.AKIRA_USER_ID, "").toString()
             Constants.anilistToken =
                 Constants.preferences.getString(Constants.AKIRA_TOKEN, "").toString()
-            val test = TestAPI().getAnilist()
+            TestAPI().getAnilist()
             withContext(Dispatchers.Main) {
-                testText.text = test
+                testText.text = Constants.anilistTest.get(0).title
             }
         }
     }

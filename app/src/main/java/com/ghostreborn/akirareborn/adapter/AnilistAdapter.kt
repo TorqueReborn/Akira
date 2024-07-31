@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
-import com.squareup.picasso.Picasso
+import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
 
 class AnilistAdapter(private val context: Context) :
     RecyclerView.Adapter<AnilistAdapter.AnimeViewHolder>() {
@@ -32,7 +31,6 @@ class AnilistAdapter(private val context: Context) :
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = Constants.anilistAnimeList[position]
         holder.animeNameTextView.text = anime.title
-        Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
             Constants.anilistAnime = anime
             Constants.isAnilist = true

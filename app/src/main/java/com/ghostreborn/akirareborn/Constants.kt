@@ -37,4 +37,8 @@ object Constants {
     lateinit var allAnimeID: String
     var isAnilist: Boolean = false
     var getAllAnimeID: Boolean = false
+
+    // Database
+    const val DATABASE_NAME = "anilist"
+    lateinit var anilistTest: ArrayList<Anilist>
 }
