@@ -23,17 +23,10 @@ class AllAnimeParser {
             .getJSONArray("edges")
         for (i in 0 until edgesArray.length()) {
             val edge = edgesArray.getJSONObject(i)
-            val availableEpisodesArray = edge.getJSONObject("availableEpisodesDetail")
-                .getJSONArray("sub")
-            val episodes: ArrayList<String> = ArrayList()
-            for (j in availableEpisodesArray.length() - 1 downTo 0) {
-                episodes.add(availableEpisodesArray.getString(j))
-            }
             val id = edge.getString("_id")
             val name = edge.getString("name")
-            val englishName = edge.getString("englishName")
             val thumbnail = edge.getString("thumbnail")
-            Constants.animeList.add(Anime(id, name, englishName, thumbnail, episodes))
+            Constants.animeList.add(Anime(id, name, thumbnail))
         }
     }
 

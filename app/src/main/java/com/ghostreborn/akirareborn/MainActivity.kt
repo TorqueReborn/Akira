@@ -1,12 +1,12 @@
 package com.ghostreborn.akirareborn
 
 import android.content.Intent
-import com.ghostreborn.akirareborn.Constants.preferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.ghostreborn.akirareborn.Constants.preferences
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
-import com.ghostreborn.akirareborn.fragment.HomeFragment
 import com.ghostreborn.akirareborn.fragment.MainFragment
+import com.ghostreborn.akirareborn.test.TestFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,10 +53,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(){
+    private fun replaceFragment() {
         if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, HomeFragment())
+                .replace(R.id.main_fragment_layout, TestFragment())
                 .commit()
         } else {
             supportFragmentManager.beginTransaction()

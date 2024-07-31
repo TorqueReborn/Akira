@@ -34,7 +34,7 @@ class AllAnimeNetwork {
         val queryTypes =
             "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
         val query =
-            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,englishName,thumbnail,availableEpisodesDetail}}"
+            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
