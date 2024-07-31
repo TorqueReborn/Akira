@@ -60,7 +60,7 @@ class AnilistUtils {
         Constants.akiraSharedPreferences
             .edit()
             .putString(Constants.AKIRA_USER_ID, id)
-            .putString(Constants.AKIRA_USERNAME, name)
+            .putString(Constants.AKIRA_USER_NAME, name)
             .putBoolean(Constants.AKIRA_LOGGED_IN, true)
             .apply()
     }

@@ -2,6 +2,7 @@ package com.ghostreborn.akirareborn
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
 import kotlinx.coroutines.CoroutineScope
@@ -23,6 +24,9 @@ class MainActivity : AppCompatActivity() {
     private fun setData() {
         Constants.akiraSharedPreferences =
             getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
+        Constants.anilistToken = Constants.akiraSharedPreferences.getString(Constants.AKIRA_TOKEN, "")!!
+        Constants.anilistUserID = Constants.akiraSharedPreferences.getString(Constants.AKIRA_USER_ID, "")!!
+        Log.e("TAG", Constants.anilistUserID)
     }
 
     private fun getToken() {

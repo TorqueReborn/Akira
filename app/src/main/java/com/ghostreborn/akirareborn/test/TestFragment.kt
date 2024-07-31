@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.anilist.AnilistNetwork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,8 +29,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
+            val test = AnilistNetwork().getAnimeList("ANIME", "CURRENT")
             withContext(Dispatchers.Main) {
-                testText.text = ""
+                testText.text = test
             }
         }
     }

@@ -19,11 +19,14 @@ object Constants {
     val SHARED_PREFERENCE = "AKIRA"
     val AKIRA_TOKEN = "AKIRA_TOKEN"
     val AKIRA_CODE = "AKIRA_CODE"
-    val AKIRA_USERNAME = "AKIRA_USERNAME"
+    val AKIRA_USER_NAME = "AKIRA_USER_NAME"
     val AKIRA_USER_ID = "AKIRA_USER_ID"
     val AKIRA_LOGGED_IN = "AKIRA_LOGGED_IN"
     val AUTH_URL = "https://anilist.co/api/v2/oauth/authorize" +
             "?client_id=20149" +
             "&response_type=code" +
             "&redirect_uri=wanpisu://ghostreborn.in"
+
+    lateinit var anilistToken: String
+    lateinit var anilistUserID: String
 }
