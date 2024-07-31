@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     // TODO show progress based on episode titles parsed
     // TODO login to Anilist only on Anilist Fragment
     // TODO show a button to login to Anilist in AnilistFragment
+    // TODO convert AnimeDetailsActivity as fragment for anilist and allAnime
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

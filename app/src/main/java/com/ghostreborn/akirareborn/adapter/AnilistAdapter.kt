@@ -26,15 +26,14 @@ class AnilistAdapter(private val context: Context) :
     }
 
     override fun getItemCount(): Int {
-        return Constants.animeList.size
+        return Constants.anilistAnimeList.size
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val anime = Constants.animeList[position]
-        holder.animeNameTextView.text = anime.name
+        val anime = Constants.anilistAnimeList[position]
+        holder.animeNameTextView.text = anime.title
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
-            Constants.anime = anime
             context.startActivity(Intent(context, AnimeDetailsActivity::class.java))
         }
     }
