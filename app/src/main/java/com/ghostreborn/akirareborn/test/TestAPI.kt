@@ -2,18 +2,11 @@ package com.ghostreborn.akirareborn.test
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.json.JSONObject
 
 class TestAPI {
 
-    private fun connectAllAnime(
-        variables: String,
-        queryTypes: String,
-        query: String
-    ): String? {
+    fun connectAllAnime(url: String): String? {
         val client = OkHttpClient()
-        val url =
-            "https://api.allanime.day/api?variables={" + variables + "}&query=query(" + queryTypes + "){" + query + "}"
         val request = Request.Builder()
             .url(url)
             .header("Referer", "https://allanime.to")
@@ -26,31 +19,6 @@ class TestAPI {
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
         return responseBody
-    }
-
-    fun queryPopular():String{
-        val variables =
-            "\"size\":30,\"type\":\"anime\",\"dateRange\":1,\"page\":1,\"allowAdult\":true,\"allowUnknown\":true"
-        val queryTypes =
-            "\$size:Int!,\$type:VaildPopularTypeEnumType!,\$dateRange:Int!,\$page:Int!,\$allowAdult:Boolean!,\$allowUnknown:Boolean!"
-        val query =
-            "queryPopular(type:\$type,size:\$size,dateRange:\$dateRange,page:\$page,allowAdult:\$allowAdult,allowUnknown:\$allowUnknown){total,recommendations{anyCard{_id,name,englishName,thumbnail}}}"
-        return connectAllAnime(variables, queryTypes, query)!!
-    }
-
-    fun scrapeQueryPopular(){
-        val recommendationsArray = JSONObject(queryPopular())
-            .getJSONObject("data")
-            .getJSONObject("queryPopular")
-            .getJSONArray("recommendations")
-        for (i in 0 until recommendationsArray.length()){
-            val recommendation = recommendationsArray.getJSONObject(i)
-                .getJSONObject("anyCard")
-            val id = recommendation.getString("_id")
-            val name = recommendation.getString("name")
-            val englishName = recommendation.getString("englishName")
-            val thumbnail = recommendation.getString("thumbnail")
-        }
     }
 
 }

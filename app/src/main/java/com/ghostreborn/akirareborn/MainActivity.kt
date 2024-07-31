@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     // TODO add to Anilist based on category like CURRENT, DROPPED etc
     // TODO get anilist locally ie save it in database
     // TODO if saved in database, it is easy to call for non anilist checking
+    // TODO show setting screen to change sub or dub
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
