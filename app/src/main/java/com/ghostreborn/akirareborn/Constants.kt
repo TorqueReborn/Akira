@@ -1,6 +1,7 @@
 package com.ghostreborn.akirareborn
 
 import android.content.SharedPreferences
+import com.ghostreborn.akirareborn.model.Anilist
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.AnimeDetails
 import com.ghostreborn.akirareborn.model.Episode
@@ -29,4 +30,6 @@ object Constants {
 
     lateinit var anilistToken: String
     lateinit var anilistUserID: String
+
+    lateinit var anilistAnimeList: ArrayList<Anilist>
 }

@@ -30,6 +30,7 @@ class AnilistNetwork {
                 "  MediaListCollection(userId:${Constants.anilistUserID},type:${type}, status:${status}){" +
                 "    lists {" +
                 "      entries {" +
+                "        id" +
                 "        media{" +
                 "          idMal" +
                 "        }" +
