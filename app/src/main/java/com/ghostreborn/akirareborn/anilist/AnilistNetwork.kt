@@ -9,7 +9,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 class AnilistNetwork {
-    fun connectAnilist(graph:String): String? {
+    private fun connectAnilist(graph:String): String? {
         val client = OkHttpClient()
         val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
         val json = JSONObject()
