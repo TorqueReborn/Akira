@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     // TODO login to Anilist only on Anilist Fragment
     // TODO show a button to login to Anilist in AnilistFragment
     // TODO convert AnimeDetailsActivity as fragment for anilist and allAnime
+    // TODO show a sweepable tab layout for anilist for CURRENT, DROPPED etc
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
