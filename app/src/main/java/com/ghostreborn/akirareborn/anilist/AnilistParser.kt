@@ -17,10 +17,12 @@ class AnilistParser {
         for (i in 0 until entries.length()) {
             val entry = entries.getJSONObject(i)
             val malID = entry.getJSONObject("media").getString("idMal")
-            val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
-            val progress = entry.getString("progress")
             val mediaId = entry.getString("id")
-            Constants.anilistAnimeList.add(Anilist(malID, mediaId, title,progress))
+            val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
+            val thumbnail =
+                entry.getJSONObject("media").getJSONObject("coverImage").getString("large")
+            val progress = entry.getString("progress")
+            Constants.anilistAnimeList.add(Anilist(malID, mediaId, title, thumbnail, progress))
         }
         return rawJSON
     }

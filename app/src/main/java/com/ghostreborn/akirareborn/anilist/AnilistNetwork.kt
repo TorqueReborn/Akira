@@ -36,6 +36,9 @@ class AnilistNetwork {
                 "          title{" +
                 "            native" +
                 "          }" +
+                "          coverImage{" +
+                "            large" +
+                "          }" +
                 "        }" +
                 "        progress" +
                 "      }" +
