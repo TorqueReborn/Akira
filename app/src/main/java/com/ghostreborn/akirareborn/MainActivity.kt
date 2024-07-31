@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    // TODO show progress based on episode titles parsed
     // TODO show a sweepable tab layout for anilist for CURRENT, DROPPED etc
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

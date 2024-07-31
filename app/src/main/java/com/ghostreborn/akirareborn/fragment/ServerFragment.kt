@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.ServerAdapter
 import com.ghostreborn.akirareborn.allanime.AllAnimeParser
 import kotlinx.coroutines.CoroutineScope
@@ -23,15 +25,18 @@ class ServerFragment(val episodeNumber: String) : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view =
-            inflater.inflate(com.ghostreborn.akirareborn.R.layout.fragment_server, container, false)
+            inflater.inflate(R.layout.fragment_server, container, false)
 
         val fragmentRecyclerView: RecyclerView =
-            view.findViewById(com.ghostreborn.akirareborn.R.id.server_recycler_view)
+            view.findViewById(R.id.server_recycler_view)
         fragmentRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        val progressBar: ProgressBar = view.findViewById(R.id.server_progress_bar)
 
         CoroutineScope(Dispatchers.IO).launch {
             AllAnimeParser().getSourceUrls(Constants.anime.id, episodeNumber)
             withContext(Dispatchers.Main) {
+                progressBar.visibility = ProgressBar.GONE
                 fragmentRecyclerView.adapter = ServerAdapter(requireContext())
             }
         }
