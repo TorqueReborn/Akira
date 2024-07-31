@@ -33,7 +33,9 @@ class AnilistDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            Constants.allAnimeID = AllAnimeParser().allAnimeIdWithMalId(Constants.anilistAnime.title, Constants.anilistAnime.malId)
+            if (Constants.getAllAnimeID){
+                Constants.allAnimeID = AllAnimeParser().allAnimeIdWithMalId(Constants.anilistAnime.title, Constants.anilistAnime.malId)
+            }
             AllAnimeParser().animeDetails(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 binding.animeName.text = Constants.animeDetails.name
@@ -45,14 +47,16 @@ class AnilistDetailsFragment : Fragment() {
                 if (Constants.animeDetails.prequel.isNotEmpty()) {
                     binding.prequelButton.visibility = View.VISIBLE
                     binding.prequelButton.setOnClickListener {
-                        Constants.anime.id = Constants.animeDetails.prequel
+                        Constants.allAnimeID = Constants.animeDetails.prequel
+                        Constants.getAllAnimeID = false
                         startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
                     }
                 }
                 if (Constants.animeDetails.sequel.isNotEmpty()) {
                     binding.sequelButton.visibility = View.VISIBLE
                     binding.sequelButton.setOnClickListener {
-                        Constants.anime.id = Constants.animeDetails.sequel
+                        Constants.allAnimeID = Constants.animeDetails.sequel
+                        Constants.getAllAnimeID = false
                         startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
                     }
                 }

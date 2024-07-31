@@ -36,4 +36,5 @@ object Constants {
     lateinit var anilistAnime: Anilist
     lateinit var allAnimeID: String
     var isAnilist: Boolean = false
+    var getAllAnimeID: Boolean = false
 }
