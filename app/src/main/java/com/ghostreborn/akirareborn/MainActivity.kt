@@ -14,6 +14,12 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     // TODO show a sweepable tab layout for anilist for CURRENT, DROPPED etc
+    // TODO save progress on episode playback is around 75%
+    // TODO if anime is in Anilist, show a way to update progress
+    // TODO if not available in Anilist, show add button
+    // TODO add to Anilist based on category like CURRENT, DROPPED etc
+    // TODO get anilist locally ie save it in database
+    // TODO if saved in database, it is easy to call for non anilist checking
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
