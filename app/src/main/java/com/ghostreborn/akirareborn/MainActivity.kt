@@ -1,6 +1,7 @@
 package com.ghostreborn.akirareborn
 
 import android.content.Intent
+import com.ghostreborn.akirareborn.Constants.preferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
@@ -26,35 +27,20 @@ class MainActivity : AppCompatActivity() {
     // TODO store list of entries in local database
     // TODO use the mediaListEntryID to save progress to cloud
     // TODO thus Anilist API is not spammed with requests
+    // TODO use malId to get allAnimeId and there is an api to use array of
+    //  allAnimeIds to get anime data
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        setData()
         getToken()
-
-        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, HomeFragment())
-                .commit()
-        } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, MainFragment())
-                .commit()
-        }
-    }
-
-    private fun setData() {
-        Constants.akiraSharedPreferences =
-            getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
-        Constants.anilistToken =
-            Constants.akiraSharedPreferences.getString(Constants.AKIRA_TOKEN, "")!!
-        Constants.anilistUserID =
-            Constants.akiraSharedPreferences.getString(Constants.AKIRA_USER_ID, "")!!
+        replaceFragment()
     }
 
     private fun getToken() {
-        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+        preferences = getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
+        if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
             return
         }
         val intent: Intent = intent
@@ -64,6 +50,18 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 AnilistUtils().getToken(code!!)
             }
+        }
+    }
+
+    private fun replaceFragment(){
+        if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, HomeFragment())
+                .commit()
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, MainFragment())
+                .commit()
         }
     }
 

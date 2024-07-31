@@ -17,7 +17,7 @@ object Constants {
     lateinit var episodeUrls: ArrayList<String>
 
     // Anilist
-    lateinit var akiraSharedPreferences: SharedPreferences
+    lateinit var preferences: SharedPreferences
     val SHARED_PREFERENCE = "AKIRA"
     val AKIRA_TOKEN = "AKIRA_TOKEN"
     val AKIRA_CODE = "AKIRA_CODE"

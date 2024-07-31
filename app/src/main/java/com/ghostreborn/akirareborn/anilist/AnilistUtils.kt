@@ -30,7 +30,7 @@ class AnilistUtils {
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
         val token = JSONObject(responseBody.toString()).getString("access_token")
-        Constants.akiraSharedPreferences
+        Constants.preferences
             .edit()
             .putString(Constants.AKIRA_CODE, code)
             .putString(Constants.AKIRA_TOKEN, token)
@@ -57,7 +57,7 @@ class AnilistUtils {
             .getString("id")
         val name = JSONObject(responseBody.toString()).getJSONObject("data").getJSONObject("Viewer")
             .getString("name")
-        Constants.akiraSharedPreferences
+        Constants.preferences
             .edit()
             .putString(Constants.AKIRA_USER_ID, id)
             .putString(Constants.AKIRA_USER_NAME, name)

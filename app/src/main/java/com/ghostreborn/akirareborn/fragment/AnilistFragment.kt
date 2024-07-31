@@ -36,7 +36,7 @@ class AnilistFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+        if (Constants.preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
             CoroutineScope(Dispatchers.IO).launch {
                 AnilistParser().getAnimeList("ANIME", "CURRENT")
                 withContext(Dispatchers.Main) {
@@ -53,7 +53,7 @@ class AnilistFragment : Fragment() {
     }
 
     private fun setAnilistLoginButton() {
-        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+        if (Constants.preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
             anilistLoginButton.visibility = View.GONE
         } else {
             anilistLoginButton.setOnClickListener {
