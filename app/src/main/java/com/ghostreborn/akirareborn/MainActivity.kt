@@ -1,7 +1,12 @@
 package com.ghostreborn.akirareborn
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.ghostreborn.akirareborn.anilist.AnilistUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,12 +16,27 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loginAnilist()
+        setData()
+        getToken()
     }
 
-    fun loginAnilist() {
+    private fun setData() {
         Constants.akiraSharedPreferences =
             getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
+    }
+
+    private fun getToken() {
+        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
+            return
+        }
+        val intent: Intent = intent
+        val uri = intent.data
+        if (uri != null) {
+            val code = uri.getQueryParameter("code")
+            CoroutineScope(Dispatchers.IO).launch {
+                AnilistUtils().getToken(code!!)
+            }
+        }
     }
 
 }

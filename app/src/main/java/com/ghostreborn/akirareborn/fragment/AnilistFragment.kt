@@ -24,10 +24,19 @@ class AnilistFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        anilistLoginButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+    override fun onResume() {
+        super.onResume()
+        setAnilistLoginButton()
+    }
+
+    private fun setAnilistLoginButton(){
+        if (Constants.akiraSharedPreferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)){
+            anilistLoginButton.visibility = View.GONE
+        }else{
+            anilistLoginButton.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+            }
         }
     }
+
 }
