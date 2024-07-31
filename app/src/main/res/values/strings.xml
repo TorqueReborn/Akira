@@ -9,4 +9,7 @@
     <string name="anime_banner">Anime banner</string>
     <string name="anime_thumbnail">Anime Thumbnail</string>
     <string name="login">Login</string>
+    <string name="anime">Anime</string>
+    <string name="manga">Manga</string>
+    <string name="user">User</string>
 </resources>
