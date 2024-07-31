@@ -9,6 +9,7 @@ import com.ghostreborn.akirareborn.model.Episode
 object Constants {
     lateinit var anime: Anime
     lateinit var animeDetails: AnimeDetails
+    lateinit var animeThumbnail: String
     lateinit var episodeUrl: String
     lateinit var animeList: ArrayList<Anime>
     lateinit var parsedEpisodes: ArrayList<Episode>

@@ -111,8 +111,11 @@ class AllAnimeParser {
         if (episodeName=="null") {
             episodeName = "Episode ${episodeNumber}"
         }
-        val episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
-                episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
+        var episodeThumbnail = Constants.animeThumbnail
+        if(!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")){
+            episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
+                    episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
+        }
         return Episode(episodeNumber, episodeName, episodeThumbnail)
     }
 

@@ -32,7 +32,7 @@ class AnimeDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().animeDetails(Constants.anime.id)
+            AllAnimeParser().animeDetails(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 binding.animeName.text = Constants.animeDetails.name
                 binding.animeDescription.text = Constants.animeDetails.description

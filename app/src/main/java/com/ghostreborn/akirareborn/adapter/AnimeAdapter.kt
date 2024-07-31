@@ -36,6 +36,7 @@ class AnimeAdapter(private val context: Context) :
         holder.itemView.setOnClickListener {
             Constants.anime = anime
             Constants.allAnimeID = anime.id
+            Constants.animeThumbnail = anime.thumbnail
             Constants.isAnilist = false
             context.startActivity(Intent(context, AnimeDetailsActivity::class.java))
         }
