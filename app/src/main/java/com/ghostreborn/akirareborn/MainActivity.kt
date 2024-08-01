@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.Constants.PREF_NAME
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
 import com.ghostreborn.akirareborn.fragment.AnilistLoginFragment
-import com.ghostreborn.akirareborn.fragment.SaveAnimeFragment
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     private fun setFragment() {
         if (Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, SaveAnimeFragment())
+                .replace(R.id.main_fragment_layout, AnimeFragment())
                 .commit()
         } else {
             supportFragmentManager.beginTransaction()

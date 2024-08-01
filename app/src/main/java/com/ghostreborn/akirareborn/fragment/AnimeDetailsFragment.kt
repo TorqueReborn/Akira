@@ -1,12 +1,12 @@
 package com.ghostreborn.akirareborn.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.room.Room
+import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.database.AnilistDatabase
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding
 import kotlinx.coroutines.CoroutineScope
@@ -41,9 +41,9 @@ class AnimeDetailsFragment : Fragment() {
             val anilist = db.anilistDao().findByAllAnimeID(AnimeFragment.allAnimeID)
             withContext(Dispatchers.Main) {
                 if (anilist != null) {
-                    Log.e("TAG", "mediaID: ${anilist.id}")
-                } else {
-                    Log.e("TAG", "allAnimeID: ${AnimeFragment.allAnimeID}")
+                    childFragmentManager.beginTransaction()
+                        .replace(R.id.anilist_frame_layout, SaveAnimeFragment())
+                        .commit()
                 }
             }
         }

@@ -86,10 +86,9 @@
                 android:id="@+id/anime_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/anime_name"
                 app:layout_constraintStart_toStartOf="@+id/thumbnail_card_view"
-                app:layout_constraintTop_toBottomOf="@+id/thumbnail_card_view" />
+                app:layout_constraintTop_toBottomOf="@+id/anilist_frame_layout" />
 
             <Button
                 android:id="@+id/prequel_button"
@@ -122,6 +121,16 @@
                 app:layout_constraintStart_toEndOf="@+id/prequel_button"
                 app:layout_constraintTop_toBottomOf="@+id/anime_description"
                 tools:visibility="visible" />
+
+            <FrameLayout
+                android:id="@+id/anilist_frame_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/thumbnail_card_view"
+                app:layout_constraintTop_toBottomOf="@+id/anime_progress_text_view">
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
