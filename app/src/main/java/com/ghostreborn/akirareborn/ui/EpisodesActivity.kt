@@ -46,19 +46,22 @@ class EpisodesActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerViews(group: ArrayList<ArrayList<String>>) {
-        val parsed = AllAnimeParser().episodeDetails(
-            AnimeFragment.allAnimeID, group[getGroup(AnimeFragment.animeEpisode, group)]
-        )
-
-        episodeProgressBar.visibility = ProgressBar.GONE
-        episodeRecycler.adapter = EpisodeAdapter(parsed, this)
-        episodeRecycler.layoutManager = LinearLayoutManager(this)
-        episodeGroupRecycler.adapter = EpisodeGroupAdapter(
-            this, group, episodeRecycler, episodeProgressBar
-        )
-        episodeGroupRecycler.layoutManager = LinearLayoutManager(
-            this, LinearLayoutManager.HORIZONTAL, false
-        )
+        CoroutineScope(Dispatchers.IO).launch {
+            val parsed = AllAnimeParser().episodeDetails(
+                AnimeFragment.allAnimeID, group[getGroup(AnimeFragment.animeEpisode, group)]
+            )
+            withContext(Dispatchers.Main) {
+                episodeProgressBar.visibility = ProgressBar.GONE
+                episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
+                episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
+                episodeGroupRecycler.adapter = EpisodeGroupAdapter(
+                    this@EpisodesActivity, group, episodeRecycler, episodeProgressBar
+                )
+                episodeGroupRecycler.layoutManager = LinearLayoutManager(
+                    this@EpisodesActivity, LinearLayoutManager.HORIZONTAL, false
+                )
+            }
+        }
     }
 
     private fun showNoEpisodesToast() {

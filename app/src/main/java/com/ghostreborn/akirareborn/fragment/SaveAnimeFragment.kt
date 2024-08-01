@@ -89,9 +89,11 @@ class SaveAnimeFragment : Fragment() {
                 "Akira"
             ).build()
             instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
-                AnilistParser().deleteAnime(anilist.id, requireContext())
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
+                if (anilist != null) {
+                    AnilistParser().deleteAnime(anilist.id, requireContext())
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -106,8 +108,10 @@ class SaveAnimeFragment : Fragment() {
             ).build()
             instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
                 withContext(Dispatchers.Main) {
-                    progressEditText.setText(anilist.progress)
-                    AnimeFragment.animeEpisode = anilist.progress
+                    if (anilist!=null){
+                        progressEditText.setText(anilist.progress)
+                        AnimeFragment.animeEpisode = anilist.progress
+                    }
                 }
             }
         }

@@ -1,6 +1,5 @@
 package com.ghostreborn.akirareborn
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -18,26 +17,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setData()
-        getData()
-        setViewPager()
+        setup()
     }
 
-    private fun setViewPager() {
-        val viewPager: ViewPager2 = findViewById(R.id.anime_view_pager)
-        viewPager.adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
-        viewPager.currentItem = 1
-    }
-
-    private fun setData() {
+    private fun setup() {
         Constants.preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
+        setupViewPager()
+        handleIntentData()
     }
 
-    private fun getData() {
-        val intent: Intent = intent
-        val uri = intent.data
-        if (uri != null) {
-            val code = uri.getQueryParameter("code").toString()
+    private fun setupViewPager() {
+        findViewById<ViewPager2>(R.id.anime_view_pager).apply {
+            adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
+            currentItem = 1
+        }
+    }
+
+    private fun handleIntentData() {
+        intent.data?.getQueryParameter("code")?.let { code ->
             CoroutineScope(Dispatchers.IO).launch {
                 AnilistUtils().getToken(code, this@MainActivity)
             }
