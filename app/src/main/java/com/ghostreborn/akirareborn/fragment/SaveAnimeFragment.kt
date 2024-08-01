@@ -27,6 +27,8 @@ class SaveAnimeFragment : Fragment() {
     private lateinit var progressEditText: EditText
     private lateinit var progressAddButton: Button
     private lateinit var progressDeleteButton: Button
+    private lateinit var plusButton: Button
+    private lateinit var minusButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +39,8 @@ class SaveAnimeFragment : Fragment() {
             progressEditText = findViewById(R.id.anime_progress_edit_text)
             progressAddButton = findViewById(R.id.anime_progress_add_button)
             progressDeleteButton = findViewById(R.id.anime_progress_delete_button)
+            plusButton = findViewById(R.id.anime_plus_button)
+            minusButton = findViewById(R.id.anime_minus_button)
         }
     }
 
@@ -46,6 +50,9 @@ class SaveAnimeFragment : Fragment() {
         setupSpinner()
         getProgress()
 
+        plusButton.setOnClickListener { updateValue(1) }
+        minusButton.setOnClickListener { updateValue(-1) }
+
         progressAddButton.setOnClickListener {
             handleAddProgress()
         }
@@ -53,6 +60,12 @@ class SaveAnimeFragment : Fragment() {
         progressDeleteButton.setOnClickListener {
             handleDeleteProgress()
         }
+    }
+
+    fun updateValue(increment: Int) {
+        val currentValue = progressEditText.text.toString().toIntOrNull() ?: 0
+        val newValue = (currentValue + increment).coerceAtLeast(0)
+        progressEditText.setText(newValue.toString())
     }
 
     private fun setupSpinner() {
