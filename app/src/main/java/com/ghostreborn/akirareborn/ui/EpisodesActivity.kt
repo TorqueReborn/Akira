@@ -51,6 +51,8 @@ class EpisodesActivity : AppCompatActivity() {
     }
 
     fun getGroup(find: String, group: ArrayList<ArrayList<String>>): Int {
+        if (group.size <= 1)
+            return 0
         return group.indexOfFirst { innerList ->
             innerList.contains(find)
         }
