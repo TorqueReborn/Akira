@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.AnimeAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
@@ -42,6 +43,9 @@ class AnilistFragment : Fragment() {
     }
 
     fun fetchData(){
+        if (!Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)){
+            return
+        }
         CoroutineScope(Dispatchers.IO).launch {
             val instance = Room.databaseBuilder(
                 requireContext(),
