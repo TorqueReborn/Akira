@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
     // TODO use malId to get allAnimeId and there is an api to use array of
     //  allAnimeIds to get anime data
 
-    // TODO upon opening AnimeDetails, check AllAnimeID is in database
-
+    // TODO make progress saving as a separate fragment and attach it
+    //  to AllAnimeDetailsFragment when database has allAnimeID use
+    //  frameLayout in AllAnimeDetailsFragment to do so
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
