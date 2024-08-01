@@ -12,7 +12,7 @@ interface AnilistDao {
     fun getAll(): List<Anilist>
 
     @Query("SELECT * FROM anilist WHERE allAnimeID=:allAnimeID")
-    fun findByAllAnimeID(allAnimeID: String): Anilist
+    fun findByAllAnimeID(allAnimeID: String): Anilist?
 
     @Query("SELECT * FROM anilist WHERE id=:mediaId")
     fun findByMediaID(mediaId: String): Anilist

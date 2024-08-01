@@ -88,9 +88,9 @@ class SaveAnimeFragment : Fragment() {
                 AnilistDatabase::class.java,
                 "Akira"
             ).build()
-            instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
-                if (anilist != null) {
-                    AnilistParser().deleteAnime(anilist.id, requireContext())
+            instance.anilistDao().findByAllAnimeID(allAnimeID).let {
+                if (it != null) {
+                    AnilistParser().deleteAnime(it.id, requireContext())
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
                     }
