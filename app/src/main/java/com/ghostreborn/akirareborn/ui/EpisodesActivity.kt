@@ -26,19 +26,33 @@ class EpisodesActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
-            val parsed = AllAnimeParser().episodeDetails(AnimeFragment.allAnimeID, group[0])
+            val parsed = AllAnimeParser().episodeDetails(
+                AnimeFragment.allAnimeID, group[
+                    getGroup(AnimeFragment.animeEpisode, group)
+                ]
+            )
             withContext(Dispatchers.Main) {
                 episodeProgressBar.visibility = ProgressBar.GONE
                 episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
                 episodeGroupRecycler.adapter =
-                    EpisodeGroupAdapter(this@EpisodesActivity, group, episodeRecycler, episodeProgressBar)
+                    EpisodeGroupAdapter(
+                        this@EpisodesActivity,
+                        group,
+                        episodeRecycler,
+                        episodeProgressBar
+                    )
                 episodeGroupRecycler.layoutManager = LinearLayoutManager(
                     this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
                     false
                 )
             }
         }
+    }
 
+    fun getGroup(find: String, group: ArrayList<ArrayList<String>>): Int {
+        return group.indexOfFirst { innerList ->
+            innerList.contains(find)
+        }
     }
 }

@@ -100,6 +100,7 @@ class SaveAnimeFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 if (anilist != null) {
                     progressEditText.setText(anilist.progress)
+                    AnimeFragment.animeEpisode = anilist.progress
                 }
             }
         }
