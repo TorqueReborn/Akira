@@ -97,7 +97,10 @@ class AllAnimeParser {
         }
 
         val episodeInfo = episodeDetails.getJSONObject("episodeInfo")
-        val episodeName = episodeInfo.optString("notes", "Episode $episodeNumber")
+        var episodeName = "Episode $episodeNumber"
+        if(!episodeInfo.isNull("notes")){
+            episodeName = episodeInfo.getString("notes")
+        }
         val episodeThumbnail = episodeInfo.optJSONArray("thumbnails")?.getString(0)?.let {
             "https://wp.youtube-anime.com/aln.youtube-anime.com$it"
         } ?: tempThumbnail
