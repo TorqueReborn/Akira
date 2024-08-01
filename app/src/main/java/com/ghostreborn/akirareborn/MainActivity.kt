@@ -3,7 +3,6 @@ package com.ghostreborn.akirareborn
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.ghostreborn.akirareborn.Constants.preferences
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
 import com.ghostreborn.akirareborn.fragment.AllAnimeFragment
 import com.ghostreborn.akirareborn.fragment.MainFragment
@@ -38,10 +37,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getToken() {
-        preferences = getSharedPreferences(Constants.SHARED_PREFERENCE, MODE_PRIVATE)
-        if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
-            return
-        }
         val intent: Intent = intent
         val uri = intent.data
         if (uri != null) {
@@ -53,15 +48,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun replaceFragment() {
-        if (preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, AllAnimeFragment())
-                .commit()
-        } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, MainFragment())
-                .commit()
-        }
+
     }
 
 }

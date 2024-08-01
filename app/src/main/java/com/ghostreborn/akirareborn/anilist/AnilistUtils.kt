@@ -6,7 +6,6 @@ import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.allanime.AllAnimeParser
 import com.ghostreborn.akirareborn.database.AnilistUser
 import com.ghostreborn.akirareborn.database.AnilistUserDatabase
-import com.ghostreborn.akirareborn.model.Anilist
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -36,11 +35,6 @@ class AnilistUtils {
         val response = client.newCall(request).execute()
         val responseBody = response.body?.string()
         val token = JSONObject(responseBody.toString()).getString("access_token")
-        Constants.preferences
-            .edit()
-            .putString(Constants.AKIRA_CODE, code)
-            .putString(Constants.AKIRA_TOKEN, token)
-            .apply()
         getUserNameAndID(token, context)
     }
 
@@ -63,13 +57,6 @@ class AnilistUtils {
             .getString("id")
         val name = JSONObject(responseBody.toString()).getJSONObject("data").getJSONObject("Viewer")
             .getString("name")
-        Constants.preferences
-            .edit()
-            .putString(Constants.AKIRA_USER_ID, id)
-            .putString(Constants.AKIRA_USER_NAME, name)
-            .putBoolean(Constants.AKIRA_LOGGED_IN, true)
-            .apply()
-        Constants.anilistToken = token
         getAnilist(context)
     }
 
@@ -95,7 +82,6 @@ class AnilistUtils {
 
     private fun getAnilist(context: Context) {
         val rawJSON = getAnimeList()
-        val anilistAnimes: ArrayList<Anilist> = ArrayList()
         val entries = JSONObject(rawJSON.toString())
             .getJSONObject("data")
             .getJSONObject("MediaListCollection")
@@ -109,24 +95,12 @@ class AnilistUtils {
             val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
             val progress = entry.getString("progress")
             val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
-            anilistAnimes.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         val instance = Room.databaseBuilder(
             context,
             AnilistUserDatabase::class.java,
             Constants.DATABASE_NAME
         ).build()
-        for (i in 0 until anilistAnimes.size) {
-            instance.anilistUserDao().insertAll(
-                AnilistUser(
-                    anilistAnimes[i].mediaId,
-                    anilistAnimes[i].malId,
-                    anilistAnimes[i].allAnimeID,
-                    anilistAnimes[i].title,
-                    anilistAnimes[i].progress
-                )
-            )
-        }
     }
 
 }

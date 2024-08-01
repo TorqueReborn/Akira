@@ -30,15 +30,6 @@ class EpisodeActivity : AppCompatActivity() {
                 episodeProgressBar.visibility = ProgressBar.GONE
                 episodeRecycler.adapter = EpisodeAdapter(this@EpisodeActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodeActivity)
-                if (Constants.groupedEpisodes.size > 1) {
-                    episodeGroupRecycler.adapter =
-                        EpisodeGroupAdapter(episodeRecycler, this@EpisodeActivity, episodeProgressBar)
-                    episodeGroupRecycler.layoutManager = LinearLayoutManager(
-                        this@EpisodeActivity,
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                }
             }
         }
     }

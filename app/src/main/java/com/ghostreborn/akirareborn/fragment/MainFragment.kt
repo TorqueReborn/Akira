@@ -27,13 +27,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (!Constants.preferences.getBoolean(Constants.AKIRA_LOGGED_IN, false)) {
-            loginButton.setOnClickListener {
-                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
-            }
-        }else{
-            startActivity(Intent(context, MainActivity::class.java))
-        }
+
     }
 
 }

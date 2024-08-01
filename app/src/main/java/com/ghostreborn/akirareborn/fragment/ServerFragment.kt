@@ -34,7 +34,6 @@ class ServerFragment(val episodeNumber: String) : DialogFragment() {
         val progressBar: ProgressBar = view.findViewById(R.id.server_progress_bar)
 
         CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().getSourceUrls(Constants.anime.id, episodeNumber)
             withContext(Dispatchers.Main) {
                 progressBar.visibility = ProgressBar.GONE
                 fragmentRecyclerView.adapter = ServerAdapter(requireContext())

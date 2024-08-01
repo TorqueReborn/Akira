@@ -23,7 +23,6 @@ class PlayEpisodeActivity : AppCompatActivity() {
         hideSystemBars()
 
         val videoView = findViewById<VideoView>(R.id.anime_video_view)
-        videoView.setVideoURI(Uri.parse(Constants.episodeUrl))
         val mediaController = MediaController(this)
         mediaController.setAnchorView(videoView)
         videoView.setMediaController(mediaController)

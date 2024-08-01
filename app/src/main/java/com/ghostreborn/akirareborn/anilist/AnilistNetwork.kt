@@ -19,7 +19,7 @@ class AnilistNetwork {
         val request = Request.Builder()
             .url("https://graphql.anilist.co")
             .post(body)
-            .addHeader("Authorization", "Bearer ${Constants.anilistToken}")
+            .addHeader("Authorization", "Bearer ")
             .build()
         val response = client.newCall(request).execute()
         return response.body?.string()
@@ -27,7 +27,7 @@ class AnilistNetwork {
 
     fun getAnimeList(type: String, status: String): String? {
         val graph = "query{" +
-                "  MediaListCollection(userId:${Constants.anilistUserID},type:${type}, status:${status}){" +
+                "  MediaListCollection(userId:,type:, status:){" +
                 "    lists {" +
                 "      entries {" +
                 "        id" +

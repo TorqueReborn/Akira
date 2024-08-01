@@ -1,12 +1,10 @@
 package com.ghostreborn.akirareborn.anilist
 
 import com.ghostreborn.akirareborn.Constants
-import com.ghostreborn.akirareborn.model.Anilist
 import org.json.JSONObject
 
 class AnilistParser {
-    fun getAnimeList(type: String, status: String): String? {
-        Constants.anilistAnimeList = ArrayList()
+    fun getAnimeList(type: String, status: String) {
         val rawJSON = AnilistNetwork().getAnimeList(type, status)
         val entries = JSONObject(rawJSON.toString())
             .getJSONObject("data")
@@ -22,8 +20,6 @@ class AnilistParser {
             val thumbnail =
                 entry.getJSONObject("media").getJSONObject("coverImage").getString("large")
             val progress = entry.getString("progress")
-            Constants.anilistAnimeList.add(Anilist(malID, mediaId, title, thumbnail, progress))
         }
-        return rawJSON
     }
 }

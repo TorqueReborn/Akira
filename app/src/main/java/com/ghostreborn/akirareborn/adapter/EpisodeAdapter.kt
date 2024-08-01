@@ -26,20 +26,11 @@ class EpisodeAdapter(val activity: AppCompatActivity) :
     }
 
     override fun getItemCount(): Int {
-        return Constants.parsedEpisodes.size
+        return 0
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val episode = Constants.parsedEpisodes[position]
-        holder.episodeTitleTextView.text = episode.episodeTitle
-        holder.episodeNumberTextView.text = episode.episodeNumber
-        Picasso.get()
-            .load(episode.episodeThumbnail)
-            .into(holder.episodeThumbnailImageView)
-        holder.itemView.setOnClickListener{
-            ServerFragment(episode.episodeNumber)
-                .show(activity.supportFragmentManager, "Select Server")
-        }
+
     }
 
 }

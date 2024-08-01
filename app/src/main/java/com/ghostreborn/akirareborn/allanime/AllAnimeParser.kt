@@ -16,7 +16,6 @@ import java.io.IOException
 class AllAnimeParser {
 
     fun searchAnime(anime: String) {
-        Constants.animeList = ArrayList()
         val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
             .getJSONObject("data")
             .getJSONObject("shows")
@@ -26,7 +25,6 @@ class AllAnimeParser {
             val id = edge.getString("_id")
             val name = edge.getString("name")
             val thumbnail = edge.getString("thumbnail")
-            Constants.animeList.add(Anime(id, name, thumbnail))
         }
     }
 
@@ -64,7 +62,6 @@ class AllAnimeParser {
             if ("prequel" == relation) prequel = relatedShow.getString("showId")
             if ("sequel" == relation) sequel = relatedShow.getString("showId")
         }
-        Constants.animeDetails = AnimeDetails(name, thumbnail, description, banner, prequel, sequel)
     }
 
     fun episodes(id: String) {
@@ -81,14 +78,11 @@ class AllAnimeParser {
     }
 
     private fun groupEpisodes(id: String, episodeList: ArrayList<String>) {
-        Constants.groupedEpisodes = ArrayList()
         var startIndex = 0
         while (startIndex < episodeList.size) {
             val endIndex = (startIndex + 15).coerceAtMost(episodeList.size)
-            Constants.groupedEpisodes.add(ArrayList(episodeList.subList(startIndex, endIndex)))
             startIndex = endIndex
         }
-        episodeDetails(id, Constants.groupedEpisodes[0])
     }
 
     private fun episodeDetail(id: String, episode: String): Episode {
@@ -98,13 +92,13 @@ class AllAnimeParser {
             .getJSONObject("episode")
         val episodeNumber = episodeDetails.getString("episodeString")
         if (episodeDetails.isNull("episodeInfo")) {
-            return Episode(episodeNumber, "Episode ${episodeNumber}", Constants.anime.thumbnail)
+            return Episode(episodeNumber, "Episode ${episodeNumber}", "")
         }
         var episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
         if (episodeName=="null") {
             episodeName = "Episode ${episodeNumber}"
         }
-        var episodeThumbnail = Constants.animeThumbnail
+        var episodeThumbnail = ""
         if(!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")){
             episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
                     episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
@@ -113,10 +107,8 @@ class AllAnimeParser {
     }
 
     fun episodeDetails(id: String, episodes: ArrayList<String>) {
-        Constants.parsedEpisodes = ArrayList()
         for (episode in episodes) {
             val episodeDetail = episodeDetail(id, episode)
-            Constants.parsedEpisodes.add(episodeDetail)
         }
     }
 
@@ -142,7 +134,6 @@ class AllAnimeParser {
 
     fun getSourceUrls(id: String?, episode: String?) {
         val sources: ArrayList<String> = episodeUrls(id!!, episode!!)
-        Constants.episodeUrls = ArrayList()
 
         for (source in sources) {
             try {
@@ -152,7 +143,6 @@ class AllAnimeParser {
                 }
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
                 for (j in 0 until linksArray.length()) {
-                    Constants.episodeUrls.add(linksArray.getJSONObject(j).getString("link"))
                 }
             } catch (e: JSONException) {
                 Log.e("TAG", "Error parsing JSON: ", e)

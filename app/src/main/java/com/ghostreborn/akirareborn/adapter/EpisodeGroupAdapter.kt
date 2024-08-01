@@ -30,23 +30,11 @@ class EpisodeGroupAdapter(val recycler: RecyclerView, val activity: AppCompatAct
     }
 
     override fun getItemCount(): Int {
-        return Constants.groupedEpisodes.size
+        return 0
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val page = "${position + 1}"
-        holder.episodePageTextView.text = page
-        holder.episodePageTextView.setOnClickListener {
-            progressBar.visibility = ProgressBar.VISIBLE
-            CoroutineScope(Dispatchers.IO).launch {
-                AllAnimeParser().episodeDetails(Constants.anime.id, Constants.groupedEpisodes[position])
-                withContext(Dispatchers.Main) {
-                    progressBar.visibility = ProgressBar.GONE
-                    recycler.adapter = EpisodeAdapter(activity)
-                    recycler.layoutManager = LinearLayoutManager(recycler.context)
-                }
-            }
-        }
+
     }
 
 }

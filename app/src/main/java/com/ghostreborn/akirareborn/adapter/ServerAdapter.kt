@@ -23,16 +23,11 @@ class ServerAdapter(val context: Context) :
     }
 
     override fun getItemCount(): Int {
-        return Constants.episodeUrls.size
+        return 0
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val server = Constants.episodeUrls[position]
-        holder.serverTextView.text = server
-        holder.itemView.setOnClickListener{
-            Constants.episodeUrl = server
-            context.startActivity(Intent(context, PlayEpisodeActivity::class.java))
-        }
+
     }
 
 }
