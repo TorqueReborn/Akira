@@ -9,6 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.AnimeAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
@@ -22,6 +23,7 @@ class AnimeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
     private lateinit var progressBar: ProgressBar
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +33,15 @@ class AnimeFragment : Fragment() {
         recyclerView = view.findViewById(R.id.anime_recycler_view)
         searchView = view.findViewById(R.id.anime_search_view)
         progressBar = view.findViewById(R.id.anime_progress_bar)
+        swipeRefreshLayout = view.findViewById(R.id.anime_swipe_refresh)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout.setOnRefreshListener {
+            setCoroutine("")
+        }
         setCoroutine("")
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -59,6 +65,7 @@ class AnimeFragment : Fragment() {
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
             }
         }
+        swipeRefreshLayout.isRefreshing = false
     }
 
     companion object{
