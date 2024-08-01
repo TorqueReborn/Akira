@@ -6,6 +6,8 @@ object Constants {
     // Shared Preferences
     lateinit var preferences: SharedPreferences
     const val PREF_NAME = "AKIRA_REBORN"
+    const val PREF_USER_ID = "USER_ID"
+    const val PREF_TOKEN = "USER_TOKEN"
 
     // Anilist
     const val AUTH_URL =
