@@ -11,7 +11,6 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akirareborn.R
-import com.ghostreborn.akirareborn.anilist.AnilistNetwork
 import com.ghostreborn.akirareborn.anilist.AnilistParser
 import com.ghostreborn.akirareborn.database.AnilistDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -75,7 +74,7 @@ class SaveAnimeFragment : Fragment() {
                     "Akira"
                 ).build()
                 val anilist = db.anilistDao().findByAllAnimeID(allAnimeID)
-                AnilistNetwork().deleteAnime(anilist.id)
+                AnilistParser().deleteAnime(anilist.id, requireContext())
             }
         }
     }

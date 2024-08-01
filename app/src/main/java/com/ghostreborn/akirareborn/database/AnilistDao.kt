@@ -14,6 +14,9 @@ interface AnilistDao {
     @Query("SELECT * FROM anilist WHERE allAnimeID=:allAnimeID")
     fun findByAllAnimeID(allAnimeID: String): Anilist
 
+    @Query("SELECT * FROM anilist WHERE id=:mediaId")
+    fun findByMediaID(mediaId: String): Anilist
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(vararg anilist: Anilist)
 

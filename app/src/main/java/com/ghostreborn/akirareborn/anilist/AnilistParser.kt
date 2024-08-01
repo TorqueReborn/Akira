@@ -30,4 +30,17 @@ class AnilistParser {
         )
         instance.close()
     }
+
+    fun deleteAnime(mediaId: String, context: Context){
+        AnilistNetwork().deleteAnime(mediaId)
+        val instance = Room.databaseBuilder(
+            context,
+            AnilistDatabase::class.java,
+            "Akira"
+        ).build()
+        instance.anilistDao().delete(
+            instance.anilistDao().findByMediaID(mediaId)
+        )
+        instance.close()
+    }
 }
