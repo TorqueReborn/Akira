@@ -59,6 +59,7 @@ class AnimeDetailsFragment : Fragment() {
                         visibility = if (details.prequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
                             AnimeFragment.allAnimeID = details.prequel
+                            AnimeFragment.animeEpisode = ""
                             startActivity(Intent(context, AnimeDetailsActivity::class.java))
                         }
                     }
@@ -67,6 +68,7 @@ class AnimeDetailsFragment : Fragment() {
                         visibility = if (details.sequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
                             AnimeFragment.allAnimeID = details.sequel
+                            AnimeFragment.animeEpisode = ""
                             startActivity(Intent(context, AnimeDetailsActivity::class.java))
                         }
                     }
