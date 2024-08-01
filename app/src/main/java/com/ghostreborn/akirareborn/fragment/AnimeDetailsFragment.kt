@@ -25,12 +25,13 @@ class AnimeDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAnimeDetailsBinding.inflate(layoutInflater)
+        binding = FragmentAnimeDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
+
         childFragmentManager.beginTransaction()
             .replace(R.id.anilist_frame_layout, SaveAnimeFragment())
             .commit()
@@ -38,26 +39,30 @@ class AnimeDetailsFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val details = AllAnimeParser().animeDetails(AnimeFragment.allAnimeID)
             withContext(Dispatchers.Main) {
-                binding.animeName.text = details.name
-                binding.animeDescription.text = details.description
-                Picasso.get().load(details.banner).into(binding.animeBanner)
-                Picasso.get().load(details.thumbnail).into(binding.animeThumbnail)
-                binding.watchFab.setOnClickListener {
-                    startActivity(Intent(requireContext(), EpisodesActivity::class.java))
-                }
+                binding.apply {
+                    animeName.text = details.name
+                    animeDescription.text = details.description
+                    Picasso.get().load(details.banner).into(animeBanner)
+                    Picasso.get().load(details.thumbnail).into(animeThumbnail)
 
-                if (details.prequel.isNotEmpty()) {
-                    binding.prequelButton.visibility = View.VISIBLE
-                    binding.prequelButton.setOnClickListener {
-                        AnimeFragment.allAnimeID = details.prequel
-                        startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
+                    watchFab.setOnClickListener {
+                        startActivity(Intent(context, EpisodesActivity::class.java))
                     }
-                }
-                if (details.sequel.isNotEmpty()) {
-                    binding.sequelButton.visibility = View.VISIBLE
-                    binding.sequelButton.setOnClickListener {
-                        AnimeFragment.allAnimeID = details.sequel
-                        startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
+
+                    prequelButton.apply {
+                        visibility = if (details.prequel.isNotEmpty()) View.VISIBLE else View.GONE
+                        setOnClickListener {
+                            AnimeFragment.allAnimeID = details.prequel
+                            startActivity(Intent(context, AnimeDetailsActivity::class.java))
+                        }
+                    }
+
+                    sequelButton.apply {
+                        visibility = if (details.sequel.isNotEmpty()) View.VISIBLE else View.GONE
+                        setOnClickListener {
+                            AnimeFragment.allAnimeID = details.sequel
+                            startActivity(Intent(context, AnimeDetailsActivity::class.java))
+                        }
                     }
                 }
             }
