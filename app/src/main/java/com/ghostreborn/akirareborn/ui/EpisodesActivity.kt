@@ -2,6 +2,7 @@ package com.ghostreborn.akirareborn.ui
 
 import android.os.Bundle
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,26 +27,32 @@ class EpisodesActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
-            val parsed = AllAnimeParser().episodeDetails(
-                AnimeFragment.allAnimeID, group[
-                    getGroup(AnimeFragment.animeEpisode, group)
-                ]
-            )
-            withContext(Dispatchers.Main) {
-                episodeProgressBar.visibility = ProgressBar.GONE
-                episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
-                episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
-                episodeGroupRecycler.adapter =
-                    EpisodeGroupAdapter(
-                        this@EpisodesActivity,
-                        group,
-                        episodeRecycler,
-                        episodeProgressBar
-                    )
-                episodeGroupRecycler.layoutManager = LinearLayoutManager(
-                    this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
-                    false
+            if (group.isNotEmpty()) {
+                val parsed = AllAnimeParser().episodeDetails(
+                    AnimeFragment.allAnimeID, group[
+                        getGroup(AnimeFragment.animeEpisode, group)
+                    ]
                 )
+                withContext(Dispatchers.Main) {
+                    episodeProgressBar.visibility = ProgressBar.GONE
+                    episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
+                    episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
+                    episodeGroupRecycler.adapter =
+                        EpisodeGroupAdapter(
+                            this@EpisodesActivity,
+                            group,
+                            episodeRecycler,
+                            episodeProgressBar
+                        )
+                    episodeGroupRecycler.layoutManager = LinearLayoutManager(
+                        this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                }
+            } else {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(baseContext, "No episodes found", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
