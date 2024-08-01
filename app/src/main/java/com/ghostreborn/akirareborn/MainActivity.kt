@@ -13,6 +13,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setData()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_layout, AnilistLoginFragment())
+            .commit()
     }
 
     private fun setData(){
