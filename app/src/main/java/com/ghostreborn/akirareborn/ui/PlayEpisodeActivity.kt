@@ -23,27 +23,42 @@ import kotlinx.coroutines.withContext
 
 
 class PlayEpisodeActivity : AppCompatActivity() {
+
+    private lateinit var videoView: VideoView
+    private val videoUrl: Uri by lazy { Uri.parse(AnimeFragment.animeUrl) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_episode)
-
         hideSystemBars()
 
-        val videoView = findViewById<VideoView>(R.id.anime_video_view)
-        videoView.setVideoURI(Uri.parse(AnimeFragment.animeUrl))
-        val mediaController = MediaController(this)
-        mediaController.setAnchorView(videoView)
-        videoView.setOnClickListener {
-            hideSystemBars()
+        videoView = findViewById(R.id.anime_video_view)
+        videoView.setVideoURI(videoUrl)
+
+        val mediaController = MediaController(this).apply {
+            setAnchorView(videoView)
         }
         videoView.setMediaController(mediaController)
+        videoView.setOnClickListener { hideSystemBars() }
         videoView.start()
 
+        monitorVideoProgress()
+    }
+
+    private fun hideSystemBars() {
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            hide(WindowInsetsCompat.Type.systemBars())
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        }
+    }
+
+    private fun monitorVideoProgress() {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
                 delay(100)
-                val progress = videoView.currentPosition.toFloat() / videoView.duration.toFloat()
-                if (videoView.duration > 0 && progress >= 0.75) {
+                if (videoView.duration > 0 && videoView.currentPosition.toFloat() / videoView.duration >= 0.75) {
                     val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
                     AnilistParser().saveAnime(
                         anilistID,
@@ -57,17 +72,6 @@ class PlayEpisodeActivity : AppCompatActivity() {
                     break
                 }
             }
-        }
-
-    }
-
-    private fun hideSystemBars() {
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior =
-                WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
         }
     }
 }
