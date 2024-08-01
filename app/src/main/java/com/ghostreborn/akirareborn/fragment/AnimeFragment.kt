@@ -28,47 +28,40 @@ class AnimeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_anime, container, false)
-        recyclerView = view.findViewById(R.id.anime_recycler_view)
-        searchView = view.findViewById(R.id.anime_search_view)
-        progressBar = view.findViewById(R.id.anime_progress_bar)
-        swipeRefreshLayout = view.findViewById(R.id.anime_swipe_refresh)
-        return view
+    ): View = inflater.inflate(R.layout.fragment_anime, container, false).apply {
+        recyclerView = findViewById(R.id.anime_recycler_view)
+        searchView = findViewById(R.id.anime_search_view)
+        progressBar = findViewById(R.id.anime_progress_bar)
+        swipeRefreshLayout = findViewById(R.id.anime_swipe_refresh)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        swipeRefreshLayout.setOnRefreshListener {
-            setCoroutine("")
-        }
-        setCoroutine("")
+        swipeRefreshLayout.setOnRefreshListener { fetchAnime("") }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                setCoroutine(searchView.query.toString())
+                fetchAnime(query.orEmpty())
                 return true
             }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
-            }
+            override fun onQueryTextChange(newText: String?): Boolean = true
         })
+        fetchAnime("")
     }
 
-    fun setCoroutine(anime: String){
-        progressBar.visibility = ProgressBar.VISIBLE
+    private fun fetchAnime(query: String) {
+        progressBar.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
-            val animes = AllAnimeParser().searchAnime(anime)
+            val animes = AllAnimeParser().searchAnime(query)
             withContext(Dispatchers.Main) {
-                progressBar.visibility = ProgressBar.GONE
+                progressBar.visibility = View.GONE
                 recyclerView.adapter = AnimeAdapter(animes)
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                swipeRefreshLayout.isRefreshing = false
             }
         }
-        swipeRefreshLayout.isRefreshing = false
     }
 
-    companion object{
+    companion object {
         var allAnimeID: String = ""
         var animeThumbnail: String = ""
         var animeEpisode: String = ""
