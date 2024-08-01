@@ -27,7 +27,10 @@ class EpisodesActivity : AppCompatActivity() {
                 episodeRecycler.adapter = EpisodeAdapter(group[0])
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
                 episodeGroupRecycler.adapter = EpisodeGroupAdapter(group)
-                episodeGroupRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
+                episodeGroupRecycler.layoutManager = LinearLayoutManager(
+                    this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
+                    false
+                )
             }
         }
 
