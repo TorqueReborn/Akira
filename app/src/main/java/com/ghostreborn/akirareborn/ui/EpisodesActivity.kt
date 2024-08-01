@@ -17,51 +17,55 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EpisodesActivity : AppCompatActivity() {
+    private lateinit var episodeRecycler: RecyclerView
+    private lateinit var episodeGroupRecycler: RecyclerView
+    private lateinit var episodeProgressBar: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
 
-        val episodeRecycler: RecyclerView = findViewById(R.id.episodes_recycler_view)
-        val episodeGroupRecycler: RecyclerView = findViewById(R.id.episode_group_recycler_view)
-        val episodeProgressBar: ProgressBar = findViewById(R.id.episode_progress_bar)
+        episodeRecycler = findViewById(R.id.episodes_recycler_view)
+        episodeGroupRecycler = findViewById(R.id.episode_group_recycler_view)
+        episodeProgressBar = findViewById(R.id.episode_progress_bar)
 
+        fetchEpisodes()
+    }
+
+    private fun fetchEpisodes() {
         CoroutineScope(Dispatchers.IO).launch {
             val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
-            if (group.isNotEmpty()) {
-                val parsed = AllAnimeParser().episodeDetails(
-                    AnimeFragment.allAnimeID, group[
-                        getGroup(AnimeFragment.animeEpisode, group)
-                    ]
-                )
-                withContext(Dispatchers.Main) {
-                    episodeProgressBar.visibility = ProgressBar.GONE
-                    episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
-                    episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
-                    episodeGroupRecycler.adapter =
-                        EpisodeGroupAdapter(
-                            this@EpisodesActivity,
-                            group,
-                            episodeRecycler,
-                            episodeProgressBar
-                        )
-                    episodeGroupRecycler.layoutManager = LinearLayoutManager(
-                        this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                }
-            } else {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(baseContext, "No episodes found", Toast.LENGTH_SHORT).show()
+            withContext(Dispatchers.Main) {
+                if (group.isNotEmpty()) {
+                    setupRecyclerViews(group)
+                } else {
+                    showNoEpisodesToast()
                 }
             }
         }
     }
 
-    fun getGroup(find: String, group: ArrayList<ArrayList<String>>): Int {
-        if (group.size <= 1)
-            return 0
-        return group.indexOfFirst { innerList ->
-            innerList.contains(find)
-        }
+    private fun setupRecyclerViews(group: ArrayList<ArrayList<String>>) {
+        val parsed = AllAnimeParser().episodeDetails(
+            AnimeFragment.allAnimeID, group[getGroup(AnimeFragment.animeEpisode, group)]
+        )
+
+        episodeProgressBar.visibility = ProgressBar.GONE
+        episodeRecycler.adapter = EpisodeAdapter(parsed, this)
+        episodeRecycler.layoutManager = LinearLayoutManager(this)
+        episodeGroupRecycler.adapter = EpisodeGroupAdapter(
+            this, group, episodeRecycler, episodeProgressBar
+        )
+        episodeGroupRecycler.layoutManager = LinearLayoutManager(
+            this, LinearLayoutManager.HORIZONTAL, false
+        )
+    }
+
+    private fun showNoEpisodesToast() {
+        Toast.makeText(this, "No episodes found", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getGroup(find: String, group: ArrayList<ArrayList<String>>): Int {
+        return group.indexOfFirst { innerList -> innerList.contains(find) }.takeIf { it >= 0 } ?: 0
     }
 }
