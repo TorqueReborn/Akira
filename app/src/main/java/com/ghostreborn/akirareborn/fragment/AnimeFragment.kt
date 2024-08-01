@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,6 +21,7 @@ class AnimeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,6 +30,7 @@ class AnimeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_anime, container, false)
         recyclerView = view.findViewById(R.id.anime_recycler_view)
         searchView = view.findViewById(R.id.anime_search_view)
+        progressBar = view.findViewById(R.id.anime_progress_bar)
         return view
     }
 
@@ -47,9 +50,11 @@ class AnimeFragment : Fragment() {
     }
 
     fun setCoroutine(anime: String){
+        progressBar.visibility = ProgressBar.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
             val animes = AllAnimeParser().searchAnime(anime)
             withContext(Dispatchers.Main) {
+                progressBar.visibility = ProgressBar.GONE
                 recyclerView.adapter = AnimeAdapter(animes)
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
             }
