@@ -22,10 +22,14 @@ class AnilistLoginFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        loginButton.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+    override fun onResume() {
+        super.onResume()
+        if (!Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)){
+            loginButton.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+            }
+        }else{
+            startActivity(Intent(context, MainActivity::class.java))
         }
     }
 }

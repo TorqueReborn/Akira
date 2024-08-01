@@ -113,5 +113,7 @@ class AnilistUtils {
                 )
             )
         }
+        instance.close()
+        Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
     }
 }

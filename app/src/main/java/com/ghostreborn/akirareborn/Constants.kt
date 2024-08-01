@@ -8,6 +8,7 @@ object Constants {
     const val PREF_NAME = "AKIRA_REBORN"
     const val PREF_USER_ID = "USER_ID"
     const val PREF_TOKEN = "USER_TOKEN"
+    const val PREF_LOGGED_IN = "LOGGED_IN"
 
     // Anilist
     const val AUTH_URL =

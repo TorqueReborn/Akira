@@ -18,9 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         setData()
         getData()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_layout, AnilistLoginFragment())
-            .commit()
+        setFragment()
     }
 
     private fun setData() {
@@ -35,6 +33,18 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 AnilistUtils().getToken(code, baseContext)
             }
+        }
+    }
+
+    private fun setFragment() {
+        if (Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, AnimeFragment())
+                .commit()
+        } else{
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_layout, AnilistLoginFragment())
+                .commit()
         }
     }
 }
