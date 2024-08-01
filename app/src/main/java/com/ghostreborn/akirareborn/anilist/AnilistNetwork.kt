@@ -26,9 +26,9 @@ class AnilistNetwork {
         return response.body?.string()
     }
 
-    fun saveAnime(mediaId: String, status: String, progress: String): String {
+    fun saveAnime(animeId: String, status: String, progress: String): String {
         val query = "mutation{" +
-                "  SaveMediaListEntry(mediaId:$mediaId,status:$status, progress:$progress) {" +
+                "  SaveMediaListEntry(mediaId:$animeId,status:$status, progress:$progress) {" +
                 "    id" +
                 "    media{" +
                 "      idMal" +
@@ -39,7 +39,15 @@ class AnilistNetwork {
                 "    progress" +
                 "  }" +
                 "}"
-        val responseBody = connectAnilist(query)
-        return responseBody.toString()
+        return connectAnilist(query).toString()
+    }
+
+    fun deleteAnime(mediaId: String): String {
+        val query = "mutation {" +
+                "  DeleteMediaListEntry(id: $mediaId) {" +
+                "    deleted" +
+                "  }" +
+                "}"
+        return connectAnilist(query).toString()
     }
 }

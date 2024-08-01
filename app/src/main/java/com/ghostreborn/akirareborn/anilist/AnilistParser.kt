@@ -8,8 +8,8 @@ import com.ghostreborn.akirareborn.database.AnilistDatabase
 import org.json.JSONObject
 
 class AnilistParser {
-    fun saveAnime(mediaId: String, status: String, progress: String, context: Context) {
-        val rawJSON = AnilistNetwork().saveAnime(mediaId, status, progress)
+    fun saveAnime(animeId: String, status: String, progress: String, context: Context) {
+        val rawJSON = AnilistNetwork().saveAnime(animeId, status, progress)
         val entry = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("SaveMediaListEntry")

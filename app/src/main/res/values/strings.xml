@@ -12,4 +12,13 @@
     <string name="anime">Anime</string>
     <string name="manga">Manga</string>
     <string name="user">User</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
+    <string-array name="anime_status">
+        <item>CURRENT</item>
+        <item>COMPLETED</item>
+        <item>DROPPED</item>
+        <item>PLANNING</item>
+        <item>PAUSED</item>
+    </string-array>
 </resources>
