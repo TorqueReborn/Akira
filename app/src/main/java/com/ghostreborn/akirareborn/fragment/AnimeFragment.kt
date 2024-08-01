@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +21,6 @@ class AnimeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
-    private lateinit var progressBar: ProgressBar
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
@@ -31,7 +29,6 @@ class AnimeFragment : Fragment() {
     ): View = inflater.inflate(R.layout.fragment_anime, container, false).apply {
         recyclerView = findViewById(R.id.anime_recycler_view)
         searchView = findViewById(R.id.anime_search_view)
-        progressBar = findViewById(R.id.anime_progress_bar)
         swipeRefreshLayout = findViewById(R.id.anime_swipe_refresh)
     }
 
@@ -43,17 +40,16 @@ class AnimeFragment : Fragment() {
                 fetchAnime(query.orEmpty())
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean = true
         })
         fetchAnime("")
     }
 
     private fun fetchAnime(query: String) {
-        progressBar.visibility = View.VISIBLE
         CoroutineScope(Dispatchers.IO).launch {
             val animes = AllAnimeParser().searchAnime(query)
             withContext(Dispatchers.Main) {
-                progressBar.visibility = View.GONE
                 recyclerView.adapter = AnimeAdapter(animes)
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
                 swipeRefreshLayout.isRefreshing = false
