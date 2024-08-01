@@ -1,4 +1,4 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.fragment
 
 import android.content.Intent
 import android.net.Uri
@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.MainActivity
+import com.ghostreborn.akirareborn.R
 
 class AnilistLoginFragment : Fragment() {
 

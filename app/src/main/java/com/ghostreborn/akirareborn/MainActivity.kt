@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.Constants.PREF_NAME
+import com.ghostreborn.akirareborn.anilist.AnilistUtils
+import com.ghostreborn.akirareborn.fragment.AnilistLoginFragment
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

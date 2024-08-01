@@ -1,7 +1,8 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.anilist
 
 import android.content.Context
 import androidx.room.Room
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.database.Anilist
 import com.ghostreborn.akirareborn.database.AnilistDatabase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
