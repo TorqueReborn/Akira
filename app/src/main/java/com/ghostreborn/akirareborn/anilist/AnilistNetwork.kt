@@ -8,7 +8,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 class AnilistNetwork {
-    private fun connectAnilist(graph: String): String? {
+    fun connectAnilist(graph: String): String {
         val body = JSONObject().apply {
             put("query", graph)
         }.toString().toRequestBody("application/json; charset=utf-8".toMediaTypeOrNull())
@@ -20,16 +20,16 @@ class AnilistNetwork {
                 "Bearer ${Constants.preferences.getString(Constants.PREF_TOKEN, "")}"
             )
             .build()
-        return OkHttpClient().newCall(request).execute().body?.string()
+        return OkHttpClient().newCall(request).execute().body!!.string()
     }
 
     fun saveAnime(animeId: String, status: String, progress: String): String {
         val query = "mutation{SaveMediaListEntry(mediaId:$animeId,status:$status,progress:$progress){id,media{idMal,title{native}},progress}}"
-        return connectAnilist(query).toString()
+        return connectAnilist(query)
     }
 
     fun deleteAnime(mediaId: String): String {
         val query = "mutation{DeleteMediaListEntry(id:$mediaId){deleted}}"
-        return connectAnilist(query).toString()
+        return connectAnilist(query)
     }
 }
