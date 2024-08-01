@@ -6,5 +6,5 @@ data class AnimeDetails(
     val description: String,
     val banner: String,
     val prequel: String,
-    val sequel: String
+    val sequel: String,
 )

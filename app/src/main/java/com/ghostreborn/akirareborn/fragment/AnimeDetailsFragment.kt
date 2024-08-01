@@ -1,10 +1,12 @@
 package com.ghostreborn.akirareborn.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ghostreborn.akirareborn.EpisodesActivity
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding
@@ -40,6 +42,9 @@ class AnimeDetailsFragment : Fragment() {
                 binding.animeDescription.text = details.description
                 Picasso.get().load(details.banner).into(binding.animeBanner)
                 Picasso.get().load(details.thumbnail).into(binding.animeThumbnail)
+                binding.watchFab.setOnClickListener {
+                    startActivity(Intent(requireContext(), EpisodesActivity::class.java))
+                }
             }
         }
 

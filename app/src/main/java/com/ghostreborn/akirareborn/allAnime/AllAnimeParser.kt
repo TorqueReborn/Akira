@@ -44,6 +44,30 @@ class AllAnimeParser {
         return AnimeDetails(name, thumbnail, description, banner, prequel, sequel)
     }
 
+    fun episodes(id: String): ArrayList<ArrayList<String>> {
+        val episodeList = ArrayList<String>()
+        val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
+            .getJSONObject("data")
+            .getJSONObject("show")
+            .getJSONObject("availableEpisodesDetail")
+            .getJSONArray("sub")
+        for (i in episodesArray.length() - 1 downTo 0) {
+            episodeList.add(episodesArray.getString(i))
+        }
+        return groupEpisodes(episodeList)
+    }
+
+    private fun groupEpisodes(episodeList: ArrayList<String>): ArrayList<ArrayList<String>> {
+        val group: ArrayList<ArrayList<String>> = ArrayList()
+        var startIndex = 0
+        while (startIndex < episodeList.size) {
+            val endIndex = (startIndex + 15).coerceAtMost(episodeList.size)
+            group.add(ArrayList(episodeList.subList(startIndex, endIndex)))
+            startIndex = endIndex
+        }
+        return group
+    }
+
     fun anilistWithAllAnimeID(allAnimeId: String):String {
         val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
         val show = JSONObject(rawJSON)
