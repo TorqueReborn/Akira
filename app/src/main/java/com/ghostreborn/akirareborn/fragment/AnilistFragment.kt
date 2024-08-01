@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.AnimeAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 class AnilistFragment : Fragment() {
 
     lateinit var recyclerView: RecyclerView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,11 +29,19 @@ class AnilistFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_anilist, container, false)
         recyclerView = view.findViewById(R.id.anilist_recycler_view)
+        swipeRefreshLayout = view.findViewById(R.id.anilist_swipe_refresh)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchData()
+        }
+        fetchData()
+    }
+
+    fun fetchData(){
         CoroutineScope(Dispatchers.IO).launch {
             val instance = Room.databaseBuilder(
                 requireContext(),
@@ -48,6 +58,7 @@ class AnilistFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 recyclerView.adapter = AnimeAdapter(animes)
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                swipeRefreshLayout.isRefreshing = false
             }
         }
     }
