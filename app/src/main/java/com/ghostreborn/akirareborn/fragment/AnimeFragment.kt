@@ -56,11 +56,4 @@ class AnimeFragment : Fragment() {
             }
         }
     }
-
-    companion object {
-        var allAnimeID: String = ""
-        var animeThumbnail: String = ""
-        var animeEpisode: String = ""
-        var animeUrl: String = ""
-    }
 }

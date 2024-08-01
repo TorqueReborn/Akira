@@ -7,9 +7,9 @@ import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +48,7 @@ class EpisodeGroupAdapter(
             progressBar.visibility = ProgressBar.VISIBLE
             CoroutineScope(Dispatchers.IO).launch {
                 val parsed = AllAnimeParser().episodeDetails(
-                    AnimeFragment.allAnimeID,
+                    Constants.allAnimeID,
                     episodeGroupList[position]
                 )
                 withContext(Dispatchers.Main) {

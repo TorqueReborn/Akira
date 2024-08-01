@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.ghostreborn.akirareborn.ui.PlayEpisodeActivity
 
 class ServerAdapter(private val sourceUrls: List<String>) :
@@ -29,7 +29,7 @@ class ServerAdapter(private val sourceUrls: List<String>) :
         val server = sourceUrls[position]
         holder.serverTextView.text = server
         holder.itemView.setOnClickListener {
-            AnimeFragment.animeUrl = server
+            Constants.animeUrl = server
             holder.itemView.context.startActivity(
                 Intent(holder.itemView.context, PlayEpisodeActivity::class.java)
             )

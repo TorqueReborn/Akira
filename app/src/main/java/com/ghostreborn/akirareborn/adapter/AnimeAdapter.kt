@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.ghostreborn.akirareborn.model.Anime
+import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
 import com.squareup.picasso.Picasso
 
 class AnimeAdapter(private val animes: ArrayList<Anime>) :
@@ -35,10 +35,15 @@ class AnimeAdapter(private val animes: ArrayList<Anime>) :
         holder.animeNameTextView.text = anime.name
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
-            AnimeFragment.allAnimeID = anime.id
-            AnimeFragment.animeThumbnail = anime.thumbnail
-            AnimeFragment.animeEpisode = ""
-            holder.itemView.context.startActivity(Intent(holder.itemView.context, AnimeDetailsActivity::class.java))
+            Constants.allAnimeID = anime.id
+            Constants.animeThumbnail = anime.thumbnail
+            Constants.animeEpisode = ""
+            holder.itemView.context.startActivity(
+                Intent(
+                    holder.itemView.context,
+                    AnimeDetailsActivity::class.java
+                )
+            )
         }
     }
 

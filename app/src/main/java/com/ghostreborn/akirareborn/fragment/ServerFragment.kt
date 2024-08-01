@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.ServerAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
@@ -30,7 +31,7 @@ class ServerFragment : DialogFragment() {
         fragmentRecyclerView.layoutManager = LinearLayoutManager(context)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val sources = AllAnimeParser().getSourceUrls(AnimeFragment.allAnimeID, AnimeFragment.animeEpisode)
+            val sources = AllAnimeParser().getSourceUrls(Constants.allAnimeID, Constants.animeEpisode)
             withContext(Dispatchers.Main) {
                 progressBar.visibility = View.GONE
                 fragmentRecyclerView.adapter = ServerAdapter(sources)

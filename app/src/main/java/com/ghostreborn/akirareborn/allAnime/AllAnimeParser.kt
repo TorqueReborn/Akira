@@ -2,7 +2,7 @@ package com.ghostreborn.akirareborn.allAnime
 
 import android.util.Log
 import androidx.core.text.HtmlCompat
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.AnimeDetails
 import com.ghostreborn.akirareborn.model.Episode
@@ -32,7 +32,9 @@ class AllAnimeParser {
             .getJSONObject("data")
             .getJSONObject("show")
 
-        val description = HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT).toString()
+        val description =
+            HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
+                .toString()
         val relatedShows = show.getJSONArray("relatedShows")
 
         var prequel = ""
@@ -90,7 +92,7 @@ class AllAnimeParser {
             .getJSONObject("episode")
 
         val episodeNumber = episodeDetails.getString("episodeString")
-        val tempThumbnail = AnimeFragment.animeThumbnail
+        val tempThumbnail = Constants.animeThumbnail
 
         if (episodeDetails.isNull("episodeInfo")) {
             return Episode(episodeNumber, "Episode $episodeNumber", tempThumbnail)
@@ -98,7 +100,7 @@ class AllAnimeParser {
 
         val episodeInfo = episodeDetails.getJSONObject("episodeInfo")
         var episodeName = "Episode $episodeNumber"
-        if(!episodeInfo.isNull("notes")){
+        if (!episodeInfo.isNull("notes")) {
             episodeName = episodeInfo.getString("notes")
         }
         val episodeThumbnail = episodeInfo.optJSONArray("thumbnails")?.getString(0)?.let {
@@ -136,7 +138,8 @@ class AllAnimeParser {
             .map { sourceUrls.getJSONObject(it).getString("sourceUrl") }
             .filter { it.contains("--") }
             .map {
-                val decrypted = decryptAllAnimeServer(it.substring(2)).replace("clock", "clock.json")
+                val decrypted =
+                    decryptAllAnimeServer(it.substring(2)).replace("clock", "clock.json")
                 if (!decrypted.contains("fast4speed")) "https://allanime.day$decrypted" else ""
             }
             .filter { it.isNotEmpty() }

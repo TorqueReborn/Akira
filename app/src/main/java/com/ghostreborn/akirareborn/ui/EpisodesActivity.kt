@@ -6,11 +6,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.EpisodeAdapter
 import com.ghostreborn.akirareborn.adapter.EpisodeGroupAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +34,7 @@ class EpisodesActivity : AppCompatActivity() {
 
     private fun fetchEpisodes() {
         CoroutineScope(Dispatchers.IO).launch {
-            val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
+            val group = AllAnimeParser().episodes(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 if (group.isNotEmpty()) {
                     setupRecyclerViews(group)
@@ -48,7 +48,7 @@ class EpisodesActivity : AppCompatActivity() {
     private fun setupRecyclerViews(group: ArrayList<ArrayList<String>>) {
         CoroutineScope(Dispatchers.IO).launch {
             val parsed = AllAnimeParser().episodeDetails(
-                AnimeFragment.allAnimeID, group[getGroup(AnimeFragment.animeEpisode, group)]
+                Constants.allAnimeID, group[getGroup(Constants.animeEpisode, group)]
             )
             withContext(Dispatchers.Main) {
                 episodeProgressBar.visibility = ProgressBar.GONE

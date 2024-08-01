@@ -11,11 +11,12 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.room.Room
+import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.Constants.allAnimeID
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.anilist.AnilistParser
 import com.ghostreborn.akirareborn.database.AnilistDatabase
-import com.ghostreborn.akirareborn.fragment.AnimeFragment.Companion.allAnimeID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -123,7 +124,7 @@ class SaveAnimeFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     if (anilist!=null){
                         progressEditText.setText(anilist.progress)
-                        AnimeFragment.animeEpisode = anilist.progress
+                        Constants.animeEpisode = anilist.progress
                     }
                 }
             }

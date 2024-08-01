@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.Constants.allAnimeID
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.anilist.AnilistParser
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
-import com.ghostreborn.akirareborn.fragment.AnimeFragment.Companion.allAnimeID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
 class PlayEpisodeActivity : AppCompatActivity() {
 
     private lateinit var videoView: VideoView
-    private val videoUrl: Uri by lazy { Uri.parse(AnimeFragment.animeUrl) }
+    private val videoUrl: Uri by lazy { Uri.parse(Constants.animeUrl) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,7 @@ class PlayEpisodeActivity : AppCompatActivity() {
                     AnilistParser().saveAnime(
                         anilistID,
                         "CURRENT",
-                        AnimeFragment.animeEpisode,
+                        Constants.animeEpisode,
                         baseContext
                     )
                     withContext(Dispatchers.Main) {

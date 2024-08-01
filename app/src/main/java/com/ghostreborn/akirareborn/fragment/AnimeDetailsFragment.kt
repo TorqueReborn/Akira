@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding
@@ -37,7 +38,7 @@ class AnimeDetailsFragment : Fragment() {
             .commit()
 
         CoroutineScope(Dispatchers.IO).launch {
-            val details = AllAnimeParser().animeDetails(AnimeFragment.allAnimeID)
+            val details = AllAnimeParser().animeDetails(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 binding.apply {
                     animeName.text = details.name
@@ -45,8 +46,8 @@ class AnimeDetailsFragment : Fragment() {
                     Picasso.get().load(details.banner).into(animeBanner)
                     Picasso.get().load(details.thumbnail).into(animeThumbnail)
 
-                    binding.animeProgressTextView.text = if (AnimeFragment.animeEpisode.isNotEmpty()) {
-                        "Watched ${AnimeFragment.animeEpisode} episodes"
+                    binding.animeProgressTextView.text = if (Constants.animeEpisode.isNotEmpty()) {
+                        "Watched ${Constants.animeEpisode} episodes"
                     } else {
                         "Not watched"
                     }
@@ -58,8 +59,8 @@ class AnimeDetailsFragment : Fragment() {
                     prequelButton.apply {
                         visibility = if (details.prequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
-                            AnimeFragment.allAnimeID = details.prequel
-                            AnimeFragment.animeEpisode = ""
+                            Constants.allAnimeID = details.prequel
+                            Constants.animeEpisode = ""
                             startActivity(Intent(context, AnimeDetailsActivity::class.java))
                         }
                     }
@@ -67,8 +68,8 @@ class AnimeDetailsFragment : Fragment() {
                     sequelButton.apply {
                         visibility = if (details.sequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
-                            AnimeFragment.allAnimeID = details.sequel
-                            AnimeFragment.animeEpisode = ""
+                            Constants.allAnimeID = details.sequel
+                            Constants.animeEpisode = ""
                             startActivity(Intent(context, AnimeDetailsActivity::class.java))
                         }
                     }
