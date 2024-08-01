@@ -29,9 +29,8 @@ class AnimeDetailsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
         childFragmentManager.beginTransaction()
             .replace(R.id.anilist_frame_layout, SaveAnimeFragment())
             .commit()
@@ -63,6 +62,5 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
-
     }
 }
