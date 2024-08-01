@@ -24,8 +24,7 @@ class AnilistNetwork {
     }
 
     fun saveAnime(animeId: String, status: String, progress: String): String {
-        val query =
-            "mutation{SaveMediaListEntry(mediaId:$animeId,status:$status,progress:$progress){id,media{idMal,title{native}},progress}}"
+        val query = "mutation{SaveMediaListEntry(mediaId:$animeId,status:$status,progress:$progress){id,media{idMal,title{native}},progress}}"
         return connectAnilist(query).toString()
     }
 
