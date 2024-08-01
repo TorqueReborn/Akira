@@ -43,6 +43,7 @@ class AllAnimeDetailsFragment : Fragment() {
             val anilist = db.anilistUserDao().findByAllAnimeID(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
                 if (anilist != null) {
+                    Constants.anilist = anilist
                     childFragmentManager.beginTransaction()
                         .replace(R.id.all_anime_frame_layout, SaveProgressFragment())
                         .commit()
