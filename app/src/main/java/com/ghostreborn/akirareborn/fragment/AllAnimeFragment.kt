@@ -33,22 +33,10 @@ class AllAnimeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
-            AllAnimeParser().searchAnime("")
-            withContext(Dispatchers.Main) {
-                recyclerView.adapter = AnimeAdapter(requireContext())
-                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-            }
-        }
+        setCoroutine("")
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                CoroutineScope(Dispatchers.IO).launch {
-                    AllAnimeParser().searchAnime(searchView.query.toString())
-                    withContext(Dispatchers.Main) {
-                        recyclerView.adapter = AnimeAdapter(requireContext())
-                        recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-                    }
-                }
+                setCoroutine(searchView.query.toString())
                 return true
             }
 
@@ -56,6 +44,16 @@ class AllAnimeFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    fun setCoroutine(anime: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            AllAnimeParser().searchAnime(anime)
+            withContext(Dispatchers.Main) {
+                recyclerView.adapter = AnimeAdapter(requireContext())
+                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+            }
+        }
     }
 
 }
