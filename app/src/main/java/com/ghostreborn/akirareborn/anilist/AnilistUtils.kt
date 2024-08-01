@@ -1,8 +1,10 @@
 package com.ghostreborn.akirareborn.anilist
 
-import android.content.Context
+import android.app.Activity
+import android.content.Intent
 import androidx.room.Room
 import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.MainActivity
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.database.Anilist
 import com.ghostreborn.akirareborn.database.AnilistDatabase
@@ -32,7 +34,7 @@ class AnilistUtils {
         return response.body?.string()
     }
 
-    fun getToken(code: String, context: Context) {
+    fun getToken(code: String, activity: Activity) {
         val client = OkHttpClient()
         val mediaType = "application/json; charset=utf-8".toMediaTypeOrNull()
         val json = JSONObject()
@@ -53,19 +55,19 @@ class AnilistUtils {
         val responseBody = response.body?.string()
         val token = JSONObject(responseBody.toString()).getString("access_token")
         Constants.preferences.edit().putString(Constants.PREF_TOKEN, token).apply()
-        getUserNameAndID(context)
+        getUserNameAndID(activity)
     }
 
-    private fun getUserNameAndID(context: Context) {
+    private fun getUserNameAndID(activity: Activity) {
         val query = "{Viewer{id}}"
         val responseBody = connectAnilist(query)
         val id = JSONObject(responseBody.toString()).getJSONObject("data").getJSONObject("Viewer")
             .getString("id")
         Constants.preferences.edit().putString(Constants.PREF_USER_ID, id).apply()
-        getAnimeList(context)
+        getAnimeList(activity)
     }
 
-    private fun getAnimeList(context: Context) {
+    private fun getAnimeList(activity: Activity) {
         val userID = Constants.preferences.getString(Constants.PREF_USER_ID, "")
         val graph = "query{" +
                 "  MediaListCollection(userId:${userID},type:ANIME, status:CURRENT){" +
@@ -85,12 +87,23 @@ class AnilistUtils {
                 "}"
         val rawJSON = connectAnilist(graph)
         val anilistAnime: ArrayList<Anilist> = ArrayList()
-        val entries = JSONObject(rawJSON.toString())
+
+        val lists = JSONObject(rawJSON.toString())
             .getJSONObject("data")
             .getJSONObject("MediaListCollection")
             .getJSONArray("lists")
+
+        if (lists.length() == 0) {
+            Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+            activity.startActivity(Intent(activity, MainActivity::class.java))
+            activity.finish()
+            return
+        }
+
+        val entries = lists
             .getJSONObject(0)
             .getJSONArray("entries")
+
         for (i in 0 until entries.length()) {
             val entry = entries.getJSONObject(i)
             val id = entry.getString("id")
@@ -101,7 +114,7 @@ class AnilistUtils {
             anilistAnime.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         val instance = Room.databaseBuilder(
-            context,
+            activity,
             AnilistDatabase::class.java,
             "Akira"
         ).build()
@@ -118,5 +131,7 @@ class AnilistUtils {
         }
         instance.close()
         Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+        activity.startActivity(Intent(activity, MainActivity::class.java))
+        activity.finish()
     }
 }

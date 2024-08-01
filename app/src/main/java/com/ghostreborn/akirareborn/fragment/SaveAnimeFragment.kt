@@ -18,6 +18,7 @@ import com.ghostreborn.akirareborn.fragment.AnimeFragment.Companion.allAnimeID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SaveAnimeFragment : Fragment() {
 
@@ -41,6 +42,8 @@ class SaveAnimeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getProgress()
+
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.anime_status,
@@ -51,7 +54,7 @@ class SaveAnimeFragment : Fragment() {
 
         progressAddButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val anilistID = AllAnimeParser().anilistWithAllAnimeID("TAY6dqJNwKKSECHaB")
+                val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
                 AnilistParser().saveAnime(
                     anilistID,
                     spinner.selectedItem.toString(),
@@ -74,6 +77,22 @@ class SaveAnimeFragment : Fragment() {
                         anilist.id,
                         requireContext()
                     )
+                }
+            }
+        }
+    }
+
+    private fun getProgress() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val instance = Room.databaseBuilder(
+                requireContext(),
+                AnilistDatabase::class.java,
+                "Akira"
+            ).build()
+            val anilist = instance.anilistDao().findByAllAnimeID(allAnimeID)
+            withContext(Dispatchers.Main) {
+                if (anilist != null) {
+                    progressEditText.setText(anilist.progress)
                 }
             }
         }

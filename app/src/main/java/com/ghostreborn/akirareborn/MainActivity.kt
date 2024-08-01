@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         if (uri != null) {
             val code = uri.getQueryParameter("code").toString()
             CoroutineScope(Dispatchers.IO).launch {
-                AnilistUtils().getToken(code, baseContext)
+                AnilistUtils().getToken(code, this@MainActivity)
             }
         }
     }
