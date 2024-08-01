@@ -36,6 +36,7 @@ class AnimeAdapter(private val animes: ArrayList<Anime>) :
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
             AnimeFragment.allAnimeID = anime.id
+            AnimeFragment.animeThumbnail = anime.thumbnail
             holder.itemView.context.startActivity(Intent(holder.itemView.context, AnimeDetailsActivity::class.java))
         }
     }

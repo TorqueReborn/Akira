@@ -1,6 +1,7 @@
 package com.ghostreborn.akirareborn.allAnime
 
 import androidx.core.text.HtmlCompat
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.AnimeDetails
 import com.ghostreborn.akirareborn.model.Episode
@@ -75,7 +76,7 @@ class AllAnimeParser {
             .getJSONObject("data")
             .getJSONObject("episode")
         val episodeNumber = episodeDetails.getString("episodeString")
-        val tempThumbnail = "https://wp.youtube-anime.com/cdn.myanimelist.net/images/anime/1810/139965.jpg?w=250"
+        val tempThumbnail = AnimeFragment.animeThumbnail
         if (episodeDetails.isNull("episodeInfo")) {
             return Episode(episodeNumber, "Episode ${episodeNumber}", tempThumbnail)
         }
