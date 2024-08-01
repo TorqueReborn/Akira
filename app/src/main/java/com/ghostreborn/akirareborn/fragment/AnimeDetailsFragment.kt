@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.database.AnilistDatabase
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +31,17 @@ class AnimeDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkAnilist()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val details = AllAnimeParser().animeDetails(AnimeFragment.allAnimeID)
+            withContext(Dispatchers.Main) {
+                binding.animeName.text = details.name
+                binding.animeDescription.text = details.description
+                Picasso.get().load(details.banner).into(binding.animeBanner)
+                Picasso.get().load(details.thumbnail).into(binding.animeThumbnail)
+            }
+        }
+
     }
 
     private fun checkAnilist() {
