@@ -13,7 +13,7 @@ import com.ghostreborn.akirareborn.fragment.ServerFragment
 import com.ghostreborn.akirareborn.model.Episode
 import com.squareup.picasso.Picasso
 
-class EpisodeAdapter(private val episodeList: ArrayList<Episode>, private val activity: AppCompatActivity) :
+class EpisodeAdapter(private val episodeList: List<Episode>, private val activity: AppCompatActivity) :
     RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
     class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeTitleTextView: TextView = itemView.findViewById(R.id.episode_title_text_view)

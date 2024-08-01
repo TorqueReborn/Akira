@@ -14,58 +14,67 @@ import java.io.IOException
 
 class AllAnimeParser {
     fun searchAnime(anime: String): ArrayList<Anime> {
-        val animeList: ArrayList<Anime> = ArrayList()
-        val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
-            .getJSONObject("data")
-            .getJSONObject("shows")
-            .getJSONArray("edges")
-        for (i in 0 until edgesArray.length()) {
-            val edge = edgesArray.getJSONObject(i)
-            val id = edge.getString("_id")
-            val name = edge.getString("name")
-            val thumbnail = edge.getString("thumbnail")
-            animeList.add(Anime(id, name, thumbnail))
+        return ArrayList<Anime>().apply {
+            val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
+                .getJSONObject("data")
+                .getJSONObject("shows")
+                .getJSONArray("edges")
+            for (i in 0 until edgesArray.length()) {
+                edgesArray.getJSONObject(i).let {
+                    add(Anime(it.getString("_id"), it.getString("name"), it.getString("thumbnail")))
+                }
+            }
         }
-        return animeList
     }
 
     fun animeDetails(animeId: String): AnimeDetails {
-        val show: JSONObject = JSONObject(AllAnimeNetwork().animeDetails(animeId).toString())
+        val show = JSONObject(AllAnimeNetwork().animeDetails(animeId).toString())
             .getJSONObject("data")
             .getJSONObject("show")
-        val name = show.getString("name")
-        val thumbnail = show.getString("thumbnail")
-        val description =
-            HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
-                .toString()
-        val banner = show.getString("banner")
+
+        val description = HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT).toString()
+        val relatedShows = show.getJSONArray("relatedShows")
+
         var prequel = ""
         var sequel = ""
-        val relatedShows = show.getJSONArray("relatedShows")
+
         for (i in 0 until relatedShows.length()) {
-            val relatedShow = relatedShows.getJSONObject(i)
-            val relation = relatedShow.getString("relation")
-            if ("prequel" == relation) prequel = relatedShow.getString("showId")
-            if ("sequel" == relation) sequel = relatedShow.getString("showId")
+            relatedShows.getJSONObject(i).apply {
+                when (getString("relation")) {
+                    "prequel" -> prequel = getString("showId")
+                    "sequel" -> sequel = getString("showId")
+                }
+            }
         }
-        return AnimeDetails(name, thumbnail, description, banner, prequel, sequel)
+
+        return AnimeDetails(
+            name = show.getString("name"),
+            thumbnail = show.getString("thumbnail"),
+            description = description,
+            banner = show.getString("banner"),
+            prequel = prequel,
+            sequel = sequel
+        )
     }
 
     fun episodes(id: String): ArrayList<ArrayList<String>> {
-        val episodeList = ArrayList<String>()
         val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
             .getJSONObject("data")
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
             .getJSONArray("sub")
-        for (i in episodesArray.length() - 1 downTo 0) {
-            episodeList.add(episodesArray.getString(i))
+
+        val episodeList = ArrayList<String>().apply {
+            for (i in episodesArray.length() - 1 downTo 0) {
+                add(episodesArray.getString(i))
+            }
         }
+
         return groupEpisodes(episodeList)
     }
 
     private fun groupEpisodes(episodeList: ArrayList<String>): ArrayList<ArrayList<String>> {
-        val group: ArrayList<ArrayList<String>> = ArrayList()
+        val group = ArrayList<ArrayList<String>>()
         var startIndex = 0
         while (startIndex < episodeList.size) {
             val endIndex = (startIndex + 15).coerceAtMost(episodeList.size)
@@ -76,97 +85,79 @@ class AllAnimeParser {
     }
 
     private fun episodeDetail(id: String, episode: String): Episode {
-        val rawJSON = AllAnimeNetwork().episodeDetails(id, episode).toString()
-        val episodeDetails = JSONObject(rawJSON)
+        val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode).toString())
             .getJSONObject("data")
             .getJSONObject("episode")
+
         val episodeNumber = episodeDetails.getString("episodeString")
         val tempThumbnail = AnimeFragment.animeThumbnail
+
         if (episodeDetails.isNull("episodeInfo")) {
-            return Episode(episodeNumber, "Episode ${episodeNumber}", tempThumbnail)
+            return Episode(episodeNumber, "Episode $episodeNumber", tempThumbnail)
         }
-        var episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
-        if (episodeName == "null") {
-            episodeName = "Episode ${episodeNumber}"
-        }
-        var episodeThumbnail = tempThumbnail
-        if (!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")) {
-            episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
-                    episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
-        }
+
+        val episodeInfo = episodeDetails.getJSONObject("episodeInfo")
+        val episodeName = episodeInfo.optString("notes", "Episode $episodeNumber")
+        val episodeThumbnail = episodeInfo.optJSONArray("thumbnails")?.getString(0)?.let {
+            "https://wp.youtube-anime.com/aln.youtube-anime.com$it"
+        } ?: tempThumbnail
+
         return Episode(episodeNumber, episodeName, episodeThumbnail)
     }
 
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
-        val rawJSON = AllAnimeNetwork().getDetailsByIds(ids)
-        val animes: ArrayList<Anime> = ArrayList()
-        val shows = JSONObject(rawJSON.toString())
+        val shows = JSONObject(AllAnimeNetwork().getDetailsByIds(ids).toString())
             .getJSONObject("data")
             .getJSONArray("showsWithIds")
-        for (i in 0 until shows.length()) {
-            val show = shows.getJSONObject(i)
-            val id = show.getString("_id")
-            val name = show.getString("name")
-            val thumbnail = show.getString("thumbnail")
-            animes.add(Anime(id, name, thumbnail))
+
+        return ArrayList<Anime>().apply {
+            for (i in 0 until shows.length()) {
+                shows.getJSONObject(i).apply {
+                    add(Anime(getString("_id"), getString("name"), getString("thumbnail")))
+                }
+            }
         }
-        return animes
     }
 
-    fun episodeDetails(id: String, episodes: ArrayList<String>): ArrayList<Episode> {
-        val parsed: ArrayList<Episode> = ArrayList()
-        for (episode in episodes) {
-            val episodeDetail = episodeDetail(id, episode)
-            parsed.add(episodeDetail)
-        }
-        return parsed
+    fun episodeDetails(id: String, episodes: List<String>): List<Episode> {
+        return episodes.map { episode -> episodeDetail(id, episode) }
     }
 
-    private fun episodeUrls(id: String, episode: String): ArrayList<String> {
-        val rawJSON = AllAnimeNetwork().episodeUrls(id, episode).toString()
-        val sources = ArrayList<String>()
-        val sourceUrls = JSONObject(rawJSON)
+    private fun episodeUrls(id: String, episode: String): List<String> {
+        val sourceUrls = JSONObject(AllAnimeNetwork().episodeUrls(id, episode).toString())
             .getJSONObject("data")
             .getJSONObject("episode")
             .getJSONArray("sourceUrls")
-        for (i in 0 until sourceUrls.length()) {
-            val sourceUrl = sourceUrls.getJSONObject(i).getString("sourceUrl")
-            if (sourceUrl.contains("--")) {
-                val decrypted: String =
-                    decryptAllAnimeServer(sourceUrl.substring(2)).replace("clock", "clock.json")
-                if (!decrypted.contains("fast4speed")) {
-                    sources.add("https://allanime.day$decrypted")
-                }
+
+        return (0 until sourceUrls.length())
+            .map { sourceUrls.getJSONObject(it).getString("sourceUrl") }
+            .filter { it.contains("--") }
+            .map {
+                val decrypted = decryptAllAnimeServer(it.substring(2)).replace("clock", "clock.json")
+                if (!decrypted.contains("fast4speed")) "https://allanime.day$decrypted" else ""
             }
-        }
-        return sources
+            .filter { it.isNotEmpty() }
     }
 
-    fun getSourceUrls(id: String?, episode: String?): ArrayList<String> {
-        val sources: ArrayList<String> = episodeUrls(id!!, episode!!)
-        val episodeUrls: ArrayList<String> = ArrayList()
-
-        for (source in sources) {
+    fun getSourceUrls(id: String?, episode: String?): List<String> {
+        return episodeUrls(id!!, episode!!).flatMap { source ->
             try {
-                val rawJSON: String = getJSON(source)
-                if (rawJSON == "error") {
-                    continue
-                }
+                val rawJSON = getJSON(source)
+                if (rawJSON == "error") return@flatMap emptyList<String>()
+
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
-                for (j in 0 until linksArray.length()) {
-                    episodeUrls.add(linksArray.getJSONObject(j).getString("link"))
-                }
+                List(linksArray.length()) { linksArray.getJSONObject(it).getString("link") }
             } catch (e: JSONException) {
                 Log.e("TAG", "Error parsing JSON: ", e)
+                emptyList()
             }
         }
-        return episodeUrls
     }
 
     private fun getJSON(url: String?): String {
         val client = OkHttpClient()
-        val request: Request = Request.Builder()
-            .url(url!!)
+        val request = Request.Builder()
+            .url(url ?: return "{}")
             .header("Referer", "https://allanime.to")
             .header("Cipher", "AES256-SHA256")
             .header(
@@ -175,35 +166,31 @@ class AllAnimeParser {
             )
             .build()
 
-        try {
+        return try {
             client.newCall(request).execute().use { response ->
-                return if (response.body != null) response.body!!
-                    .string() else "NULL"
+                response.body?.string() ?: "NULL"
             }
         } catch (e: IOException) {
             Log.e("TAG", "Error fetching JSON: ", e)
+            "{}"
         }
-        return "{}"
     }
 
     private fun decryptAllAnimeServer(decrypt: String): String {
-        val decryptedString = StringBuilder()
-        var i = 0
-        while (i < decrypt.length) {
-            val dec = decrypt.substring(i, i + 2).toInt(16)
-            decryptedString.append((dec xor 56).toChar())
-            i += 2
+        return buildString {
+            for (i in decrypt.indices step 2) {
+                val dec = decrypt.substring(i, i + 2).toInt(16)
+                append((dec xor 56).toChar())
+            }
         }
-        return decryptedString.toString()
     }
 
     fun anilistWithAllAnimeID(allAnimeId: String): String {
         val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
-        val show = JSONObject(rawJSON)
+        return JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("show")
-        val malId = show.getString("aniListId")
-        return malId
+            .getString("aniListId")
     }
 
     fun allAnimeIdWithMalId(anime: String, malId: String): String {
@@ -212,12 +199,10 @@ class AllAnimeParser {
             .getJSONObject("data")
             .getJSONObject("shows")
             .getJSONArray("edges")
-        for (i in 0 until edgesArray.length()) {
-            val edge = edgesArray.getJSONObject(i)
-            if (edge.getString("malId") == malId) {
-                return edge.getString("_id")
-            }
-        }
-        return ""
+
+        return (0 until edgesArray.length()).firstNotNullOfOrNull { index ->
+            val edge = edgesArray.getJSONObject(index)
+            if (edge.getString("malId") == malId) edge.getString("_id") else null
+        } ?: ""
     }
 }

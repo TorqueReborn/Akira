@@ -10,7 +10,7 @@ import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.ghostreborn.akirareborn.ui.PlayEpisodeActivity
 
-class ServerAdapter(private val sourceUrls: ArrayList<String>) :
+class ServerAdapter(private val sourceUrls: List<String>) :
     RecyclerView.Adapter<ServerAdapter.AnimeViewHolder>() {
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val serverTextView: TextView = itemView.findViewById(R.id.server_text_view)
