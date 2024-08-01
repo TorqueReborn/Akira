@@ -45,6 +45,12 @@ class AnimeDetailsFragment : Fragment() {
                     Picasso.get().load(details.banner).into(animeBanner)
                     Picasso.get().load(details.thumbnail).into(animeThumbnail)
 
+                    binding.animeProgressTextView.text = if (AnimeFragment.animeEpisode.isNotEmpty()) {
+                        "Watched ${AnimeFragment.animeEpisode} episodes"
+                    } else {
+                        "Not watched"
+                    }
+
                     watchFab.setOnClickListener {
                         startActivity(Intent(context, EpisodesActivity::class.java))
                     }
