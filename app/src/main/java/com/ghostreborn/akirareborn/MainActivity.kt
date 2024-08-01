@@ -3,10 +3,10 @@ package com.ghostreborn.akirareborn
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.ghostreborn.akirareborn.Constants.PREF_NAME
+import com.ghostreborn.akirareborn.adapter.AnimeViewPagerAdapter
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
-import com.ghostreborn.akirareborn.fragment.AnilistLoginFragment
-import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +20,13 @@ class MainActivity : AppCompatActivity() {
 
         setData()
         getData()
-        setFragment()
+        setViewPager()
+    }
+
+    private fun setViewPager() {
+        val viewPager: ViewPager2 = findViewById(R.id.anime_view_pager)
+        viewPager.adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.currentItem = 1
     }
 
     private fun setData() {
@@ -35,18 +41,6 @@ class MainActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 AnilistUtils().getToken(code, this@MainActivity)
             }
-        }
-    }
-
-    private fun setFragment() {
-        if (Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, AnimeFragment())
-                .commit()
-        } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_layout, AnilistLoginFragment())
-                .commit()
         }
     }
 }
