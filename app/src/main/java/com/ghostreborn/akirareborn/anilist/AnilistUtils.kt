@@ -3,6 +3,7 @@ package com.ghostreborn.akirareborn.anilist
 import android.content.Context
 import androidx.room.Room
 import com.ghostreborn.akirareborn.Constants
+import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.database.Anilist
 import com.ghostreborn.akirareborn.database.AnilistDatabase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -96,7 +97,8 @@ class AnilistUtils {
             val malId = entry.getJSONObject("media").getString("idMal")
             val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
             val progress = entry.getString("progress")
-            anilistAnime.add(Anilist(id, malId, "", title, progress))
+            val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
+            anilistAnime.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         val instance = Room.databaseBuilder(
             context,
