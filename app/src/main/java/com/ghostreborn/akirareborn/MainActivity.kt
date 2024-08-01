@@ -19,16 +19,14 @@ class MainActivity : AppCompatActivity() {
     // TODO if anime is in Anilist, show a way to update progress
     // TODO if not available in Anilist, show add button
     // TODO add to Anilist based on category like CURRENT, DROPPED etc
-    // TODO get anilist locally ie save it in database
-    // TODO if saved in database, it is easy to call for non anilist checking
     // TODO show setting screen to change sub or dub
 
-    // TODO IDEA - Login with Anilist upon app opening
-    // TODO store list of entries in local database
     // TODO use the mediaListEntryID to save progress to cloud
     // TODO thus Anilist API is not spammed with requests
     // TODO use malId to get allAnimeId and there is an api to use array of
     //  allAnimeIds to get anime data
+
+    // TODO upon opening AnimeDetails, check AllAnimeID is in database
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

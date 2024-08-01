@@ -32,7 +32,6 @@ class AnilistAdapter(private val context: Context) :
         val anime = Constants.anilistAnimeList[position]
         holder.animeNameTextView.text = anime.title
         holder.itemView.setOnClickListener {
-            Constants.anilistAnime = anime
             Constants.isAnilist = true
             Constants.getAllAnimeID = true
             context.startActivity(Intent(context, AnimeDetailsActivity::class.java))

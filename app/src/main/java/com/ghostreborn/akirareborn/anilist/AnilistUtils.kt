@@ -95,7 +95,7 @@ class AnilistUtils {
 
     private fun getAnilist(context: Context) {
         val rawJSON = getAnimeList()
-        Constants.anilistTest = ArrayList()
+        Constants.anilistAnimes = ArrayList()
         val entries = JSONObject(rawJSON.toString())
             .getJSONObject("data")
             .getJSONObject("MediaListCollection")
@@ -109,21 +109,21 @@ class AnilistUtils {
             val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
             val progress = entry.getString("progress")
             val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
-            Constants.anilistTest.add(Anilist(id, malId, allAnimeId, title, progress))
+            Constants.anilistAnimes.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         val instance = Room.databaseBuilder(
             context,
             AnilistUserDatabase::class.java,
             Constants.DATABASE_NAME
         ).build()
-        for (i in 0 until Constants.anilistTest.size) {
+        for (i in 0 until Constants.anilistAnimes.size) {
             instance.anilistUserDao().insertAll(
                 AnilistUser(
-                    Constants.anilistTest.get(i).mediaId,
-                    Constants.anilistTest.get(i).malId,
-                    Constants.anilistTest.get(i).allAnimeID,
-                    Constants.anilistTest.get(i).title,
-                    Constants.anilistTest.get(i).progress
+                    Constants.anilistAnimes.get(i).mediaId,
+                    Constants.anilistAnimes.get(i).malId,
+                    Constants.anilistAnimes.get(i).allAnimeID,
+                    Constants.anilistAnimes.get(i).title,
+                    Constants.anilistAnimes.get(i).progress
                 )
             )
         }

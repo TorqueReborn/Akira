@@ -34,6 +34,7 @@ class AnimeAdapter(private val context: Context) :
         holder.animeNameTextView.text = anime.name
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
+            Constants.allAnimeID = anime.id
             context.startActivity(Intent(context, AnimeDetailsActivity::class.java))
         }
     }

@@ -1,4 +1,4 @@
-package com.ghostreborn.akirareborn.test
+package com.ghostreborn.akirareborn.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,14 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.R
-import com.ghostreborn.akirareborn.database.AnilistUser
 import com.ghostreborn.akirareborn.database.AnilistUserDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class TestFragment : Fragment() {
+class AllAnimeDetailsFragment : Fragment() {
 
     private lateinit var testText: TextView
 
@@ -24,37 +23,28 @@ class TestFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_test, container, false)
+        val view = inflater.inflate(R.layout.fragment_all_anime_details, container, false)
         testText = view.findViewById(R.id.test_text)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkAnilist()
+    }
+
+    private fun checkAnilist() {
         CoroutineScope(Dispatchers.IO).launch {
-            Constants.anilistUserID =
-                Constants.preferences.getString(Constants.AKIRA_USER_ID, "").toString()
-            Constants.anilistToken =
-                Constants.preferences.getString(Constants.AKIRA_TOKEN, "").toString()
-            TestAPI().getAnilist()
-            val instance = Room.databaseBuilder(
+            val db = Room.databaseBuilder(
                 requireContext(),
                 AnilistUserDatabase::class.java,
                 Constants.DATABASE_NAME
             ).build()
-            for (i in 0 until Constants.anilistAnimes.size) {
-                instance.anilistUserDao().insertAll(
-                    AnilistUser(
-                        Constants.anilistAnimes.get(i).mediaId,
-                        Constants.anilistAnimes.get(i).malId,
-                        Constants.anilistAnimes.get(i).allAnimeID,
-                        Constants.anilistAnimes.get(i).title,
-                        Constants.anilistAnimes.get(i).progress
-                    )
-                )
-            }
+            val anilist = db.anilistUserDao().findByAllAnimeID(Constants.allAnimeID)
             withContext(Dispatchers.Main) {
-                testText.text = Constants.anilistAnimes.get(0).title
+                if (anilist != null) {
+                    testText.text = anilist.progress
+                }
             }
         }
     }

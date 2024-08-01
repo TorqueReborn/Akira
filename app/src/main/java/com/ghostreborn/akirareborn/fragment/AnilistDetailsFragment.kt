@@ -34,7 +34,7 @@ class AnilistDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
             if (Constants.getAllAnimeID){
-                Constants.allAnimeID = AllAnimeParser().allAnimeIdWithMalId(Constants.anilistAnime.title, Constants.anilistAnime.malId)
+//                Constants.allAnimeID = AllAnimeParser().allAnimeIdWithMalId(Constants.anilistAnime.title, Constants.anilistAnime.malId)
             }
             AllAnimeParser().animeDetails(Constants.allAnimeID)
             withContext(Dispatchers.Main) {

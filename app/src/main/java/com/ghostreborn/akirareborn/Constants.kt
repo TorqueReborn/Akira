@@ -1,6 +1,7 @@
 package com.ghostreborn.akirareborn
 
 import android.content.SharedPreferences
+import com.ghostreborn.akirareborn.database.AnilistUser
 import com.ghostreborn.akirareborn.model.Anilist
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.AnimeDetails
@@ -33,12 +34,16 @@ object Constants {
     lateinit var anilistUserID: String
 
     lateinit var anilistAnimeList: ArrayList<Anilist>
-    lateinit var anilistAnime: Anilist
-    lateinit var allAnimeID: String
     var isAnilist: Boolean = false
     var getAllAnimeID: Boolean = false
-
     // Database
     const val DATABASE_NAME = "anilist"
-    lateinit var anilistTest: ArrayList<Anilist>
+
+    // Updated variables
+    lateinit var allAnimeID: String
+
+    // For one time use to store anilist to database
+    lateinit var anilistAnimes: ArrayList<Anilist>
+    lateinit var anilist: AnilistUser
+
 }

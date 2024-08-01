@@ -50,7 +50,7 @@ class TestAPI {
 
     fun getAnilist(): String {
         val rawJSON = getAnimeList()
-        Constants.anilistTest = ArrayList()
+        Constants.anilistAnimes = ArrayList()
         val entries = JSONObject(rawJSON.toString())
             .getJSONObject("data")
             .getJSONObject("MediaListCollection")
@@ -64,7 +64,7 @@ class TestAPI {
             val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
             val progress = entry.getString("progress")
             val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
-            Constants.anilistTest.add(Anilist(id, malId, allAnimeId, title, progress))
+            Constants.anilistAnimes.add(Anilist(id, malId, allAnimeId, title, progress))
         }
         return entries.toString()
     }

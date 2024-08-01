@@ -10,6 +10,9 @@ interface AnilistUserDao {
     @Query("SELECT * FROM Anilist")
     fun getAll(): List<AnilistUser>
 
+    @Query("SELECT * FROM Anilist WHERE allAnimeID=:allAnimeID")
+    fun findByAllAnimeID(allAnimeID: String): AnilistUser
+
     @Insert
     fun insertAll(vararg anilist: AnilistUser)
 
