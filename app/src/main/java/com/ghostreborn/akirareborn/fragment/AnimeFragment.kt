@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,24 +18,40 @@ import kotlinx.coroutines.withContext
 
 class AnimeFragment : Fragment() {
 
-    private lateinit var animeRecyclerView: RecyclerView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_anime, container, false)
-        animeRecyclerView = view.findViewById(R.id.anime_recycler_view)
+        recyclerView = view.findViewById(R.id.anime_recycler_view)
+        searchView = view.findViewById(R.id.anime_search_view)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setCoroutine("")
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                setCoroutine(searchView.query.toString())
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+        })
+    }
+
+    fun setCoroutine(anime: String){
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = AllAnimeParser().searchAnime("")
+            val animes = AllAnimeParser().searchAnime(anime)
             withContext(Dispatchers.Main) {
-                animeRecyclerView.adapter = AnimeAdapter(anime)
-                animeRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                recyclerView.adapter = AnimeAdapter(animes)
+                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
             }
         }
     }
