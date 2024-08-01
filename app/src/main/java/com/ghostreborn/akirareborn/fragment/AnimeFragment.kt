@@ -38,4 +38,8 @@ class AnimeFragment : Fragment() {
             }
         }
     }
+
+    companion object{
+        var allAnimeID: String = ""
+    }
 }

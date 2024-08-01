@@ -1,12 +1,15 @@
 package com.ghostreborn.akirareborn.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
 import com.ghostreborn.akirareborn.model.Anime
 import com.squareup.picasso.Picasso
 
@@ -31,6 +34,10 @@ class AnimeAdapter(private val animes: ArrayList<Anime>) :
         val anime = animes[position]
         holder.animeNameTextView.text = anime.name
         Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
+        holder.itemView.setOnClickListener {
+            AnimeFragment.allAnimeID = anime.id
+            holder.itemView.context.startActivity(Intent(holder.itemView.context, AnimeDetailsActivity::class.java))
+        }
     }
 
 }
