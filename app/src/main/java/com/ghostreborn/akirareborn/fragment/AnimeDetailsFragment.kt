@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ghostreborn.akirareborn.ui.EpisodesActivity
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding
+import com.ghostreborn.akirareborn.ui.AnimeDetailsActivity
+import com.ghostreborn.akirareborn.ui.EpisodesActivity
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +45,21 @@ class AnimeDetailsFragment : Fragment() {
                 Picasso.get().load(details.thumbnail).into(binding.animeThumbnail)
                 binding.watchFab.setOnClickListener {
                     startActivity(Intent(requireContext(), EpisodesActivity::class.java))
+                }
+
+                if (details.prequel.isNotEmpty()) {
+                    binding.prequelButton.visibility = View.VISIBLE
+                    binding.prequelButton.setOnClickListener {
+                        AnimeFragment.allAnimeID = details.prequel
+                        startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
+                    }
+                }
+                if (details.sequel.isNotEmpty()) {
+                    binding.sequelButton.visibility = View.VISIBLE
+                    binding.sequelButton.setOnClickListener {
+                        AnimeFragment.allAnimeID = details.sequel
+                        startActivity(Intent(requireContext(), AnimeDetailsActivity::class.java))
+                    }
                 }
             }
         }
