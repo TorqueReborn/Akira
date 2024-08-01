@@ -14,6 +14,7 @@
     <string name="user">User</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
+    <string name="one">1</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>

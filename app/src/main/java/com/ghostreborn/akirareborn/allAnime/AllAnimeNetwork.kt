@@ -55,4 +55,12 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
+    fun anilistIdWithAllAnimeID(id:String): String? {
+        val variables = "\"showId\":\"$id\""
+        val queryTypes = "\$showId:String!"
+        val query =
+            "show(_id:\$showId){aniListId}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
 }

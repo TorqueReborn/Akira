@@ -44,6 +44,15 @@ class AllAnimeParser {
         return AnimeDetails(name, thumbnail, description, banner, prequel, sequel)
     }
 
+    fun anilistWithAllAnimeID(allAnimeId: String):String {
+        val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
+        val show = JSONObject(rawJSON)
+            .getJSONObject("data")
+            .getJSONObject("show")
+        val malId = show.getString("aniListId")
+        return malId
+    }
+
     fun allAnimeIdWithMalId(anime: String, malId: String):String {
         val rawJSON = AllAnimeNetwork().allAnimeIdWithMalId(anime).toString()
         val edgesArray = JSONObject(rawJSON)

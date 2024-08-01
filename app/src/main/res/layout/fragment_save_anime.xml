@@ -27,7 +27,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="4"
-        android:inputType="text"
+        android:inputType="number"
+        android:text="@string/one"
         app:layout_constraintEnd_toStartOf="@+id/anime_status_spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

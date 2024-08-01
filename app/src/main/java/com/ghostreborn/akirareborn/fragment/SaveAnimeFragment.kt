@@ -11,8 +11,10 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.anilist.AnilistParser
 import com.ghostreborn.akirareborn.database.AnilistDatabase
+import com.ghostreborn.akirareborn.fragment.AnimeFragment.Companion.allAnimeID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,15 +51,9 @@ class SaveAnimeFragment : Fragment() {
 
         progressAddButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val allAnimeID = "ReooPAxPMsHM4KPMY"
-                val db = Room.databaseBuilder(
-                    requireContext(),
-                    AnilistDatabase::class.java,
-                    "Akira"
-                ).build()
-                val anilist = db.anilistDao().findByAllAnimeID(allAnimeID)
+                val anilistID = AllAnimeParser().anilistWithAllAnimeID("TAY6dqJNwKKSECHaB")
                 AnilistParser().saveAnime(
-                    anilist.malID,
+                    anilistID,
                     spinner.selectedItem.toString(),
                     progressEditText.text.toString(),
                     requireContext()
@@ -67,14 +63,18 @@ class SaveAnimeFragment : Fragment() {
 
         progressDeleteButton.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val allAnimeID = "ReooPAxPMsHM4KPMY"
-                val db = Room.databaseBuilder(
+                val instance = Room.databaseBuilder(
                     requireContext(),
                     AnilistDatabase::class.java,
                     "Akira"
                 ).build()
-                val anilist = db.anilistDao().findByAllAnimeID(allAnimeID)
-                AnilistParser().deleteAnime(anilist.id, requireContext())
+                val anilist = instance.anilistDao().findByAllAnimeID(allAnimeID)
+                if (anilist != null) {
+                    AnilistParser().deleteAnime(
+                        anilist.id,
+                        requireContext()
+                    )
+                }
             }
         }
     }
