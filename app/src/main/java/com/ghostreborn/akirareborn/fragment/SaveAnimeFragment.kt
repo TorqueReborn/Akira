@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akirareborn.R
@@ -61,6 +62,9 @@ class SaveAnimeFragment : Fragment() {
                     progressEditText.text.toString(),
                     requireContext()
                 )
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -77,6 +81,9 @@ class SaveAnimeFragment : Fragment() {
                         anilist.id,
                         requireContext()
                     )
+                }
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
