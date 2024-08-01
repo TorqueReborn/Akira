@@ -21,11 +21,9 @@ class AnilistLoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_anilist_login, container, false)
-        loginButton = view.findViewById(R.id.anilist_login_button)
-        progressBar = view.findViewById(R.id.login_progress_bar)
-        return view
+    ): View = inflater.inflate(R.layout.fragment_anilist_login, container, false).apply {
+        loginButton = findViewById(R.id.anilist_login_button)
+        progressBar = findViewById(R.id.login_progress_bar)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,7 +31,7 @@ class AnilistLoginFragment : Fragment() {
         if (!Constants.preferences.getBoolean(Constants.PREF_LOGGED_IN, false)) {
             loginButton.setOnClickListener {
                 progressBar.visibility = View.VISIBLE
-                startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(Constants.AUTH_URL)))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
             }
         } else {
             startActivity(Intent(context, MainActivity::class.java))
