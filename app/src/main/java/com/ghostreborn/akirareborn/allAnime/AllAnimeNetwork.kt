@@ -11,96 +11,69 @@ class AllAnimeNetwork {
         query: String
     ): String? {
         val client = OkHttpClient()
-        val url =
-            "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
+        val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val request = Request.Builder()
             .url(url)
             .header("Referer", "https://allanime.to")
             .header("Cipher", "AES256-SHA256")
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
-            )
+            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0")
             .build()
-        val response = client.newCall(request).execute()
-        val responseBody = response.body?.string()
-        return responseBody
+        return client.newCall(request).execute().body?.string()
     }
 
     fun searchAnime(anime: String): String? {
-        val variables =
-            "\"search\":{\"allowAdult\":true,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"JP\""
-        val queryTypes =
-            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
-        val query =
-            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail}}"
+        val variables = "\"search\":{\"allowAdult\":true,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"JP\""
+        val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query = "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun animeDetails(id: String): String? {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
-        val query =
-            "show(_id:\$showId){name,thumbnail,description,banner,relatedShows}"
+        val query = "show(_id:\$showId){name,thumbnail,description,banner,relatedShows}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun episodes(id: String): String? {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
-        val query =
-            "show(_id:\$showId){availableEpisodesDetail}"
+        val query = "show(_id:\$showId){availableEpisodesDetail}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun episodeUrls(id: String, episode: String): String? {
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
-        val queryTypes =
-            "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
-        val query =
-            "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){" +
-                    "sourceUrls" +
-                    "}"
+        val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
+        val query = "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){sourceUrls}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun episodeDetails(id: String, episode: String): String? {
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
-        val queryTypes =
-            "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
-        val query =
-            "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){" +
-                    "episodeString," +
-                    "episodeInfo{notes,thumbnails}" +
-                    "}"
+        val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
+        val query = "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){episodeString,episodeInfo{notes,thumbnails}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun getDetailsByIds(ids: String): String? {
-        val variables =
-            "\"ids\":[$ids]"
-        val queryTypes =
-            "\$ids:[String!]!"
-        val query =
-            "showsWithIds(ids:\$ids){_id,name,thumbnail}"
+        val variables = "\"ids\":[$ids]"
+        val queryTypes = "\$ids:[String!]!"
+        val query = "showsWithIds(ids:\$ids){_id,name,thumbnail}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun allAnimeIdWithMalId(anime: String): String? {
-        val variables =
-            "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
-        val queryTypes =
-            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
-        val query =
-            "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,malId}}"
+        val variables = "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
+        val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query = "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,malId}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
     fun anilistIdWithAllAnimeID(id: String): String? {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
-        val query =
-            "show(_id:\$showId){aniListId}"
+        val query = "show(_id:\$showId){aniListId}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
