@@ -86,15 +86,31 @@ class AllAnimeParser {
             return Episode(episodeNumber, "Episode ${episodeNumber}", tempThumbnail)
         }
         var episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
-        if (episodeName=="null") {
+        if (episodeName == "null") {
             episodeName = "Episode ${episodeNumber}"
         }
         var episodeThumbnail = tempThumbnail
-        if(!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")){
+        if (!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")) {
             episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
                     episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
         }
         return Episode(episodeNumber, episodeName, episodeThumbnail)
+    }
+
+    fun getDetailsByIds(ids: String): ArrayList<Anime> {
+        val rawJSON = AllAnimeNetwork().getDetailsByIds(ids)
+        val animes: ArrayList<Anime> = ArrayList()
+        val shows = JSONObject(rawJSON.toString())
+            .getJSONObject("data")
+            .getJSONArray("showsWithIds")
+        for (i in 0 until shows.length()) {
+            val show = shows.getJSONObject(i)
+            val id = show.getString("_id")
+            val name = show.getString("name")
+            val thumbnail = show.getString("thumbnail")
+            animes.add(Anime(id, name, thumbnail))
+        }
+        return animes
     }
 
     fun episodeDetails(id: String, episodes: ArrayList<String>): ArrayList<Episode> {
@@ -181,7 +197,7 @@ class AllAnimeParser {
         return decryptedString.toString()
     }
 
-    fun anilistWithAllAnimeID(allAnimeId: String):String {
+    fun anilistWithAllAnimeID(allAnimeId: String): String {
         val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
         val show = JSONObject(rawJSON)
             .getJSONObject("data")
@@ -190,7 +206,7 @@ class AllAnimeParser {
         return malId
     }
 
-    fun allAnimeIdWithMalId(anime: String, malId: String):String {
+    fun allAnimeIdWithMalId(anime: String, malId: String): String {
         val rawJSON = AllAnimeNetwork().allAnimeIdWithMalId(anime).toString()
         val edgesArray = JSONObject(rawJSON)
             .getJSONObject("data")
@@ -198,7 +214,7 @@ class AllAnimeParser {
             .getJSONArray("edges")
         for (i in 0 until edgesArray.length()) {
             val edge = edgesArray.getJSONObject(i)
-            if (edge.getString("malId") == malId){
+            if (edge.getString("malId") == malId) {
                 return edge.getString("_id")
             }
         }

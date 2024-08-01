@@ -27,7 +27,7 @@ class AllAnimeNetwork {
         return responseBody
     }
 
-    fun searchAnime(anime:String): String? {
+    fun searchAnime(anime: String): String? {
         val variables =
             "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"JP\""
         val queryTypes =
@@ -37,7 +37,7 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun animeDetails(id:String):String?{
+    fun animeDetails(id: String): String? {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query =
@@ -76,7 +76,17 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun allAnimeIdWithMalId(anime:String): String? {
+    fun getDetailsByIds(ids: String): String? {
+        val variables =
+            "\"ids\":[$ids]"
+        val queryTypes =
+            "\$ids:[String!]!"
+        val query =
+            "showsWithIds(ids:\$ids){_id,name,thumbnail}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
+    fun allAnimeIdWithMalId(anime: String): String? {
         val variables =
             "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
         val queryTypes =
@@ -86,7 +96,7 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun anilistIdWithAllAnimeID(id:String): String? {
+    fun anilistIdWithAllAnimeID(id: String): String? {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query =

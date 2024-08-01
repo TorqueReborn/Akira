@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private fun setViewPager() {
         val viewPager: ViewPager2 = findViewById(R.id.anime_view_pager)
         viewPager.adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
-        viewPager.currentItem = 1
+        viewPager.currentItem = 0
     }
 
     private fun setData() {
