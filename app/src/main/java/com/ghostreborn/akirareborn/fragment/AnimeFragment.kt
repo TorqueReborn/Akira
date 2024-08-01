@@ -60,5 +60,6 @@ class AnimeFragment : Fragment() {
         var allAnimeID: String = ""
         var animeThumbnail: String = ""
         var animeEpisode: String = ""
+        var animeUrl: String = ""
     }
 }

@@ -1,11 +1,14 @@
 package com.ghostreborn.akirareborn.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
+import com.ghostreborn.akirareborn.ui.PlayEpisodeActivity
 
 class ServerAdapter(private val sourceUrls: ArrayList<String>) :
     RecyclerView.Adapter<ServerAdapter.AnimeViewHolder>() {
@@ -25,6 +28,12 @@ class ServerAdapter(private val sourceUrls: ArrayList<String>) :
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val server = sourceUrls[position]
         holder.serverTextView.text = server
+        holder.itemView.setOnClickListener {
+            AnimeFragment.animeUrl = server
+            holder.itemView.context.startActivity(
+                Intent(holder.itemView.context, PlayEpisodeActivity::class.java)
+            )
+        }
     }
 
 }
