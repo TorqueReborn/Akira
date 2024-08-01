@@ -23,65 +23,73 @@ import kotlinx.coroutines.withContext
 
 class SaveAnimeFragment : Fragment() {
 
-    lateinit var spinner: Spinner
-    lateinit var progressEditText: EditText
-    lateinit var progressAddButton: Button
-    lateinit var progressDeleteButton: Button
+    private lateinit var spinner: Spinner
+    private lateinit var progressEditText: EditText
+    private lateinit var progressAddButton: Button
+    private lateinit var progressDeleteButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_save_anime, container, false)
-        spinner = view.findViewById(R.id.anime_status_spinner)
-        progressEditText = view.findViewById(R.id.anime_progress_edit_text)
-        progressAddButton = view.findViewById(R.id.anime_progress_add_button)
-        progressDeleteButton = view.findViewById(R.id.anime_progress_delete_button)
-        return view
+        return inflater.inflate(R.layout.fragment_save_anime, container, false).apply {
+            spinner = findViewById(R.id.anime_status_spinner)
+            progressEditText = findViewById(R.id.anime_progress_edit_text)
+            progressAddButton = findViewById(R.id.anime_progress_add_button)
+            progressDeleteButton = findViewById(R.id.anime_progress_delete_button)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupSpinner()
         getProgress()
 
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.anime_status,
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-
         progressAddButton.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
-                AnilistParser().saveAnime(
-                    anilistID,
-                    spinner.selectedItem.toString(),
-                    progressEditText.text.toString(),
-                    requireContext()
-                )
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
-                }
-            }
+            handleAddProgress()
         }
 
         progressDeleteButton.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val instance = Room.databaseBuilder(
-                    requireContext(),
-                    AnilistDatabase::class.java,
-                    "Akira"
-                ).build()
-                val anilist = instance.anilistDao().findByAllAnimeID(allAnimeID)
-                if (anilist != null) {
-                    AnilistParser().deleteAnime(
-                        anilist.id,
-                        requireContext()
-                    )
-                }
+            handleDeleteProgress()
+        }
+    }
+
+    private fun setupSpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.anime_status,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
+    }
+
+    private fun handleAddProgress() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
+            AnilistParser().saveAnime(
+                anilistID,
+                spinner.selectedItem.toString(),
+                progressEditText.text.toString(),
+                requireContext()
+            )
+            withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun handleDeleteProgress() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val instance = Room.databaseBuilder(
+                requireContext(),
+                AnilistDatabase::class.java,
+                "Akira"
+            ).build()
+            instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
+                AnilistParser().deleteAnime(anilist.id, requireContext())
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
                 }
@@ -96,14 +104,12 @@ class SaveAnimeFragment : Fragment() {
                 AnilistDatabase::class.java,
                 "Akira"
             ).build()
-            val anilist = instance.anilistDao().findByAllAnimeID(allAnimeID)
-            withContext(Dispatchers.Main) {
-                if (anilist != null) {
+            instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
+                withContext(Dispatchers.Main) {
                     progressEditText.setText(anilist.progress)
                     AnimeFragment.animeEpisode = anilist.progress
                 }
             }
         }
     }
-
 }
