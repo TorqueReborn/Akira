@@ -1,9 +1,9 @@
 package com.ghostreborn.akirareborn.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.R
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EpisodeGroupAdapter(
-    val context: Context,
+    val activity: AppCompatActivity,
     val episodeGroupList: ArrayList<ArrayList<String>>,
     val episodeRecycler: RecyclerView
 ) : RecyclerView.Adapter<EpisodeGroupAdapter.EpisodeGroupViewHolder>() {
@@ -32,9 +32,9 @@ class EpisodeGroupAdapter(
     }
 
     override fun getItemCount(): Int {
-        return if (episodeGroupList.size<=1){
+        return if (episodeGroupList.size <= 1) {
             0
-        }else{
+        } else {
             episodeGroupList.size
         }
     }
@@ -44,10 +44,13 @@ class EpisodeGroupAdapter(
         holder.episodePageTextView.text = page
         holder.episodePageTextView.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val parsed = AllAnimeParser().episodeDetails(AnimeFragment.allAnimeID, episodeGroupList[position])
+                val parsed = AllAnimeParser().episodeDetails(
+                    AnimeFragment.allAnimeID,
+                    episodeGroupList[position]
+                )
                 withContext(Dispatchers.Main) {
-                    episodeRecycler.adapter = EpisodeAdapter(parsed)
-                    episodeRecycler.layoutManager = LinearLayoutManager(context)
+                    episodeRecycler.adapter = EpisodeAdapter(parsed, activity)
+                    episodeRecycler.layoutManager = LinearLayoutManager(activity)
                 }
             }
         }

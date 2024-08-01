@@ -5,12 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.fragment.AnimeFragment
+import com.ghostreborn.akirareborn.fragment.ServerFragment
 import com.ghostreborn.akirareborn.model.Episode
 import com.squareup.picasso.Picasso
 
-class EpisodeAdapter(private val episodeList: ArrayList<Episode>) :
+class EpisodeAdapter(private val episodeList: ArrayList<Episode>, private val activity: AppCompatActivity) :
     RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
     class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeTitleTextView: TextView = itemView.findViewById(R.id.episode_title_text_view)
@@ -35,5 +38,10 @@ class EpisodeAdapter(private val episodeList: ArrayList<Episode>) :
         Picasso.get()
             .load(episode.episodeThumbnail)
             .into(holder.episodeThumbnailImageView)
+        holder.itemView.setOnClickListener {
+            AnimeFragment.animeEpisode = episode.episodeNumber
+            ServerFragment()
+                .show(activity.supportFragmentManager, "Select Server")
+        }
     }
 }

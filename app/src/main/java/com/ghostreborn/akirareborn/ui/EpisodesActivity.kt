@@ -26,7 +26,7 @@ class EpisodesActivity : AppCompatActivity() {
             val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
             val parsed = AllAnimeParser().episodeDetails(AnimeFragment.allAnimeID, group[0])
             withContext(Dispatchers.Main) {
-                episodeRecycler.adapter = EpisodeAdapter(parsed)
+                episodeRecycler.adapter = EpisodeAdapter(parsed, this@EpisodesActivity)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
                 episodeGroupRecycler.adapter =
                     EpisodeGroupAdapter(this@EpisodesActivity, group, episodeRecycler)
