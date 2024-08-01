@@ -1,9 +1,10 @@
-package com.ghostreborn.akirareborn
+package com.ghostreborn.akirareborn.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.adapter.EpisodeAdapter
 import com.ghostreborn.akirareborn.adapter.EpisodeGroupAdapter
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
@@ -23,10 +24,12 @@ class EpisodesActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val group = AllAnimeParser().episodes(AnimeFragment.allAnimeID)
+            val parsed = AllAnimeParser().episodeDetails(AnimeFragment.allAnimeID, group[0])
             withContext(Dispatchers.Main) {
-                episodeRecycler.adapter = EpisodeAdapter(group[0])
+                episodeRecycler.adapter = EpisodeAdapter(parsed)
                 episodeRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
-                episodeGroupRecycler.adapter = EpisodeGroupAdapter(group)
+                episodeGroupRecycler.adapter =
+                    EpisodeGroupAdapter(this@EpisodesActivity, group, episodeRecycler)
                 episodeGroupRecycler.layoutManager = LinearLayoutManager(
                     this@EpisodesActivity, LinearLayoutManager.HORIZONTAL,
                     false

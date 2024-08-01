@@ -53,6 +53,18 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
+    fun episodeDetails(id: String, episode: String): String? {
+        val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
+        val queryTypes =
+            "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
+        val query =
+            "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){" +
+                    "episodeString," +
+                    "episodeInfo{notes,thumbnails}" +
+                    "}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
     fun allAnimeIdWithMalId(anime:String): String? {
         val variables =
             "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""

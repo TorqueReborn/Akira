@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.ghostreborn.akirareborn.EpisodesActivity
+import com.ghostreborn.akirareborn.ui.EpisodesActivity
 import com.ghostreborn.akirareborn.R
 import com.ghostreborn.akirareborn.allAnime.AllAnimeParser
 import com.ghostreborn.akirareborn.databinding.FragmentAnimeDetailsBinding

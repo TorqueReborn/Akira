@@ -3,6 +3,7 @@ package com.ghostreborn.akirareborn.allAnime
 import androidx.core.text.HtmlCompat
 import com.ghostreborn.akirareborn.model.Anime
 import com.ghostreborn.akirareborn.model.AnimeDetails
+import com.ghostreborn.akirareborn.model.Episode
 import org.json.JSONObject
 
 class AllAnimeParser {
@@ -66,6 +67,37 @@ class AllAnimeParser {
             startIndex = endIndex
         }
         return group
+    }
+
+    private fun episodeDetail(id: String, episode: String): Episode {
+        val rawJSON = AllAnimeNetwork().episodeDetails(id, episode).toString()
+        val episodeDetails = JSONObject(rawJSON)
+            .getJSONObject("data")
+            .getJSONObject("episode")
+        val episodeNumber = episodeDetails.getString("episodeString")
+        val tempThumbnail = "https://wp.youtube-anime.com/cdn.myanimelist.net/images/anime/1810/139965.jpg?w=250"
+        if (episodeDetails.isNull("episodeInfo")) {
+            return Episode(episodeNumber, "Episode ${episodeNumber}", tempThumbnail)
+        }
+        var episodeName = episodeDetails.getJSONObject("episodeInfo").getString("notes")
+        if (episodeName=="null") {
+            episodeName = "Episode ${episodeNumber}"
+        }
+        var episodeThumbnail = tempThumbnail
+        if(!episodeDetails.getJSONObject("episodeInfo").isNull("thumbnails")){
+            episodeThumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com" +
+                    episodeDetails.getJSONObject("episodeInfo").getJSONArray("thumbnails")[0]
+        }
+        return Episode(episodeNumber, episodeName, episodeThumbnail)
+    }
+
+    fun episodeDetails(id: String, episodes: ArrayList<String>): ArrayList<Episode> {
+        val parsed: ArrayList<Episode> = ArrayList()
+        for (episode in episodes) {
+            val episodeDetail = episodeDetail(id, episode)
+            parsed.add(episodeDetail)
+        }
+        return parsed
     }
 
     fun anilistWithAllAnimeID(allAnimeId: String):String {

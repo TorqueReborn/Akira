@@ -7,8 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akirareborn.R
+import com.ghostreborn.akirareborn.model.Episode
+import com.squareup.picasso.Picasso
 
-class EpisodeAdapter(private val episodeList: ArrayList<String>) :
+class EpisodeAdapter(private val episodeList: ArrayList<Episode>) :
     RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
     class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeTitleTextView: TextView = itemView.findViewById(R.id.episode_title_text_view)
@@ -27,6 +29,11 @@ class EpisodeAdapter(private val episodeList: ArrayList<String>) :
     }
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        holder.episodeNumberTextView.text = episodeList[position]
+        val episode = episodeList[position]
+        holder.episodeTitleTextView.text = episode.episodeTitle
+        holder.episodeNumberTextView.text = episode.episodeNumber
+        Picasso.get()
+            .load(episode.episodeThumbnail)
+            .into(holder.episodeThumbnailImageView)
     }
 }
