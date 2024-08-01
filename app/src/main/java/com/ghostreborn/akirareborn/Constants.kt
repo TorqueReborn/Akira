@@ -43,7 +43,6 @@ object Constants {
     lateinit var allAnimeID: String
 
     // For one time use to store anilist to database
-    lateinit var anilistAnimes: ArrayList<Anilist>
     lateinit var anilist: AnilistUser
 
 }

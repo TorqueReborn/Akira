@@ -32,29 +32,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            Constants.anilistUserID =
-                Constants.preferences.getString(Constants.AKIRA_USER_ID, "").toString()
-            Constants.anilistToken =
-                Constants.preferences.getString(Constants.AKIRA_TOKEN, "").toString()
-            TestAPI().getAnilist()
-            val instance = Room.databaseBuilder(
-                requireContext(),
-                AnilistUserDatabase::class.java,
-                Constants.DATABASE_NAME
-            ).build()
-            for (i in 0 until Constants.anilistAnimes.size) {
-                instance.anilistUserDao().insertAll(
-                    AnilistUser(
-                        Constants.anilistAnimes.get(i).mediaId,
-                        Constants.anilistAnimes.get(i).malId,
-                        Constants.anilistAnimes.get(i).allAnimeID,
-                        Constants.anilistAnimes.get(i).title,
-                        Constants.anilistAnimes.get(i).progress
-                    )
-                )
-            }
+            val test = TestAPI().testApi()
             withContext(Dispatchers.Main) {
-                testText.text = Constants.anilistAnimes.get(0).title
+                testText.text = test
             }
         }
     }
