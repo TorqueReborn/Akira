@@ -2,9 +2,11 @@ package com.ghostreborn.akirareborn
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akirareborn.Constants.PREF_NAME
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,8 +31,10 @@ class MainActivity : AppCompatActivity() {
         val intent: Intent = intent
         val uri = intent.data
         if (uri != null) {
-            val code = uri.getQueryParameter("code")
-            Log.e("MainActivity", "Code: $code")
+            val code = uri.getQueryParameter("code").toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                AnilistUtils().getToken(code)
+            }
         }
     }
 }
