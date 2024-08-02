@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.room.Room
@@ -24,7 +22,6 @@ import kotlinx.coroutines.withContext
 
 class SaveAnimeFragment : Fragment() {
 
-    private lateinit var spinner: Spinner
     private lateinit var progressEditText: EditText
     private lateinit var progressAddButton: Button
     private lateinit var progressDeleteButton: Button
@@ -36,7 +33,6 @@ class SaveAnimeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_save_anime, container, false).apply {
-            spinner = findViewById(R.id.anime_status_spinner)
             progressEditText = findViewById(R.id.anime_progress_edit_text)
             progressAddButton = findViewById(R.id.anime_progress_add_button)
             progressDeleteButton = findViewById(R.id.anime_progress_delete_button)
@@ -48,7 +44,6 @@ class SaveAnimeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupSpinner()
         getProgress()
 
         plusButton.setOnClickListener { updateValue(1) }
@@ -64,20 +59,9 @@ class SaveAnimeFragment : Fragment() {
     }
 
     fun updateValue(increment: Int) {
-        val currentValue = progressEditText.text.toString().toIntOrNull() ?: 0
-        val newValue = (currentValue + increment).coerceAtLeast(0)
+        val currentValue = progressEditText.text.toString().toIntOrNull() ?: 1
+        val newValue = (currentValue + increment).coerceAtLeast(1)
         progressEditText.setText(newValue.toString())
-    }
-
-    private fun setupSpinner() {
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.anime_status,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
     }
 
     private fun handleAddProgress() {
@@ -85,7 +69,7 @@ class SaveAnimeFragment : Fragment() {
             val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
             AnilistParser().saveAnime(
                 anilistID,
-                spinner.selectedItem.toString(),
+                "CURRENT",
                 progressEditText.text.toString(),
                 requireContext()
             )
@@ -122,7 +106,7 @@ class SaveAnimeFragment : Fragment() {
             ).build()
             instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
                 withContext(Dispatchers.Main) {
-                    if (anilist!=null){
+                    if (anilist != null) {
                         progressEditText.setText(anilist.progress)
                         Constants.animeEpisode = anilist.progress
                     }

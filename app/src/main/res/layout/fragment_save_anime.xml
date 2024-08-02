@@ -6,15 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".fragment.SaveAnimeFragment">
 
-    <Spinner
-        android:id="@+id/anime_status_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/anime_progress_edit_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/anime_plus_button"
-        app:layout_constraintTop_toTopOf="@+id/anime_progress_edit_text" />
-
     <TextView
         android:id="@+id/anime_progress_text_view"
         android:layout_width="wrap_content"
@@ -24,42 +15,43 @@
 
     <EditText
         android:id="@+id/anime_progress_edit_text"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="4"
+        android:autofillHints="phone"
+        android:ems="3"
+        android:gravity="center"
+        android:hint="@string/anime_progress"
         android:inputType="number"
         android:text="@string/one"
-        android:hint="@string/anime_progress"
-        android:autofillHints="phone"
+        app:guidelineUseRtl="false"
         app:layout_constraintEnd_toStartOf="@+id/anime_plus_button"
         app:layout_constraintStart_toEndOf="@+id/anime_minus_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/anime_plus_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:backgroundTint="@color/black"
         android:padding="12dp"
         android:text="@string/plus"
         android:textColor="@android:color/white"
         app:cornerRadius="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/anime_status_spinner"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/anime_progress_add_button"
         app:layout_constraintStart_toEndOf="@+id/anime_progress_edit_text"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/anime_minus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:backgroundTint="@color/black"
         android:padding="12dp"
         android:text="@string/minus"
         android:textColor="@android:color/white"
         app:cornerRadius="24dp"
         app:layout_constraintEnd_toStartOf="@+id/anime_progress_edit_text"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/anime_progress_delete_button"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -71,23 +63,21 @@
         android:text="@string/add"
         android:textColor="@android:color/white"
         app:cornerRadius="24dp"
-        app:layout_constraintEnd_toStartOf="@+id/anime_progress_delete_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/anime_progress_edit_text" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/anime_plus_button"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/anime_progress_delete_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:backgroundTint="@color/black"
         android:padding="12dp"
         android:text="@string/delete"
         android:textColor="@android:color/white"
         app:cornerRadius="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/anime_progress_add_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/anime_progress_add_button"
-        app:layout_constraintTop_toTopOf="@+id/anime_progress_add_button" />
+        app:layout_constraintEnd_toStartOf="@+id/anime_minus_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
