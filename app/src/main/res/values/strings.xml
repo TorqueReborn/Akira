@@ -19,6 +19,8 @@
     <string name="plus">+</string>
     <string name="minus">-</string>
     <string name="zero">0</string>
+    <string name="allow_adult">Allow Adult</string>
+    <string name="allow_unknown">Allow Unknown</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>

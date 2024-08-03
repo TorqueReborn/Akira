@@ -10,6 +10,9 @@ object Constants {
     const val PREF_TOKEN = "USER_TOKEN"
     const val PREF_LOGGED_IN = "LOGGED_IN"
 
+    const val PREF_ALLOW_ADULT = "ALLOW_ADULT"
+    const val PREF_ALLOW_UNKNOWN = "ALLOW_UNKNOWN"
+
     // Anilist
     const val AUTH_URL =
         "https://anilist.co/api/v2/oauth/authorize?client_id=20149&response_type=code&redirect_uri=wanpisu://ghostreborn.in"

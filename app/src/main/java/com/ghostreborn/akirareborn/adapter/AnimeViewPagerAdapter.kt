@@ -8,11 +8,12 @@ import com.ghostreborn.akirareborn.Constants
 import com.ghostreborn.akirareborn.fragment.AnilistFragment
 import com.ghostreborn.akirareborn.fragment.AnilistLoginFragment
 import com.ghostreborn.akirareborn.fragment.AnimeFragment
+import com.ghostreborn.akirareborn.fragment.SettingsFragment
 
 class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
-    override fun getItemCount(): Int = 2
+    override fun getItemCount(): Int = 3
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
@@ -25,6 +26,8 @@ class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
             }
 
             1 -> AnimeFragment()
+
+            2 -> SettingsFragment()
             else -> throw IllegalStateException("Invalid tab position")
         }
     }
