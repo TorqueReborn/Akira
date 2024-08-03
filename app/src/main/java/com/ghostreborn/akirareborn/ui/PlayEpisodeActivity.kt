@@ -60,14 +60,18 @@ class PlayEpisodeActivity : AppCompatActivity() {
                 delay(100)
                 if (videoView.duration > 0 && videoView.currentPosition.toFloat() / videoView.duration >= 0.75) {
                     val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
-                    AnilistParser().saveAnime(
+                    val saved = AnilistParser().saveAnime(
                         anilistID,
                         "CURRENT",
                         Constants.animeEpisode,
                         baseContext
                     )
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(baseContext, "Saved!", Toast.LENGTH_SHORT).show()
+                        if (saved){
+                            Toast.makeText(baseContext, "Saved!", Toast.LENGTH_SHORT).show()
+                        }else{
+                            Toast.makeText(baseContext, "Failed to save!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                     break
                 }

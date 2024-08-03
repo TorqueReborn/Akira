@@ -5,7 +5,7 @@ import okhttp3.Request
 
 class AllAnimeNetwork {
 
-    private fun connectAllAnime(
+    fun connectAllAnime(
         variables: String,
         queryTypes: String,
         query: String

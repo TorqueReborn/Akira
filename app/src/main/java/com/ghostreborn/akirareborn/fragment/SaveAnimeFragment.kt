@@ -67,14 +67,18 @@ class SaveAnimeFragment : Fragment() {
     private fun handleAddProgress() {
         CoroutineScope(Dispatchers.IO).launch {
             val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
-            AnilistParser().saveAnime(
+            val saved = AnilistParser().saveAnime(
                 anilistID,
                 "CURRENT",
                 progressEditText.text.toString(),
                 requireContext()
             )
             withContext(Dispatchers.Main) {
-                Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
+                if (saved){
+                    Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(), "Login to Anilist by swiping from home screen to add or update progress!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

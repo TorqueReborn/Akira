@@ -23,6 +23,7 @@ class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
                     AnilistFragment()
                 }
             }
+
             1 -> AnimeFragment()
             else -> throw IllegalStateException("Invalid tab position")
         }
