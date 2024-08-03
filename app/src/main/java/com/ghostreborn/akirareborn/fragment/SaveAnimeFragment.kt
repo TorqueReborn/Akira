@@ -66,6 +66,7 @@ class SaveAnimeFragment : Fragment() {
 
     private fun handleAddProgress() {
         CoroutineScope(Dispatchers.IO).launch {
+
             val anilistID = AllAnimeParser().anilistWithAllAnimeID(allAnimeID)
             val saved = AnilistParser().saveAnime(
                 anilistID,
@@ -111,6 +112,8 @@ class SaveAnimeFragment : Fragment() {
             instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
                 withContext(Dispatchers.Main) {
                     if (anilist != null) {
+                        val text = "Update"
+                        progressAddButton.text = text
                         progressEditText.setText(anilist.progress)
                         Constants.animeEpisode = anilist.progress
                     }
