@@ -13,6 +13,7 @@ class SettingsFragment : Fragment() {
 
     private lateinit var allowAdultSwitch: SwitchCompat
     private lateinit var allowUnknownSwitch: SwitchCompat
+    private lateinit var subDubSwitch: SwitchCompat
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,6 +22,7 @@ class SettingsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         allowAdultSwitch = view.findViewById(R.id.allow_adult_switch)
         allowUnknownSwitch = view.findViewById(R.id.allow_unknown_switch)
+        subDubSwitch = view.findViewById(R.id.sub_dub_switch)
         return view
     }
 
@@ -28,11 +30,15 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         allowAdultSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_ALLOW_ADULT, false)
         allowUnknownSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_ALLOW_UNKNOWN, false)
+        subDubSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_SUB_DUB, false)
         allowAdultSwitch.setOnCheckedChangeListener{
             _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_ALLOW_ADULT, isChecked).apply()
         }
         allowUnknownSwitch.setOnCheckedChangeListener{
                 _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_ALLOW_UNKNOWN, isChecked).apply()
+        }
+        subDubSwitch.setOnCheckedChangeListener{
+                _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_SUB_DUB, isChecked).apply()
         }
     }
 

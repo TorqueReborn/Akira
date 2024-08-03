@@ -21,4 +21,12 @@
         android:text="@string/allow_unknown"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/allow_adult_switch" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sub_dub_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enable_dub"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/allow_unknown_switch" />
 </androidx.constraintlayout.widget.ConstraintLayout>

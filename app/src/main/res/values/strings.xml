@@ -21,6 +21,8 @@
     <string name="zero">0</string>
     <string name="allow_adult">Allow Adult</string>
     <string name="allow_unknown">Allow Unknown</string>
+    <string name="enable_dub">Enable Dub</string>
+    <string name="enable_sub">Enable Sub</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>

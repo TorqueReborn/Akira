@@ -12,6 +12,7 @@ object Constants {
 
     const val PREF_ALLOW_ADULT = "ALLOW_ADULT"
     const val PREF_ALLOW_UNKNOWN = "ALLOW_UNKNOWN"
+    const val PREF_SUB_DUB = "SUB_DUB"
 
     // Anilist
     const val AUTH_URL =

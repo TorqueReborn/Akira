@@ -60,11 +60,12 @@ class AllAnimeParser {
     }
 
     fun episodes(id: String): ArrayList<ArrayList<String>> {
+        val subDub = AllAnimeNetwork().getSubDub(Constants.preferences.getBoolean(Constants.PREF_SUB_DUB, true))
         val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
             .getJSONObject("data")
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
-            .getJSONArray("sub")
+            .getJSONArray(subDub)
 
         val episodeList = ArrayList<String>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
