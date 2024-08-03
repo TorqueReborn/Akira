@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.PlayEpisodeActivity">
 
-    <VideoView
+    <androidx.media3.ui.PlayerView
         android:id="@+id/anime_video_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
