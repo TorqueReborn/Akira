@@ -43,7 +43,11 @@ class PlayEpisodeActivity : AppCompatActivity() {
         exoPlayer.prepare()
         exoPlayer.play()
 
-        showSystemBars()
+        playerView.setOnClickListener {
+            hideSystemBars()
+        }
+
+        hideSystemBars()
         monitorVideoProgress()
 
     }
@@ -51,20 +55,6 @@ class PlayEpisodeActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         exoPlayer.release()
-    }
-
-    private fun showSystemBars() {
-        WindowInsetsControllerCompat(window, window.decorView).apply {
-            show(WindowInsetsCompat.Type.statusBars())
-            show(WindowInsetsCompat.Type.displayCutout())
-            show(WindowInsetsCompat.Type.navigationBars())
-            CoroutineScope(Dispatchers.IO).launch {
-                delay(1000)
-                withContext(Dispatchers.Main) {
-                    hideSystemBars()
-                }
-            }
-        }
     }
 
     private fun hideSystemBars() {
