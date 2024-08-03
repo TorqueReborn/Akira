@@ -23,7 +23,7 @@ class AllAnimeNetwork {
     }
 
     fun getSubDub(isSubDub: Boolean): String{
-        return if (isSubDub) "dub" else "sub"
+        return if (isSubDub) "sub" else "dub"
     }
 
     fun searchAnime(anime: String): String? {
