@@ -6,6 +6,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.ghostreborn.akirareborn.Constants.PREF_NAME
 import com.ghostreborn.akirareborn.adapter.AnimeViewPagerAdapter
 import com.ghostreborn.akirareborn.anilist.AnilistUtils
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,10 +29,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager() {
-        findViewById<ViewPager2>(R.id.anime_view_pager).apply {
-            adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
-            currentItem = 1
-        }
+        val tabLayout = findViewById<TabLayout>(R.id.main_tabs_layout)
+        val viewPager = findViewById<ViewPager2>(R.id.anime_view_pager)
+        viewPager.adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
+        viewPager.currentItem = 1
+        val tabTitles = listOf("Anilist", "Anime", "Settings")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 
     private fun handleIntentData() {
