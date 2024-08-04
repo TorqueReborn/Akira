@@ -8,7 +8,7 @@ import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allManga.AllMangaParser
 import com.ghostreborn.akira.databinding.ActivityMangaDetailsBinding
-import com.ghostreborn.akira.fragment.SaveAnimeFragment
+import com.ghostreborn.akira.fragment.SaveMangaFragment
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +25,7 @@ class MangaDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.anilist_frame_layout, SaveAnimeFragment())
+            .replace(R.id.anilist_frame_layout, SaveMangaFragment())
             .commit()
 
         CoroutineScope(Dispatchers.IO).launch {

@@ -7,7 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.fragment.AnilistFragment
 import com.ghostreborn.akira.fragment.AnilistLoginFragment
-import com.ghostreborn.akira.fragment.AnimeFragment
 import com.ghostreborn.akira.fragment.MangaFragment
 import com.ghostreborn.akira.fragment.SettingsFragment
 import com.ghostreborn.akira.fragment.TestFragment
@@ -27,7 +26,7 @@ class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
                 }
             }
 
-            1 -> AnimeFragment()
+            1 -> TestFragment()
             2 -> MangaFragment()
             3 -> SettingsFragment()
             else -> throw IllegalStateException("Invalid tab position")

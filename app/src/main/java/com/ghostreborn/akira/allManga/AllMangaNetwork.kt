@@ -47,4 +47,11 @@ class AllMangaNetwork {
         val query = "chapterPages(mangaId:\$mangaId,chapterString:\$chapterString,translationType:\$translationType){edges{pictureUrls}}"
         return connectAllAnime(variables, queryTypes, query)
     }
+
+    fun anilistIdWithAllMangaID(id: String): String {
+        val variables = "\"showId\":\"$id\""
+        val queryTypes = "\$showId:String!"
+        val query = "manga(_id:\$showId){aniListId}"
+        return connectAllAnime(variables, queryTypes, query).toString()
+    }
 }

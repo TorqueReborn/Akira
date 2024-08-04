@@ -104,4 +104,11 @@ class AllMangaParser {
         }
         return thumbnails
     }
+
+    fun anilistIdWithAllMangaID(id: String): String{
+        return JSONObject(AllMangaNetwork().anilistIdWithAllMangaID(id))
+            .getJSONObject("data")
+            .getJSONObject("manga")
+            .getString("aniListId")
+    }
 }
