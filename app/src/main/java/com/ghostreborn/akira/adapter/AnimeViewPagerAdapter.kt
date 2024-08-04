@@ -10,6 +10,7 @@ import com.ghostreborn.akira.fragment.AnilistLoginFragment
 import com.ghostreborn.akira.fragment.AnimeFragment
 import com.ghostreborn.akira.fragment.MangaFragment
 import com.ghostreborn.akira.fragment.SettingsFragment
+import com.ghostreborn.akira.fragment.TestFragment
 
 class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fragmentManager, lifecycle) {

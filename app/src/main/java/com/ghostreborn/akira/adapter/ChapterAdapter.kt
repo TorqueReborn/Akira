@@ -1,12 +1,15 @@
 package com.ghostreborn.akira.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.ui.ReadMangaActivity
 
 class ChapterAdapter(
     private val chapterList: ArrayList<String>,
@@ -32,5 +35,11 @@ class ChapterAdapter(
         val chapter = chapterList[position]
         holder.chapterTitleTextView.text = chapter
         holder.chapterNumberTextView.text = chapter
+        holder.itemView.setOnClickListener {
+            Constants.mangaChapter = chapter
+            holder.itemView.context.startActivity(
+                Intent(holder.itemView.context, ReadMangaActivity::class.java)
+            )
+        }
     }
 }
