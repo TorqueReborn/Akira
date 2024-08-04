@@ -78,7 +78,8 @@ class PlayEpisodeActivity : AppCompatActivity() {
                             anilistID,
                             "CURRENT",
                             Constants.animeEpisode,
-                            baseContext
+                            baseContext,
+                            false
                         )
                     }
                     if (saved) {

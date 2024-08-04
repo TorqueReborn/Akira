@@ -72,7 +72,8 @@ class SaveAnimeFragment : Fragment() {
                 anilistID,
                 "CURRENT",
                 progressEditText.text.toString(),
-                requireContext()
+                requireContext(),
+                false
             )
             withContext(Dispatchers.Main) {
                 if (saved){

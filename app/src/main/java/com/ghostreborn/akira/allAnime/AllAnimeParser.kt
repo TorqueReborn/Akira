@@ -112,9 +112,14 @@ class AllAnimeParser {
     }
 
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
-        val shows = JSONObject(AllAnimeNetwork().getDetailsByIds(ids).toString())
+        val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids).toString())
             .getJSONObject("data")
-            .getJSONArray("showsWithIds")
+
+        if (show.isNull("showsWithIds")){
+            return ArrayList()
+        }
+
+        val shows = show.getJSONArray("showsWithIds")
 
         return ArrayList<Anime>().apply {
             for (i in 0 until shows.length()) {

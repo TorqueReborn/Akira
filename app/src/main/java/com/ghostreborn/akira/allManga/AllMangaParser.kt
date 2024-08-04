@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.allManga
 
+import android.util.Log
 import androidx.core.text.HtmlCompat
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeDetails
@@ -106,9 +107,15 @@ class AllMangaParser {
     }
 
     fun anilistIdWithAllMangaID(id: String): String{
-        return JSONObject(AllMangaNetwork().anilistIdWithAllMangaID(id))
+        val raw = JSONObject(AllMangaNetwork().anilistIdWithAllMangaID(id))
             .getJSONObject("data")
-            .getJSONObject("manga")
-            .getString("aniListId")
+
+        Log.e("TAG", raw.toString())
+        Log.e("TAG", "id: $id")
+
+        if (raw.isNull("manga")){
+            return "null"
+        }
+        return raw.getJSONObject("manga").getString("aniListId")
     }
 }

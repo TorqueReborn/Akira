@@ -1,23 +1,32 @@
 package com.ghostreborn.akira.anilist
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Room
-import com.ghostreborn.akira.allAnime.AllAnimeParser
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.database.Anilist
 import com.ghostreborn.akira.database.AnilistDatabase
 import org.json.JSONObject
 
 class AnilistParser {
-    fun saveAnime(animeId: String, status: String, progress: String, context: Context): Boolean {
+    fun saveAnime(
+        animeId: String,
+        status: String,
+        progress: String,
+        context: Context,
+        isManga: Boolean
+    ): Boolean {
+        Log.e("TAG", "saveAnime: $animeId $status $progress")
         val raw = JSONObject(AnilistNetwork().saveAnime(animeId, status, progress))
-        if (raw.getJSONObject("data").isNull("SaveMediaListEntry")){
+        Log.e("TAG", raw.toString())
+        if (raw.getJSONObject("data").isNull("SaveMediaListEntry")) {
             return false
         }
         val entry = raw.getJSONObject("data").getJSONObject("SaveMediaListEntry")
         val id = entry.getString("id")
         val malId = entry.getJSONObject("media").getString("idMal")
         val title = entry.getJSONObject("media").getJSONObject("title").getString("native")
-        val allAnimeId = AllAnimeParser().allAnimeIdWithMalId(title, malId)
+        val allAnimeId = if (isManga) Constants.allMangaID else Constants.allAnimeID
         val currentProgress = entry.getString("progress")
 
         Room.databaseBuilder(context, AnilistDatabase::class.java, "Akira").build().apply {

@@ -10,9 +10,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.ghostreborn.akira.Constants
-import com.ghostreborn.akira.Constants.allAnimeID
+import com.ghostreborn.akira.Constants.allMangaID
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allManga.AllMangaNetwork
+import com.ghostreborn.akira.allManga.AllMangaParser
 import com.ghostreborn.akira.anilist.AnilistParser
 import com.ghostreborn.akira.database.AnilistDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -67,20 +67,24 @@ class SaveMangaFragment : Fragment() {
     private fun handleAddProgress() {
         CoroutineScope(Dispatchers.IO).launch {
 
-            val anilistID = AllMangaNetwork().anilistIdWithAllMangaID(allAnimeID)
-            val saved = AnilistParser().saveAnime(
-                anilistID,
-                "CURRENT",
-                progressEditText.text.toString(),
-                requireContext()
-            )
+            val anilistID = AllMangaParser().anilistIdWithAllMangaID(allMangaID)
+            var saved = false
+            if (anilistID != "null") {
+                saved = AnilistParser().saveAnime(
+                    anilistID,
+                    "CURRENT",
+                    progressEditText.text.toString(),
+                    requireContext(),
+                    true
+                )
+            }
             withContext(Dispatchers.Main) {
                 if (saved) {
                     Toast.makeText(requireContext(), "Saved!", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "Login to Anilist by swiping from home screen to add or update progress!",
+                        "Unable to save!",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -95,7 +99,7 @@ class SaveMangaFragment : Fragment() {
                 AnilistDatabase::class.java,
                 "Akira"
             ).build()
-            instance.anilistDao().findByAllAnimeID(allAnimeID).let {
+            instance.anilistDao().findByAllAnimeID(allMangaID).let {
                 if (it != null) {
                     AnilistParser().deleteAnime(it.id, requireContext())
                     withContext(Dispatchers.Main) {
@@ -113,7 +117,7 @@ class SaveMangaFragment : Fragment() {
                 AnilistDatabase::class.java,
                 "Akira"
             ).build()
-            instance.anilistDao().findByAllAnimeID(allAnimeID).let { anilist ->
+            instance.anilistDao().findByAllAnimeID(allMangaID).let { anilist ->
                 withContext(Dispatchers.Main) {
                     if (anilist != null) {
                         val text = "Update"

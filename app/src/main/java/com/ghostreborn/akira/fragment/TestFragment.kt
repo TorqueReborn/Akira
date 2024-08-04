@@ -6,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.room.Room
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allManga.AllMangaNetwork
+import com.ghostreborn.akira.database.AnilistDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +31,19 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = AllMangaNetwork().anilistIdWithAllMangaID("ex9vXC6gWYY9bGkSo")
-            withContext(Dispatchers.Main) {
-                testText.text = test
+            val instance = Room.databaseBuilder(
+                requireContext(),
+                AnilistDatabase::class.java,
+                "Akira"
+            ).build()
+            instance.anilistDao().getAll().let { anilist ->
+                withContext(Dispatchers.Main) {
+                    var test = ""
+                    for (i in anilist) {
+                        test += i.allAnimeID + " " + i.title + "\n"
+                    }
+                    testText.text = test
+                }
             }
         }
     }
