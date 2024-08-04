@@ -40,4 +40,11 @@ class AllMangaNetwork {
         val query = "manga(_id:\$id){availableChaptersDetail}"
         return connectAllAnime(variables, queryTypes, query)
     }
+
+    fun chapterPages(mangaId: String, chapter: String): String?{
+        val variables = "\"mangaId\":\"$mangaId\",\"chapterString\":\"$chapter\",\"translationType\":\"sub\""
+        val queryTypes = "\$mangaId:String!,\$chapterString:String!,\$translationType:VaildTranslationTypeMangaEnumType!"
+        val query = "chapterPages(mangaId:\$mangaId,chapterString:\$chapterString,translationType:\$translationType){edges{pictureUrls}}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
 }

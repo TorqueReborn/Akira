@@ -89,4 +89,18 @@ class AllMangaParser {
         }
         return group
     }
+
+    fun chapterPages(mangaId: String, chapter: String): ArrayList<String> {
+        val edges = JSONObject(AllMangaNetwork().chapterPages(mangaId, chapter).toString())
+            .getJSONObject("data")
+            .getJSONObject("chapterPages")
+            .getJSONArray("edges")
+        val pictureUrls = edges.getJSONObject(0).getJSONArray("pictureUrls")
+        val thumbnails: ArrayList<String> = ArrayList()
+        for (i in 0 until pictureUrls.length()) {
+            val thumbnail = "https://ytimgf.youtube-anime.com/${pictureUrls.getJSONObject(i).getString("url")}"
+            thumbnails.add(thumbnail)
+        }
+        return thumbnails
+    }
 }
