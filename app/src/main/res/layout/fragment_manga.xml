@@ -15,7 +15,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:queryBackground="@android:color/transparent"
-        app:queryHint="@string/search_anime_here" />
+        app:queryHint="@string/search_manga_here" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/manga_swipe_refresh"

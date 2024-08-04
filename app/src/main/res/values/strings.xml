@@ -25,6 +25,7 @@
     <string name="enable_sub">Enable Sub</string>
     <string name="read_manga">Read Manga</string>
     <string name="manga_thumbnail">Manga Thumbnail</string>
+    <string name="search_manga_here">Search Manga Here</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>

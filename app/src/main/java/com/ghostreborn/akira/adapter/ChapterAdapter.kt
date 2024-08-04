@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.ui.ReadMangaActivity
+import com.squareup.picasso.Picasso
 
 class ChapterAdapter(
     private val chapterList: ArrayList<String>,
@@ -33,8 +34,10 @@ class ChapterAdapter(
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val chapter = chapterList[position]
-        holder.chapterTitleTextView.text = chapter
+        val chapterName = "Chapter $chapter"
+        holder.chapterTitleTextView.text = chapterName
         holder.chapterNumberTextView.text = chapter
+        Picasso.get().load(Constants.mangaThumbnail).into(holder.chapterThumbnailImageView)
         holder.itemView.setOnClickListener {
             Constants.mangaChapter = chapter
             holder.itemView.context.startActivity(
