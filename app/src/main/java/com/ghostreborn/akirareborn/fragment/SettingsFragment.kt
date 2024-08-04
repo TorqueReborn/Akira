@@ -30,7 +30,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         allowAdultSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_ALLOW_ADULT, false)
         allowUnknownSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_ALLOW_UNKNOWN, false)
-        subDubSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_SUB_DUB, false)
+        subDubSwitch.isChecked = Constants.preferences.getBoolean(Constants.PREF_DUB_ENABLED, false)
         allowAdultSwitch.setOnCheckedChangeListener{
             _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_ALLOW_ADULT, isChecked).apply()
         }
@@ -38,7 +38,7 @@ class SettingsFragment : Fragment() {
                 _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_ALLOW_UNKNOWN, isChecked).apply()
         }
         subDubSwitch.setOnCheckedChangeListener{
-                _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_SUB_DUB, isChecked).apply()
+                _, isChecked -> Constants.preferences.edit().putBoolean(Constants.PREF_DUB_ENABLED, isChecked).apply()
         }
     }
 
