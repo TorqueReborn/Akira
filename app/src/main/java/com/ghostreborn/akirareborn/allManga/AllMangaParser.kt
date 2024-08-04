@@ -12,7 +12,12 @@ class AllMangaParser {
                 .getJSONArray("edges")
             for (i in 0 until edgesArray.length()) {
                 edgesArray.getJSONObject(i).let {
-                    add(Anime(it.getString("_id"), it.getString("name"), it.getString("thumbnail")))
+                    var thumbnail = it.getString("thumbnail")
+                    if (!thumbnail.startsWith("http")) {
+                        thumbnail =
+                            "https://wp.youtube-anime.com/aln.youtube-anime.com/${it.getString("thumbnail")}"
+                    }
+                    add(Anime(it.getString("_id"), it.getString("name"), thumbnail.toString()))
                 }
             }
         }
