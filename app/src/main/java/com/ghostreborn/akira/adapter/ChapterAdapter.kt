@@ -5,16 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.model.Episode
-import com.squareup.picasso.Picasso
 
 class ChapterAdapter(
-    private val chapterList: List<Episode>,
-    private val activity: AppCompatActivity
+    private val chapterList: ArrayList<String>,
 ) :
     RecyclerView.Adapter<ChapterAdapter.EpisodeViewHolder>() {
     class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,13 +30,7 @@ class ChapterAdapter(
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val chapter = chapterList[position]
-        holder.chapterTitleTextView.text = chapter.episodeTitle
-        holder.chapterNumberTextView.text = chapter.episodeNumber
-        Picasso.get()
-            .load(chapter.episodeThumbnail)
-            .into(holder.chapterThumbnailImageView)
-        holder.itemView.setOnClickListener {
-            Constants.mangaChapter = chapter.episodeNumber
-        }
+        holder.chapterTitleTextView.text = chapter
+        holder.chapterNumberTextView.text = chapter
     }
 }

@@ -1,21 +1,37 @@
 package com.ghostreborn.akira.ui
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.adapter.ChapterAdapter
+import com.ghostreborn.akira.allManga.AllMangaParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChaptersActivity : AppCompatActivity() {
+
+    lateinit var chapterRecycler: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_chapters)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        chapterRecycler = findViewById(R.id.chapters_recycler_view)
+        fetchChapters()
+    }
+
+    private fun fetchChapters() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val group = AllMangaParser().mangaChapters(Constants.allMangaID)
+            withContext(Dispatchers.Main) {
+                chapterRecycler.adapter = ChapterAdapter(group[0])
+                chapterRecycler.layoutManager = LinearLayoutManager(this@ChaptersActivity)
+            }
         }
     }
+
 }
