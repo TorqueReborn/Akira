@@ -62,4 +62,31 @@ class AllMangaParser {
             sequel = sequel
         )
     }
+
+    fun mangaChapters(mangaId: String): ArrayList<ArrayList<String>> {
+        val episodesArray = JSONObject(AllMangaNetwork().mangaChapters(mangaId).toString())
+            .getJSONObject("data")
+            .getJSONObject("manga")
+            .getJSONObject("availableChaptersDetail")
+            .getJSONArray("sub")
+
+        val episodeList = ArrayList<String>().apply {
+            for (i in episodesArray.length() - 1 downTo 0) {
+                add(episodesArray.getString(i))
+            }
+        }
+
+        return groupChapters(episodeList)
+    }
+
+    private fun groupChapters(chaptersList: ArrayList<String>): ArrayList<ArrayList<String>> {
+        val group = ArrayList<ArrayList<String>>()
+        var startIndex = 0
+        while (startIndex < chaptersList.size) {
+            val endIndex = (startIndex + 15).coerceAtMost(chaptersList.size)
+            group.add(ArrayList(chaptersList.subList(startIndex, endIndex)))
+            startIndex = endIndex
+        }
+        return group
+    }
 }

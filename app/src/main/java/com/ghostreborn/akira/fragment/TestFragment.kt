@@ -30,7 +30,7 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = TestAllAnime().mangaDetails("tYqGANpGQDEjoc4PR")
+            val test = TestAllAnime().mangaChapters("ex9vXC6gWYY9bGkSo")
             withContext(Dispatchers.Main) {
                 testText.text = test
             }
