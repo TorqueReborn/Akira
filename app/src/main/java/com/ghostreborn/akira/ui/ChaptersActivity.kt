@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.ChapterAdapter
+import com.ghostreborn.akira.adapter.ChaptersGroupAdapter
 import com.ghostreborn.akira.allManga.AllMangaParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,11 +17,13 @@ import kotlinx.coroutines.withContext
 class ChaptersActivity : AppCompatActivity() {
 
     lateinit var chapterRecycler: RecyclerView
+    lateinit var chapterGroupRecycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chapters)
         chapterRecycler = findViewById(R.id.chapters_recycler_view)
+        chapterGroupRecycler = findViewById(R.id.chapters_group_recycler_view)
         fetchChapters()
     }
 
@@ -30,6 +33,10 @@ class ChaptersActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 chapterRecycler.adapter = ChapterAdapter(group[0])
                 chapterRecycler.layoutManager = LinearLayoutManager(this@ChaptersActivity)
+                chapterGroupRecycler.adapter = ChaptersGroupAdapter(group, chapterRecycler)
+                chapterGroupRecycler.layoutManager = LinearLayoutManager(
+                    this@ChaptersActivity, LinearLayoutManager.HORIZONTAL, false
+                )
             }
         }
     }
