@@ -20,7 +20,9 @@ object Constants {
 
     // Anime
     var allAnimeID: String = ""
+    var allMangaID: String = ""
     var animeThumbnail: String = ""
     var animeEpisode: String = ""
+    var mangaChapter: String = ""
     var animeUrl: String = ""
 }

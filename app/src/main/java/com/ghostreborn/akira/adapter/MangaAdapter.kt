@@ -1,13 +1,16 @@
 package com.ghostreborn.akira.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.ui.MangaDetailsActivity
 import com.squareup.picasso.Picasso
 
 class MangaAdapter(private val mangas: ArrayList<Anime>) :
@@ -32,7 +35,13 @@ class MangaAdapter(private val mangas: ArrayList<Anime>) :
         holder.mangaNameTextView.text = manga.name
         Picasso.get().load(manga.thumbnail).into(holder.mangaImageView)
         holder.itemView.setOnClickListener {
-
+            Constants.allMangaID = manga.id
+            holder.itemView.context.startActivity(
+                Intent(
+                    holder.itemView.context,
+                    MangaDetailsActivity::class.java
+                )
+            )
         }
     }
 

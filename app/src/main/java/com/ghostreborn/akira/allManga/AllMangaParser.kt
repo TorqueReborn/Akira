@@ -1,6 +1,8 @@
 package com.ghostreborn.akira.allManga
 
+import androidx.core.text.HtmlCompat
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.model.AnimeDetails
 import org.json.JSONObject
 
 class AllMangaParser {
@@ -21,5 +23,43 @@ class AllMangaParser {
                 }
             }
         }
+    }
+
+    fun mangaDetails(mangaId: String): AnimeDetails {
+        val manga = JSONObject(AllMangaNetwork().mangaDetails(mangaId).toString())
+            .getJSONObject("data")
+            .getJSONObject("manga")
+
+        val description =
+            HtmlCompat.fromHtml(manga.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
+                .toString()
+        val relatedShows = manga.getJSONArray("relatedMangas")
+
+        var prequel = ""
+        var sequel = ""
+
+        var thumbnail = manga.getString("thumbnail")
+        if (!thumbnail.startsWith("http")) {
+            thumbnail =
+                "https://wp.youtube-anime.com/aln.youtube-anime.com/${manga.getString("thumbnail")}"
+        }
+
+        for (i in 0 until relatedShows.length()) {
+            relatedShows.getJSONObject(i).apply {
+                when (getString("relation")) {
+                    "prequel" -> prequel = getString("mangaId")
+                    "sequel" -> sequel = getString("mangaId")
+                }
+            }
+        }
+
+        return AnimeDetails(
+            name = manga.getString("name"),
+            thumbnail = thumbnail,
+            description = description,
+            banner = manga.getString("banner"),
+            prequel = prequel,
+            sequel = sequel
+        )
     }
 }

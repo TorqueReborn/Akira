@@ -21,10 +21,10 @@ class TestAllAnime {
         return client.newCall(request).execute().body?.string()
     }
 
-    fun searchManga(anime: String): String? {
-        val variables = "\"search\":{\"query\":\"$anime\"}"
-        val queryTypes = "\$search:SearchInput"
-        val query = "mangas(search:\$search){edges{_id,name,thumbnail}}"
+    fun mangaDetails(mangaId: String): String?{
+        val variables = "\"id\":\"$mangaId\""
+        val queryTypes = "\$id:String!"
+        val query = "manga(_id:\$id){name,thumbnail,description,banner,relatedMangas}"
         return connectAllAnime(variables, queryTypes, query)
     }
 

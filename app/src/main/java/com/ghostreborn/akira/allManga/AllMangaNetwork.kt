@@ -10,7 +10,7 @@ class AllMangaNetwork {
         query: String
     ): String? {
         val client = OkHttpClient()
-        var url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
+        val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val request = Request.Builder()
             .url(url)
             .header("Referer", "https://allanime.to")
@@ -24,6 +24,13 @@ class AllMangaNetwork {
         val variables = "\"search\":{\"query\":\"$anime\"}"
         val queryTypes = "\$search:SearchInput"
         val query = "mangas(search:\$search){edges{_id,name,thumbnail}}"
+        return connectAllAnime(variables, queryTypes, query)
+    }
+
+    fun mangaDetails(mangaId: String): String?{
+        val variables = "\"id\":\"$mangaId\""
+        val queryTypes = "\$id:String!"
+        val query = "manga(_id:\$id){name,thumbnail,description,banner,relatedMangas}"
         return connectAllAnime(variables, queryTypes, query)
     }
 }

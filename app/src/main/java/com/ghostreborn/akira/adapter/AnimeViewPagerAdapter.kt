@@ -29,7 +29,6 @@ class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecyc
             1 -> AnimeFragment()
             2 -> MangaFragment()
             3 -> SettingsFragment()
-
             else -> throw IllegalStateException("Invalid tab position")
         }
     }
