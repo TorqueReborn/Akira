@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.ghostreborn.akirareborn"
+    namespace = "com.ghostreborn.akira"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ghostreborn.akirareborn"
+        applicationId = "com.ghostreborn.akira"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
