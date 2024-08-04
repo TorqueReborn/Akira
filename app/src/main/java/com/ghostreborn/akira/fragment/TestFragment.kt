@@ -6,13 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.room.Room
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.database.AnilistDatabase
+import com.ghostreborn.akira.allManga.AllMangaNetwork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 
 class TestFragment : Fragment() {
@@ -31,20 +31,18 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val instance = Room.databaseBuilder(
-                requireContext(),
-                AnilistDatabase::class.java,
-                "Akira"
-            ).build()
-            instance.anilistDao().getAll().let { anilist ->
-                withContext(Dispatchers.Main) {
-                    var test = ""
-                    for (i in anilist) {
-                        test += i.allAnimeID + " " + i.title + "\n"
-                    }
-                    testText.text = test
-                }
+            val test = JSONObject(AllMangaNetwork().searchManga("").toString())
+                .getJSONObject("data")
+                .getJSONObject("mangas")
+                .getJSONArray("edges")
+            var out = ""
+            for (i in 0 until test.length()) {
+                out += test.getJSONObject(i).getString("aniListId") + "\n\n"
             }
+            withContext(Dispatchers.Main) {
+                testText.text = out
+            }
+
         }
     }
 
