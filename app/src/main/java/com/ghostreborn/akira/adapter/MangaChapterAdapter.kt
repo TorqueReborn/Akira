@@ -3,16 +3,16 @@ package com.ghostreborn.akira.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.ui.ZoomableImageView
 import com.squareup.picasso.Picasso
 
-class MangaChapterAdapter (private val images: ArrayList<String>) :
+class MangaChapterAdapter(private val images: ArrayList<String>) :
     RecyclerView.Adapter<MangaChapterAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imageView: ImageView = itemView.findViewById(R.id.manga_chapter_image_view)
+        val imageView: ZoomableImageView = itemView.findViewById(R.id.manga_chapter_image_view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {

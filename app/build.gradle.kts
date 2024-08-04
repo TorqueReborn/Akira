@@ -21,7 +21,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            viewBinding{
+            viewBinding {
                 enable = true
             }
             proguardFiles(
@@ -44,9 +44,9 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer.hls)
     implementation(libs.androidx.swiperefreshlayout)
-    implementation (libs.androidx.room.runtime)
+    implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
-    implementation (libs.androidx.room.ktx)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.picasso)
     implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
