@@ -2,6 +2,7 @@ package com.ghostreborn.akira.gojo
 
 import com.ghostreborn.akira.model.Anime
 import org.json.JSONArray
+import org.json.JSONObject
 
 class GojoParser {
     fun recentUpdates(): ArrayList<Anime>{
@@ -27,5 +28,17 @@ class GojoParser {
             }
         }
         return ""
+    }
+
+    fun server(id:String, episodeId: String): ArrayList<String>{
+        val sourcesArray = JSONObject(GojoNetwork().server(id, episodeId).toString())
+            .getJSONArray("sources")
+        val servers = ArrayList<String>()
+        for (i in 0 until sourcesArray.length()){
+            val sourceObject = sourcesArray.getJSONObject(i)
+            val url = sourceObject.getString("url")
+            servers.add(url)
+        }
+        return servers
     }
 }

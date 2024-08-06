@@ -30,9 +30,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = GojoParser().episodeId("21", "1")
+            val test = GojoParser().server("21", GojoParser().episodeId("21", "1"))
             withContext(Dispatchers.Main) {
-                testText.text = test
+                testText.text = test.get(1)
             }
 
         }
