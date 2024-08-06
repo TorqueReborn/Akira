@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.allAnime.AllAnimeParser
+import com.ghostreborn.akira.gojo.GojoParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +48,7 @@ class AnimeFragment : Fragment() {
 
     private fun fetchAnime(query: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            val animes = AllAnimeParser().searchAnime(query)
+            val animes = GojoParser().recentUpdates()
             withContext(Dispatchers.Main) {
                 recyclerView.adapter = AnimeAdapter(animes)
                 recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
