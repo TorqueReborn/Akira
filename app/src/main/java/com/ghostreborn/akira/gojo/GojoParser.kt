@@ -14,4 +14,18 @@ class GojoParser {
         }
         return anime
     }
+
+    fun episodeId(id: String, episode: String): String{
+        val episodesArray = JSONArray(GojoNetwork().episodeId(id))
+            .getJSONObject(0)
+            .getJSONArray("episodes")
+        for (i in 0 until episodesArray.length()){
+            val episodeObject = episodesArray.getJSONObject(i)
+            val number = episodeObject.getString("number")
+            if (number == episode){
+                return episodeObject.getString("id")
+            }
+        }
+        return ""
+    }
 }

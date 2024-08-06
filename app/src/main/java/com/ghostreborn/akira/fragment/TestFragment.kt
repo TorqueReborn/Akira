@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allManga.AllMangaNetwork
+import com.ghostreborn.akira.gojo.GojoParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
 
 class TestFragment : Fragment() {
@@ -31,16 +30,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = JSONObject(AllMangaNetwork().searchManga("").toString())
-                .getJSONObject("data")
-                .getJSONObject("mangas")
-                .getJSONArray("edges")
-            var out = ""
-            for (i in 0 until test.length()) {
-                out += test.getJSONObject(i).getString("aniListId") + "\n\n"
-            }
+            val test = GojoParser().episodeId("21", "1")
             withContext(Dispatchers.Main) {
-                testText.text = out
+                testText.text = test
             }
 
         }
