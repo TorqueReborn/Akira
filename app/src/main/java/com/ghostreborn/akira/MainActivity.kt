@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.anime_view_pager)
         viewPager.adapter = AnimeViewPagerAdapter(supportFragmentManager, lifecycle)
         viewPager.currentItem = 1
-        val tabTitles = listOf("Anilist", "Anime", "Manga", "Settings")
+        val tabTitles = listOf("Anilist", "Home", "Settings")
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabTitles[position]
         }.attach()
