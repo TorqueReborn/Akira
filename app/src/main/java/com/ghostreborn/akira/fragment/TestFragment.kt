@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.gojo.GojoParser
+import com.ghostreborn.akira.allManga.AllMangaNetwork
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,9 +30,9 @@ class TestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = GojoParser().server("21", GojoParser().episodeId("21", "1"))
+            val test = AllMangaNetwork().getDetailsByIds("\"ex9vXC6gWYY9bGkSo\"")
             withContext(Dispatchers.Main) {
-                testText.text = test.get(1)
+                testText.text = test
             }
 
         }

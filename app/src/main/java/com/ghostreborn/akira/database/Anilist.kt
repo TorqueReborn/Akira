@@ -10,5 +10,6 @@ data class Anilist(
     val malID: String,
     val allAnimeID: String,
     val title: String,
-    val progress: String
+    val progress: String,
+    val isManga: Boolean
 )

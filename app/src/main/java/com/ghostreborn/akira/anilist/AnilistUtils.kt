@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.allAnime.AllAnimeParser
+import com.ghostreborn.akira.allManga.AllMangaParser
 import com.ghostreborn.akira.database.Anilist
 import com.ghostreborn.akira.database.AnilistDatabase
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -80,7 +81,53 @@ class AnilistUtils {
                     media.getString("idMal"),
                     AllAnimeParser().allAnimeIdWithMalId(title, media.getString("idMal")),
                     title,
-                    entry.getString("progress")
+                    entry.getString("progress"),
+                    false
+                )
+            )
+        }
+
+        Room.databaseBuilder(activity, AnilistDatabase::class.java, "Akira").build().apply {
+            anilistDao().insertAll(*anilistAnime.toTypedArray())
+            close()
+        }
+
+        getMangaList(activity)
+    }
+
+    private fun getMangaList(activity: Activity) {
+        val graph = "query{MediaListCollection(userId:${
+            Constants.preferences.getString(
+                Constants.PREF_USER_ID,
+                ""
+            )
+        },type:MANGA, status:CURRENT){lists{entries{id,media{idMal,title{native}},progress}}}}"
+        val response = JSONObject(AnilistNetwork().connectAnilist(graph))
+        val lists = response.getJSONObject("data").getJSONObject("MediaListCollection")
+            .getJSONArray("lists")
+
+        if (lists.length() == 0) {
+            Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+            activity.startActivity(Intent(activity, MainActivity::class.java))
+            activity.finish()
+            return
+        }
+
+        val entries = lists.getJSONObject(0).getJSONArray("entries")
+        val anilistAnime = ArrayList<Anilist>()
+
+        for (i in 0 until entries.length()) {
+            val entry = entries.getJSONObject(i)
+            val media = entry.getJSONObject("media")
+            val title = media.getJSONObject("title").getString("native")
+            anilistAnime.add(
+                Anilist(
+                    entry.getString("id"),
+                    media.getString("idMal"),
+                    AllMangaParser().allAnimeIdWithMalId(title, media.getString("idMal")),
+                    title,
+                    entry.getString("progress"),
+                    true
                 )
             )
         }

@@ -106,16 +106,48 @@ class AllMangaParser {
         return thumbnails
     }
 
-    fun anilistIdWithAllMangaID(id: String): String{
+    fun anilistIdWithAllMangaID(id: String): String {
         val raw = JSONObject(AllMangaNetwork().anilistIdWithAllMangaID(id))
             .getJSONObject("data")
 
         Log.e("TAG", raw.toString())
         Log.e("TAG", "id: $id")
 
-        if (raw.isNull("manga")){
+        if (raw.isNull("manga")) {
             return "null"
         }
         return raw.getJSONObject("manga").getString("aniListId")
+    }
+
+    fun allAnimeIdWithMalId(anime: String, malId: String): String {
+        val rawJSON = AllMangaNetwork().allAnimeIdWithMalId(anime).toString()
+        val edgesArray = JSONObject(rawJSON)
+            .getJSONObject("data")
+            .getJSONObject("mangas")
+            .getJSONArray("edges")
+
+        return (0 until edgesArray.length()).firstNotNullOfOrNull { index ->
+            val edge = edgesArray.getJSONObject(index)
+            if (edge.getString("malId") == malId) edge.getString("_id") else null
+        } ?: ""
+    }
+
+    fun getDetailsByIds(ids: String): ArrayList<Anime> {
+        val show = JSONObject(AllMangaNetwork().getDetailsByIds(ids).toString())
+            .getJSONObject("data")
+
+        if (show.isNull("mangasWithIds")) {
+            return ArrayList()
+        }
+
+        val shows = show.getJSONArray("mangasWithIds")
+
+        return ArrayList<Anime>().apply {
+            for (i in 0 until shows.length()) {
+                shows.getJSONObject(i).apply {
+                    add(Anime(getString("_id"), getString("name"), getString("thumbnail")))
+                }
+            }
+        }
     }
 }

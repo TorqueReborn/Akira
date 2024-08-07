@@ -23,12 +23,12 @@ class AnilistNetwork {
         return OkHttpClient().newCall(request).execute().body!!.string()
     }
 
-    fun saveAnime(animeId: String, status: String, progress: String): String {
+    fun saveAnimeManga(animeId: String, status: String, progress: String): String {
         val query = "mutation{SaveMediaListEntry(mediaId:$animeId,status:$status,progress:$progress){id,media{idMal,title{native}},progress}}"
         return connectAnilist(query)
     }
 
-    fun deleteAnime(mediaId: String): String {
+    fun deleteAnimeManga(mediaId: String): String {
         val query = "mutation{DeleteMediaListEntry(id:$mediaId){deleted}}"
         return connectAnilist(query)
     }

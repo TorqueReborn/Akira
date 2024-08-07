@@ -11,6 +11,12 @@ interface AnilistDao {
     @Query("SELECT * FROM anilist")
     fun getAll(): List<Anilist>
 
+    @Query("SELECT * FROM anilist WHERE isManga=1")
+    fun getAllManga(): List<Anilist>
+
+    @Query("SELECT * FROM anilist WHERE isManga=0")
+    fun getAllAnime(): List<Anilist>
+
     @Query("SELECT * FROM anilist WHERE allAnimeID=:allAnimeID")
     fun findByAllAnimeID(allAnimeID: String): Anilist?
 

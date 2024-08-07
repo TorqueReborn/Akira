@@ -1,6 +1,7 @@
 package com.ghostreborn.akira
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.ghostreborn.akira.Constants.PREF_NAME
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setup() {
         Constants.preferences = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
+        Log.e("TAG", Constants.preferences.getString(Constants.PREF_USER_ID, "").toString())
         setupViewPager()
         handleIntentData()
     }
