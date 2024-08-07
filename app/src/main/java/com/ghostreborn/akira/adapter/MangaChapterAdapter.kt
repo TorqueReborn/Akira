@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.ui.ZoomableImageView
 import com.squareup.picasso.Picasso
 
-class MangaChapterAdapter(private val images: ArrayList<String>) :
+class MangaChapterAdapter(private val images: ArrayList<String>, private val viewPager2: ViewPager2) :
     RecyclerView.Adapter<MangaChapterAdapter.ImageViewHolder>() {
 
     class ImageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -22,6 +23,7 @@ class MangaChapterAdapter(private val images: ArrayList<String>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        holder.imageView.setCustomTouchListener(AkiraTouchListener(viewPager2))
         Picasso.get()
             .load(images[position])
             .into(holder.imageView)

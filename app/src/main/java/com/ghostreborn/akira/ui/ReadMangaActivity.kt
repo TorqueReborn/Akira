@@ -1,10 +1,7 @@
 package com.ghostreborn.akira.ui
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
@@ -24,7 +21,7 @@ class ReadMangaActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val test = AllMangaParser().chapterPages(Constants.allMangaID, Constants.mangaChapter)
             withContext(Dispatchers.Main) {
-                viewPager.adapter = MangaChapterAdapter(test)
+                viewPager.adapter = MangaChapterAdapter(test, viewPager)
             }
         }
 

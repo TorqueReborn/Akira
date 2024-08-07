@@ -32,8 +32,7 @@ class ZoomableImageView @JvmOverloads constructor(
                     isZooming = true
                     val scale = detector.scaleFactor
                     scaleFactor *= scale
-                    scaleFactor =
-                        0.1f.coerceAtLeast(scaleFactor.coerceAtMost(5.0f))
+                    scaleFactor = 0.1f.coerceAtLeast(scaleFactor.coerceAtMost(5.0f))
 
                     scaleX = scaleFactor
                     scaleY = scaleFactor
@@ -45,21 +44,23 @@ class ZoomableImageView @JvmOverloads constructor(
                     translationX += dx
                     translationY += dy
 
-                    return true
-                }
-            })
+                    customTouchListener?.setSwipeEnabled(false) // Disable swipe while zooming
 
-        gestureDetector =
-            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDoubleTap(e: MotionEvent): Boolean {
-                    if (scaleFactor < 1.5f) {
-                        zoomIn(e.x, e.y)
-                    } else {
-                        zoomOut(e.x, e.y)
-                    }
                     return true
                 }
-            })
+            }
+        )
+
+        gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                if (scaleFactor < 1.5f) {
+                    zoomIn(e.x, e.y)
+                } else {
+                    zoomOut(e.x, e.y)
+                }
+                return true
+            }
+        })
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -90,7 +91,9 @@ class ZoomableImageView @JvmOverloads constructor(
 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isDragging = false
-                customTouchListener?.setSwipeEnabled(true)
+                if (!isZooming) {
+                    customTouchListener?.setSwipeEnabled(true)
+                }
             }
         }
 
@@ -115,6 +118,10 @@ class ZoomableImageView @JvmOverloads constructor(
         val dy = (y - height / 2) * (1 - 1f)
         translationX += dx
         translationY += dy
+    }
+
+    fun setCustomTouchListener(listener: AkiraTouchListener) {
+        customTouchListener = listener
     }
 
 }
