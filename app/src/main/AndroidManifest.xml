@@ -25,7 +25,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".tv.TVActivity"
+            android:name=".MainActivity"
             android:banner="@mipmap/ic_launcher"
             android:exported="true"
             android:icon="@mipmap/ic_launcher"
