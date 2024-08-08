@@ -26,7 +26,6 @@ class SaveMangaFragment : Fragment() {
     private lateinit var progressAddButton: Button
     private lateinit var progressDeleteButton: Button
     private lateinit var plusButton: Button
-    private lateinit var minusButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +36,6 @@ class SaveMangaFragment : Fragment() {
         progressAddButton = view.findViewById(R.id.manga_progress_add_button)
         progressDeleteButton = view.findViewById(R.id.manga_progress_delete_button)
         plusButton = view.findViewById(R.id.manga_plus_button)
-        minusButton = view.findViewById(R.id.manga_minus_button)
         return view
     }
 
@@ -47,7 +45,6 @@ class SaveMangaFragment : Fragment() {
         getProgress()
 
         plusButton.setOnClickListener { updateValue(1) }
-        minusButton.setOnClickListener { updateValue(-1) }
 
         progressAddButton.setOnClickListener {
             handleAddProgress()
