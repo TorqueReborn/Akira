@@ -1,8 +1,8 @@
-package com.ghostreborn.akira.ui
+package com.ghostreborn.akira.tv
 
 import android.os.Bundle
-import androidx.fragment.app.FragmentActivity
 import com.ghostreborn.akira.R
+import androidx.fragment.app.FragmentActivity
 
 class TVActivity : FragmentActivity() {
 
