@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.hls)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.leanback)
+    implementation(libs.glide)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.picasso)
