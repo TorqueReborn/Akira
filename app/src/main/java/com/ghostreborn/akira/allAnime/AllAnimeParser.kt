@@ -60,12 +60,11 @@ class AllAnimeParser {
     }
 
     fun episodes(id: String): ArrayList<ArrayList<String>> {
-        val subDub = AllAnimeNetwork().getSubDub(Constants.preferences.getBoolean(Constants.PREF_DUB_ENABLED, false))
         val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
             .getJSONObject("data")
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
-            .getJSONArray(subDub)
+            .getJSONArray("sub")
 
         val episodeList = ArrayList<String>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
@@ -109,25 +108,6 @@ class AllAnimeParser {
         } ?: tempThumbnail
 
         return Episode(episodeNumber, episodeName, episodeThumbnail)
-    }
-
-    fun getDetailsByIds(ids: String): ArrayList<Anime> {
-        val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids).toString())
-            .getJSONObject("data")
-
-        if (show.isNull("showsWithIds")){
-            return ArrayList()
-        }
-
-        val shows = show.getJSONArray("showsWithIds")
-
-        return ArrayList<Anime>().apply {
-            for (i in 0 until shows.length()) {
-                shows.getJSONObject(i).apply {
-                    add(Anime(getString("_id"), getString("name"), getString("thumbnail")))
-                }
-            }
-        }
     }
 
     fun episodeDetails(id: String, episodes: List<String>): List<Episode> {
@@ -197,24 +177,4 @@ class AllAnimeParser {
         }
     }
 
-    fun anilistWithAllAnimeID(allAnimeId: String): String {
-        val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
-        return JSONObject(rawJSON)
-            .getJSONObject("data")
-            .getJSONObject("show")
-            .getString("aniListId")
-    }
-
-    fun allAnimeIdWithMalId(anime: String, malId: String): String {
-        val rawJSON = AllAnimeNetwork().allAnimeIdWithMalId(anime).toString()
-        val edgesArray = JSONObject(rawJSON)
-            .getJSONObject("data")
-            .getJSONObject("shows")
-            .getJSONArray("edges")
-
-        return (0 until edgesArray.length()).firstNotNullOfOrNull { index ->
-            val edge = edgesArray.getJSONObject(index)
-            if (edge.getString("malId") == malId) edge.getString("_id") else null
-        } ?: ""
-    }
 }
