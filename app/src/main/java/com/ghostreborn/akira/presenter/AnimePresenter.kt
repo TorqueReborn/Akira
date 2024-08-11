@@ -1,12 +1,15 @@
 package com.ghostreborn.akira.presenter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.leanback.widget.Presenter
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.ui.AnimeDetailsActivity
 import com.squareup.picasso.Picasso
 
 class AnimePresenter : Presenter() {
@@ -22,6 +25,13 @@ class AnimePresenter : Presenter() {
         val thumbnail = viewHolder.view.findViewById<ImageView>(R.id.animeImageView)
         Picasso.get().load(anime.thumbnail).into(thumbnail)
         name.text = anime.name
+
+        viewHolder.view.setOnClickListener {
+            Constants.allAnimeID = anime.id
+            val intent = Intent(viewHolder.view.context, AnimeDetailsActivity::class.java)
+            viewHolder.view.context.startActivity(intent)
+        }
+
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder?) {

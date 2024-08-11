@@ -27,7 +27,7 @@ class HomeFragment : BrowseSupportFragment() {
             val anime = AllAnimeParser().searchAnime("")
             withContext(Dispatchers.Main) {
                 val cardPresenter = AnimePresenter()
-                val headerItem = HeaderItem("Anime")
+                val headerItem = HeaderItem("Recently Updated Anime")
                 val listRowAdapter = ArrayObjectAdapter(cardPresenter)
                 listRowAdapter.addAll(0, anime)
                 rowsAdapter.add(ListRow(headerItem, listRowAdapter))
