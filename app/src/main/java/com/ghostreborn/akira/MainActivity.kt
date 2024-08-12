@@ -7,6 +7,8 @@ import com.ghostreborn.akira.fragment.HomeFragment
 
 class MainActivity : FragmentActivity() {
 
+    // TODO add custom watch button to watch anime in details section
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

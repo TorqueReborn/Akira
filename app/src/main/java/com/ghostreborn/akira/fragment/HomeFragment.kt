@@ -23,7 +23,7 @@ class HomeFragment : BrowseSupportFragment() {
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
         CoroutineScope(Dispatchers.IO).launch {
-            val animeList = AllAnimeParser().searchAnime("One Piece")
+            val animeList = AllAnimeParser().searchAnime("")
             withContext(Dispatchers.Main) {
                 animeList.forEach { animeList ->
                     val listRowAdapter = ArrayObjectAdapter(AnimePresenter()).apply {
