@@ -3,7 +3,6 @@ package com.ghostreborn.akira.fragment
 import android.os.Bundle
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
-import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import com.ghostreborn.akira.allAnime.AllAnimeParser
@@ -21,16 +20,17 @@ class HomeFragment : BrowseSupportFragment() {
     }
 
     private fun createRowsAdapter(): ArrayObjectAdapter {
-
         val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = AllAnimeParser().searchAnime("")
+            val animeList = AllAnimeParser().searchAnime("")
             withContext(Dispatchers.Main) {
-                val cardPresenter = AnimePresenter()
-                val headerItem = HeaderItem("Recently Updated Anime")
-                val listRowAdapter = ArrayObjectAdapter(cardPresenter)
-                listRowAdapter.addAll(0, anime)
-                rowsAdapter.add(ListRow(headerItem, listRowAdapter))
+                animeList.forEach { animeList ->
+                    val listRowAdapter = ArrayObjectAdapter(AnimePresenter()).apply {
+                        addAll(0, animeList.take(4))
+                    }
+                    rowsAdapter.add(ListRow(listRowAdapter))
+                }
             }
         }
         return rowsAdapter

@@ -13,8 +13,8 @@ import org.json.JSONObject
 import java.io.IOException
 
 class AllAnimeParser {
-    fun searchAnime(anime: String): ArrayList<Anime> {
-        return ArrayList<Anime>().apply {
+    fun searchAnime(anime: String): ArrayList<ArrayList<Anime>> {
+        return groupAnimes(ArrayList<Anime>().apply {
             val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
                 .getJSONObject("data")
                 .getJSONObject("shows")
@@ -24,7 +24,18 @@ class AllAnimeParser {
                     add(Anime(it.getString("_id"), it.getString("name"), it.getString("thumbnail")))
                 }
             }
+        })
+    }
+
+    private fun groupAnimes(animeList: ArrayList<Anime>): ArrayList<ArrayList<Anime>> {
+        val group = ArrayList<ArrayList<Anime>>()
+        var startIndex = 0
+        while (startIndex < animeList.size) {
+            val endIndex = (startIndex + 4).coerceAtMost(animeList.size)
+            group.add(ArrayList(animeList.subList(startIndex, endIndex)))
+            startIndex = endIndex
         }
+        return group
     }
 
     fun animeDetails(animeId: String): AnimeDetails {

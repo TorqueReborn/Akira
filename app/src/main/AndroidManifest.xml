@@ -23,23 +23,6 @@
         android:theme="@style/Theme.Akira"
         tools:targetApi="31">
         <activity
-            android:name=".ui.TVActivity"
-            android:banner="@mipmap/ic_launcher"
-            android:exported="true"
-            android:icon="@mipmap/ic_launcher"
-            android:logo="@mipmap/ic_launcher"
-            android:screenOrientation="landscape">
-        </activity>
-        <activity
-            android:name=".ui.ReadMangaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.ChaptersActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.MangaDetailsActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.PlayEpisodeActivity"
             android:exported="false" />
         <activity

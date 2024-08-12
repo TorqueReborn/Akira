@@ -26,7 +26,7 @@ class AllAnimeNetwork {
 
     fun searchAnime(anime: String): String? {
         val variables =
-            "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
+            "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":20,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
         val queryTypes =
             "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
         val query =
