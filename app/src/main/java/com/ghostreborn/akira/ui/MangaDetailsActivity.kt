@@ -4,12 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allManga.AllMangaParser
 import com.ghostreborn.akira.databinding.ActivityMangaDetailsBinding
 import com.ghostreborn.akira.fragment.SaveMangaFragment
-import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,8 +34,8 @@ class MangaDetailsActivity : AppCompatActivity() {
                 binding.apply {
                     mangaName.text = details.name
                     mangaDescription.text = details.description
-                    Picasso.get().load(details.banner).into(mangaBanner)
-                    Picasso.get().load(details.thumbnail).into(mangaThumbnail)
+                    Glide.with(this@MangaDetailsActivity).load(details.banner).into(mangaBanner)
+                    Glide.with(this@MangaDetailsActivity).load(details.thumbnail).into(mangaThumbnail)
 
                     binding.mangaProgressTextView.text = if (Constants.mangaChapter.isNotEmpty()) {
                         "Read ${Constants.mangaChapter} chapters"

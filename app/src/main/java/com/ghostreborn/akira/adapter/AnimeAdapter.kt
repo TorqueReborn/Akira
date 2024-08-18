@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.ui.AnimeDetailsActivity
-import com.squareup.picasso.Picasso
 
 class AnimeAdapter(private val animes: ArrayList<Anime>) :
     RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
@@ -33,7 +33,7 @@ class AnimeAdapter(private val animes: ArrayList<Anime>) :
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = animes[position]
         holder.animeNameTextView.text = anime.name
-        Picasso.get().load(anime.thumbnail).into(holder.animeImageView)
+        Glide.with(holder.itemView.context).load(anime.thumbnail).into(holder.animeImageView)
         holder.itemView.setOnClickListener {
             Constants.allAnimeID = anime.id
             Constants.animeThumbnail = anime.thumbnail

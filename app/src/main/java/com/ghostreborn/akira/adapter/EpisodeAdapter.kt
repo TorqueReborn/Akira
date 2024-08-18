@@ -7,11 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.fragment.ServerFragment
 import com.ghostreborn.akira.model.Episode
-import com.squareup.picasso.Picasso
 
 class EpisodeAdapter(
     private val episodeList: List<Episode>,
@@ -38,8 +38,7 @@ class EpisodeAdapter(
         val episode = episodeList[position]
         holder.episodeTitleTextView.text = episode.episodeTitle
         holder.episodeNumberTextView.text = episode.episodeNumber
-        Picasso.get()
-            .load(episode.episodeThumbnail)
+        Glide.with(holder.itemView.context).load(episode.episodeThumbnail)
             .into(holder.episodeThumbnailImageView)
         holder.itemView.setOnClickListener {
             Constants.animeEpisode = episode.episodeNumber

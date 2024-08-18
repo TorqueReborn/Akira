@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.glide)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer.hls)
@@ -47,7 +48,6 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.picasso)
     implementation(libs.okhttp)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
