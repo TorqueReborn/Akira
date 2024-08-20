@@ -1,11 +1,12 @@
 package com.ghostreborn.akira.ui
 
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.adapter.MangaChapterAdapter
 import com.ghostreborn.akira.allManga.AllMangaParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,17 +14,29 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ReadMangaActivity : AppCompatActivity() {
+    private var page = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_manga)
 
-        val viewPager = findViewById<ViewPager2>(R.id.read_manga_view_pager)
+        val mangaImageView = findViewById<ImageView>(R.id.manga_chapter_image)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = AllMangaParser().chapterPages(Constants.allMangaID, Constants.mangaChapter)
+            val pages = AllMangaParser().chapterPages(Constants.allMangaID, Constants.mangaChapter)
             withContext(Dispatchers.Main) {
-                viewPager.adapter = MangaChapterAdapter(test, viewPager)
+                fun updateImage() = Glide.with(baseContext).load(pages[page]).into(mangaImageView)
+                updateImage()
+                val buttons = mapOf(
+                    R.id.manga_previous_button to -1,
+                    R.id.manga_next_button to 1
+                )
+                buttons.forEach { (id, delta) ->
+                    findViewById<Button>(id).setOnClickListener {
+                        page = (page + delta).coerceIn(0, pages.size - 1)
+                        updateImage()
+                    }
+                }
             }
         }
-
     }
 }

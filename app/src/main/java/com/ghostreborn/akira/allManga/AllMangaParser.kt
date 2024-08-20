@@ -99,8 +99,12 @@ class AllMangaParser {
         val pictureUrls = edges.getJSONObject(0).getJSONArray("pictureUrls")
         val thumbnails: ArrayList<String> = ArrayList()
         for (i in 0 until pictureUrls.length()) {
-            val thumbnail =
+            var thumbnail =
                 "https://ytimgf.youtube-anime.com/${pictureUrls.getJSONObject(i).getString("url")}"
+            if (!pictureUrls.getJSONObject(i).getString("url").contains("images")){
+                thumbnail =
+                    "https://ytimgf.youtube-anime.com/images/${pictureUrls.getJSONObject(i).getString("url")}"
+            }
             thumbnails.add(thumbnail)
         }
         return thumbnails
