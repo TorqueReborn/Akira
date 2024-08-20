@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.adapter
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -10,7 +11,7 @@ import com.ghostreborn.akira.fragment.AnilistLoginFragment
 import com.ghostreborn.akira.fragment.HomeFragment
 import com.ghostreborn.akira.fragment.SettingsFragment
 
-class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+class AnimeViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, val context: Context) :
     FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun getItemCount(): Int = 3

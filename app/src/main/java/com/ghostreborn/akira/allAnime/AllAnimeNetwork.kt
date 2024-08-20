@@ -26,9 +26,9 @@ class AllAnimeNetwork {
     }
 
     fun searchAnime(anime: String): String? {
-        val allowAdult = Constants.preferences.getBoolean(Constants.PREF_ALLOW_ADULT, false)
-        val allowUnknown = Constants.preferences.getBoolean(Constants.PREF_ALLOW_UNKNOWN, false)
-        val subDub = getSubDub(Constants.preferences.getBoolean(Constants.PREF_DUB_ENABLED, false))
+        val allowAdult = false
+        val allowUnknown = false
+        val subDub = "sub"
         val variables = "\"search\":{\"allowAdult\":$allowAdult,\"allowUnknown\":$allowUnknown,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"$subDub\",\"countryOrigin\":\"ALL\""
         val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
         val query = "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail}}"

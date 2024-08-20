@@ -51,7 +51,7 @@ class AnimeFragment : Fragment() {
             val animes = AllAnimeParser().searchAnime(query)
             withContext(Dispatchers.Main) {
                 recyclerView.adapter = AnimeAdapter(animes)
-                recyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+                recyclerView.layoutManager = GridLayoutManager(context, 3)
                 swipeRefreshLayout.isRefreshing = false
             }
         }

@@ -34,12 +34,14 @@ class HomeFragment : Fragment() {
                         .commit()
                     true
                 }
+
                 R.id.nav_manga -> {
                     childFragmentManager.beginTransaction()
                         .replace(R.id.home_frame_layout, MangaFragment())
                         .commit()
                     true
                 }
+
                 else -> false
             }
         }
