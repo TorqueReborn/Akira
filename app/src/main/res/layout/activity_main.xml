@@ -15,12 +15,20 @@
             android:layout_height="wrap_content">
 
             <FrameLayout
-                android:id="@+id/home_anime_frame"
+                android:id="@+id/anilist_login_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <FrameLayout
+                android:id="@+id/home_anime_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/anilist_login_frame" />
 
             <FrameLayout
                 android:id="@+id/home_manga_frame"

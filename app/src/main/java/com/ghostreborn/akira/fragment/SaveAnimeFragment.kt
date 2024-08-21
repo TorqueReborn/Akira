@@ -70,7 +70,8 @@ class SaveAnimeFragment : Fragment() {
                 "CURRENT",
                 progressEditText.text.toString(),
                 requireContext(),
-                false
+                false,
+                requireActivity()
             )
             withContext(Dispatchers.Main) {
                 if (saved){
@@ -91,7 +92,7 @@ class SaveAnimeFragment : Fragment() {
             ).build()
             instance.anilistDao().findByAllAnimeID(allAnimeID).let {
                 if (it != null) {
-                    AnilistParser().deleteAnime(it.id, requireContext())
+                    AnilistParser().deleteAnime(it.id, requireContext(), requireActivity())
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Deleted!", Toast.LENGTH_SHORT).show()
                     }

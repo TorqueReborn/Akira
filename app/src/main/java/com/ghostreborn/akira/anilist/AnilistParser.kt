@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.anilist
 
+import android.app.Activity
 import android.content.Context
 import androidx.room.Room
 import com.ghostreborn.akira.Constants
@@ -13,9 +14,10 @@ class AnilistParser {
         status: String,
         progress: String,
         context: Context,
-        isManga: Boolean
+        isManga: Boolean,
+        activity: Activity
     ): Boolean {
-        val raw = JSONObject(AnilistNetwork().saveAnimeManga(animeId, status, progress))
+        val raw = JSONObject(AnilistNetwork().saveAnimeManga(animeId, status, progress, activity))
         if (raw.getJSONObject("data").isNull("SaveMediaListEntry")) {
             return false
         }
@@ -33,8 +35,8 @@ class AnilistParser {
         return true
     }
 
-    fun deleteAnime(mediaId: String, context: Context) {
-        AnilistNetwork().deleteAnimeManga(mediaId)
+    fun deleteAnime(mediaId: String, context: Context, activity: Activity) {
+        AnilistNetwork().deleteAnimeManga(mediaId, activity)
         Room.databaseBuilder(context, AnilistDatabase::class.java, "Akira").build().apply {
             anilistDao().findByMediaID(mediaId).let { anilist ->
                 anilistDao().delete(anilist)

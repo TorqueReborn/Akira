@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.anilist
 
 import android.app.Activity
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import androidx.room.Room
 import com.ghostreborn.akira.Constants
@@ -36,33 +37,36 @@ class AnilistUtils {
 
         OkHttpClient().newCall(request).execute().use { response ->
             val token = JSONObject(response.body?.string() ?: "").getString("access_token")
-            Constants.preferences.edit().putString(Constants.PREF_TOKEN, token).apply()
+            activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+                .putString(Constants.PREF_TOKEN, token).apply()
             getUserNameAndID(activity)
         }
     }
 
     private fun getUserNameAndID(activity: Activity) {
         val query = "{Viewer{id}}"
-        val responseBody = AnilistNetwork().connectAnilist(query)
+        val responseBody = AnilistNetwork().connectAnilist(query, activity)
         val id =
             JSONObject(responseBody).getJSONObject("data").getJSONObject("Viewer").getString("id")
-        Constants.preferences.edit().putString(Constants.PREF_USER_ID, id).apply()
+        activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+            .putString(Constants.PREF_USER_ID, id).apply()
         getAnimeList(activity)
     }
 
     private fun getAnimeList(activity: Activity) {
         val graph = "query{MediaListCollection(userId:${
-            Constants.preferences.getString(
+            activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).getString(
                 Constants.PREF_USER_ID,
                 ""
             )
         },type:ANIME, status:CURRENT){lists{entries{id,media{idMal,title{native}},progress}}}}"
-        val response = JSONObject(AnilistNetwork().connectAnilist(graph))
+        val response = JSONObject(AnilistNetwork().connectAnilist(graph, activity))
         val lists = response.getJSONObject("data").getJSONObject("MediaListCollection")
             .getJSONArray("lists")
 
         if (lists.length() == 0) {
-            Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+            activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+                .putBoolean(Constants.PREF_LOGGED_IN, true).apply()
             activity.startActivity(Intent(activity, MainActivity::class.java))
             activity.finish()
             return
@@ -97,17 +101,18 @@ class AnilistUtils {
 
     private fun getMangaList(activity: Activity) {
         val graph = "query{MediaListCollection(userId:${
-            Constants.preferences.getString(
+            activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).getString(
                 Constants.PREF_USER_ID,
                 ""
             )
         },type:MANGA, status:CURRENT){lists{entries{id,media{idMal,title{native}},progress}}}}"
-        val response = JSONObject(AnilistNetwork().connectAnilist(graph))
+        val response = JSONObject(AnilistNetwork().connectAnilist(graph, activity))
         val lists = response.getJSONObject("data").getJSONObject("MediaListCollection")
             .getJSONArray("lists")
 
         if (lists.length() == 0) {
-            Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+            activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+                .putBoolean(Constants.PREF_LOGGED_IN, true).apply()
             activity.startActivity(Intent(activity, MainActivity::class.java))
             activity.finish()
             return
@@ -137,7 +142,8 @@ class AnilistUtils {
             close()
         }
 
-        Constants.preferences.edit().putBoolean(Constants.PREF_LOGGED_IN, true).apply()
+        activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+            .putBoolean(Constants.PREF_LOGGED_IN, true).apply()
         activity.startActivity(Intent(activity, MainActivity::class.java))
         activity.finish()
     }

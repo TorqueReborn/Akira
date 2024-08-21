@@ -3,6 +3,7 @@ package com.ghostreborn.akira
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akira.anilist.AnilistUtils
+import com.ghostreborn.akira.fragment.AnilistLoginFragment
 import com.ghostreborn.akira.fragment.AnimeFragment
 import com.ghostreborn.akira.fragment.MangaFragment
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +17,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val isLoggedIn = getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE)
+            .getBoolean(Constants.PREF_LOGGED_IN, false)
+        if (!isLoggedIn) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.anilist_login_frame, AnilistLoginFragment())
+                .commit()
+        }
 
         handleIntentData()
         supportFragmentManager.beginTransaction()

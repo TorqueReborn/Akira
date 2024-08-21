@@ -79,7 +79,8 @@ class PlayEpisodeActivity : AppCompatActivity() {
                             "CURRENT",
                             Constants.animeEpisode,
                             baseContext,
-                            false
+                            false,
+                            this@PlayEpisodeActivity
                         )
                     }
                     if (saved) {

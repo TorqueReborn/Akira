@@ -28,6 +28,7 @@
     <string name="search_manga_here">Search Manga Here</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
+    <string name="anilist_login_desc">Login with Anilist to save progress</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>
