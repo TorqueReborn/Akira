@@ -1,6 +1,8 @@
 package com.ghostreborn.akira
 
 import android.os.Bundle
+import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -9,6 +11,7 @@ import com.ghostreborn.akira.adapter.MangaAdapter
 import com.ghostreborn.akira.allAnime.AllAnimeParser
 import com.ghostreborn.akira.allManga.AllMangaParser
 import com.ghostreborn.akira.anilist.AnilistUtils
+import com.ghostreborn.akira.model.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,15 +30,27 @@ class MainActivity : AppCompatActivity() {
             val animes = AllAnimeParser().searchAnime("")
             val mangas = AllMangaParser().searchManga("")
             withContext(Dispatchers.Main) {
-                val recyclerView:RecyclerView = findViewById(R.id.home_anime_recycler)
-                val mangaRecyclerView:RecyclerView = findViewById(R.id.home_manga_recycler)
-                recyclerView.adapter = AnimeAdapter(animes)
-                mangaRecyclerView.adapter = MangaAdapter(mangas)
-                mangaRecyclerView.layoutManager = GridLayoutManager(baseContext, 1, RecyclerView.HORIZONTAL, false)
-                recyclerView.layoutManager = GridLayoutManager(baseContext, 1, RecyclerView.HORIZONTAL, false)
+                setupAnime(animes)
+                setupManga(mangas)
             }
         }
 
+    }
+
+    private fun setupAnime(anime: ArrayList<Anime>){
+        findViewById<LinearLayout>(R.id.anime_linear_layout).visibility = if (anime.isEmpty()) View.GONE else View.VISIBLE
+        findViewById<RecyclerView>(R.id.home_anime_recycler).apply {
+            adapter = AnimeAdapter(anime)
+            layoutManager = GridLayoutManager(context, 1, RecyclerView.HORIZONTAL, false)
+        }
+    }
+
+    private fun setupManga(manga: ArrayList<Anime>) {
+        findViewById<LinearLayout>(R.id.manga_linear_layout).visibility = if (manga.isEmpty()) View.GONE else View.VISIBLE
+        findViewById<RecyclerView>(R.id.home_manga_recycler).apply {
+            adapter = MangaAdapter(manga)
+            layoutManager = GridLayoutManager(context, 1, RecyclerView.HORIZONTAL, false)
+        }
     }
 
     private fun handleIntentData() {
