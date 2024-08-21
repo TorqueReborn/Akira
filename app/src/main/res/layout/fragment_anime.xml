@@ -8,12 +8,15 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/anime_card"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         app:cardBackgroundColor="@color/card_background_color"
         app:cardCornerRadius="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -26,6 +29,24 @@
             android:paddingBottom="5dp"
             android:text="@string/anime"
             android:textSize="24sp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            app:cardBackgroundColor="@color/card_background_color_two"
+            app:cardCornerRadius="16dp"
+            android:layout_marginEnd="10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="5dp"
+                android:text="@string/more"
+                android:textSize="14sp"/>
+        </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView

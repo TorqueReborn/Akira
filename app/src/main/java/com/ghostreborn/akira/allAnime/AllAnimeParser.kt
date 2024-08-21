@@ -15,7 +15,7 @@ import java.io.IOException
 class AllAnimeParser {
     fun searchAnime(anime: String): ArrayList<Anime> {
         return ArrayList<Anime>().apply {
-            val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime).toString())
+            val edgesArray = JSONObject(AllAnimeNetwork().searchAnime(anime))
                 .getJSONObject("data")
                 .getJSONObject("shows")
                 .getJSONArray("edges")
@@ -28,7 +28,7 @@ class AllAnimeParser {
     }
 
     fun animeDetails(animeId: String): AnimeDetails {
-        val show = JSONObject(AllAnimeNetwork().animeDetails(animeId).toString())
+        val show = JSONObject(AllAnimeNetwork().animeDetails(animeId))
             .getJSONObject("data")
             .getJSONObject("show")
 
@@ -60,12 +60,11 @@ class AllAnimeParser {
     }
 
     fun episodes(id: String): ArrayList<ArrayList<String>> {
-        val subDub = AllAnimeNetwork().getSubDub(Constants.preferences.getBoolean(Constants.PREF_DUB_ENABLED, false))
-        val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
+        val episodesArray = JSONObject(AllAnimeNetwork().episodes(id))
             .getJSONObject("data")
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
-            .getJSONArray(subDub)
+            .getJSONArray("sub")
 
         val episodeList = ArrayList<String>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
@@ -88,7 +87,7 @@ class AllAnimeParser {
     }
 
     private fun episodeDetail(id: String, episode: String): Episode {
-        val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode).toString())
+        val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode))
             .getJSONObject("data")
             .getJSONObject("episode")
 
@@ -112,7 +111,7 @@ class AllAnimeParser {
     }
 
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
-        val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids).toString())
+        val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids))
             .getJSONObject("data")
 
         if (show.isNull("showsWithIds")){
@@ -135,7 +134,7 @@ class AllAnimeParser {
     }
 
     private fun episodeUrls(id: String, episode: String): List<String> {
-        val sourceUrls = JSONObject(AllAnimeNetwork().episodeUrls(id, episode).toString())
+        val sourceUrls = JSONObject(AllAnimeNetwork().episodeUrls(id, episode))
             .getJSONObject("data")
             .getJSONObject("episode")
             .getJSONArray("sourceUrls")
@@ -198,7 +197,7 @@ class AllAnimeParser {
     }
 
     fun anilistWithAllAnimeID(allAnimeId: String): String {
-        val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId).toString()
+        val rawJSON = AllAnimeNetwork().anilistIdWithAllAnimeID(allAnimeId)
         return JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("show")
@@ -206,7 +205,7 @@ class AllAnimeParser {
     }
 
     fun allAnimeIdWithMalId(anime: String, malId: String): String {
-        val rawJSON = AllAnimeNetwork().allAnimeIdWithMalId(anime).toString()
+        val rawJSON = AllAnimeNetwork().allAnimeIdWithMalId(anime)
         val edgesArray = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("shows")

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ import kotlinx.coroutines.withContext
 class AnilistMangaFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var cardView: CardView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,6 +29,7 @@ class AnilistMangaFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_anilist_manga, container, false)
         recyclerView = view.findViewById(R.id.anilist_recycler_view)
+        cardView = view.findViewById(R.id.anime_card)
         return view
     }
 
@@ -49,6 +52,7 @@ class AnilistMangaFragment : Fragment() {
 
             withContext(Dispatchers.Main) {
                 recyclerView.apply {
+                    cardView.visibility = View.VISIBLE
                     adapter = MangaAdapter(animes)
                     layoutManager = GridLayoutManager(requireContext(), 3)
                 }

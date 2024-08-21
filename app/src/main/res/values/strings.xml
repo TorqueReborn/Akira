@@ -31,6 +31,7 @@
     <string name="anilist_login_desc">Login with Anilist to save progress</string>
     <string name="saved_anime">Saved Anime</string>
     <string name="saved_manga">Saved Manga</string>
+    <string name="more">more</string>
     <string-array name="anime_status">
         <item>CURRENT</item>
         <item>COMPLETED</item>
