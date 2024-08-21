@@ -23,28 +23,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
-                android:id="@+id/anilist_anime_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/anilist_login_frame" />
-
-            <FrameLayout
-                android:id="@+id/anilist_manga_frame"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/anilist_anime_frame" />
-
-            <FrameLayout
                 android:id="@+id/home_anime_frame"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/anilist_manga_frame" />
+                app:layout_constraintTop_toBottomOf="@id/anilist_login_frame" />
 
             <FrameLayout
                 android:id="@+id/home_manga_frame"
@@ -53,6 +37,22 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/home_anime_frame" />
+
+            <FrameLayout
+                android:id="@+id/anilist_anime_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_manga_frame" />
+
+            <FrameLayout
+                android:id="@+id/anilist_manga_frame"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/anilist_anime_frame" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -1,34 +1,33 @@
 package com.ghostreborn.akira.allManga
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import java.net.HttpURLConnection
+import java.net.URL
 
 class AllMangaNetwork {
     private fun connectAllAnime(
         variables: String,
         queryTypes: String,
         query: String
-    ): String? {
-        val client = OkHttpClient()
+    ): String {
         val url =
-            "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
-        val request = Request.Builder()
-            .url(url)
-            .header("Referer", "https://allanime.to")
-            .header("Cipher", "AES256-SHA256")
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
-            )
-            .build()
-        return client.newCall(request).execute().body?.string()
+            URL("https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+        connection.setRequestProperty("Referer", "https://allanime.to")
+        connection.setRequestProperty("Cipher", "AES256-SHA256")
+        connection.setRequestProperty(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
+        )
+        return connection.inputStream.bufferedReader().use { it.readText() }
     }
 
     private fun getSubDub(isDubEnabled: Boolean): String {
         return if (isDubEnabled) "dub" else "sub"
     }
 
-    fun searchManga(anime: String): String? {
+    fun searchManga(anime: String): String {
         val allowAdult = false
         val allowUnknown = false
         val subDub = "sub"
@@ -41,21 +40,21 @@ class AllMangaNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun mangaDetails(mangaId: String): String? {
+    fun mangaDetails(mangaId: String): String {
         val variables = "\"id\":\"$mangaId\""
         val queryTypes = "\$id:String!"
         val query = "manga(_id:\$id){name,thumbnail,description,banner,relatedMangas}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun mangaChapters(mangaId: String): String? {
+    fun mangaChapters(mangaId: String): String {
         val variables = "\"id\":\"$mangaId\""
         val queryTypes = "\$id:String!"
         val query = "manga(_id:\$id){availableChaptersDetail}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun chapterPages(mangaId: String, chapter: String): String? {
+    fun chapterPages(mangaId: String, chapter: String): String {
         val variables =
             "\"mangaId\":\"$mangaId\",\"chapterString\":\"$chapter\",\"translationType\":\"sub\""
         val queryTypes =
@@ -69,10 +68,10 @@ class AllMangaNetwork {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "manga(_id:\$showId){aniListId}"
-        return connectAllAnime(variables, queryTypes, query).toString()
+        return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun allAnimeIdWithMalId(anime: String): String? {
+    fun allAnimeIdWithMalId(anime: String): String {
         val allowAdult = false
         val allowUnknown = false
         val subDub = getSubDub(false)
@@ -85,7 +84,7 @@ class AllMangaNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun getDetailsByIds(ids: String): String? {
+    fun getDetailsByIds(ids: String): String {
         val variables = "\"ids\":[$ids]"
         val queryTypes = "\$ids:[String!]!"
         val query = "mangasWithIds(ids:\$ids){_id,name,thumbnail}"

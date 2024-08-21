@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coil)
     implementation(libs.glide)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)

@@ -1,34 +1,33 @@
 package com.ghostreborn.akira.allAnime
 
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import java.net.HttpURLConnection
+import java.net.URL
 
 class AllAnimeNetwork {
     private fun connectAllAnime(
         variables: String,
         queryTypes: String,
         query: String
-    ): String? {
-        val client = OkHttpClient()
+    ): String {
         val url =
-            "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
-        val request = Request.Builder()
-            .url(url)
-            .header("Referer", "https://allanime.to")
-            .header("Cipher", "AES256-SHA256")
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
-            )
-            .build()
-        return client.newCall(request).execute().body?.string()
+            URL("https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}")
+        val connection = url.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("User-Agent", "Mozilla/5.0")
+        connection.setRequestProperty("Referer", "https://allanime.to")
+        connection.setRequestProperty("Cipher", "AES256-SHA256")
+        connection.setRequestProperty(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
+        )
+        return connection.inputStream.bufferedReader().use { it.readText() }
     }
 
     fun getSubDub(isDubEnabled: Boolean): String {
         return if (isDubEnabled) "dub" else "sub"
     }
 
-    fun searchAnime(anime: String): String? {
+    fun searchAnime(anime: String): String {
         val allowAdult = false
         val allowUnknown = false
         val subDub = "sub"
@@ -41,21 +40,21 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun animeDetails(id: String): String? {
+    fun animeDetails(id: String): String {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){name,thumbnail,description,banner,relatedShows}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun episodes(id: String): String? {
+    fun episodes(id: String): String {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){availableEpisodesDetail}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun episodeUrls(id: String, episode: String): String? {
+    fun episodeUrls(id: String, episode: String): String {
         val subDub = getSubDub(false)
         val variables =
             "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"$subDub\""
@@ -66,7 +65,7 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun episodeDetails(id: String, episode: String): String? {
+    fun episodeDetails(id: String, episode: String): String {
         val subDub = getSubDub(false)
         val variables =
             "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"$subDub\""
@@ -77,14 +76,14 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun getDetailsByIds(ids: String): String? {
+    fun getDetailsByIds(ids: String): String {
         val variables = "\"ids\":[$ids]"
         val queryTypes = "\$ids:[String!]!"
         val query = "showsWithIds(ids:\$ids){_id,name,thumbnail}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun allAnimeIdWithMalId(anime: String): String? {
+    fun allAnimeIdWithMalId(anime: String): String {
         val allowAdult = false
         val allowUnknown = false
         val subDub = getSubDub(false)
@@ -97,7 +96,7 @@ class AllAnimeNetwork {
         return connectAllAnime(variables, queryTypes, query)
     }
 
-    fun anilistIdWithAllAnimeID(id: String): String? {
+    fun anilistIdWithAllAnimeID(id: String): String {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){aniListId}"
