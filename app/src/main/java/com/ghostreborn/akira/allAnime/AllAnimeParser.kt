@@ -8,6 +8,7 @@ import com.ghostreborn.akira.model.AnimeDetails
 import com.ghostreborn.akira.model.Episode
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -102,7 +103,7 @@ class AllAnimeParser {
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
         val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids))
             .getJSONObject("data")
-        if (show.isNull("showsWithIds")){
+        if (show.isNull("showsWithIds")) {
             return ArrayList()
         }
         val shows = show.getJSONArray("showsWithIds")
@@ -139,7 +140,7 @@ class AllAnimeParser {
         return episodeUrls(id!!, episode!!).flatMap { source ->
             try {
                 val rawJSON = getJSON(source)
-                if (rawJSON == "error") return@flatMap emptyList<String>()
+                if (rawJSON == "error" || rawJSON == "{}") return@flatMap emptyList<String>()
 
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
                 List(linksArray.length()) { linksArray.getJSONObject(it).getString("link") }
@@ -151,11 +152,19 @@ class AllAnimeParser {
     }
 
     private fun getJSON(url: String?): String {
-        val ur = URL(url)
+        val ur = URL(url ?: return "{}")
         val connection = ur.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-        connection.setRequestProperty("Referer", "https://allanime.to")
-        return connection.inputStream.bufferedReader().use { it.readText() }
+        with(connection) {
+            requestMethod = "GET"
+            setRequestProperty("Referer", "https://allanime.to")
+            return try {
+                inputStream.bufferedReader().use { it.readText() }
+            } catch (e: IOException) {
+                "{}"
+            } finally {
+                disconnect()
+            }
+        }
     }
 
     private fun decryptAllAnimeServer(decrypt: String): String {
