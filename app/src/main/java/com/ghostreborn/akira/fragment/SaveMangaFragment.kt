@@ -31,11 +31,11 @@ class SaveMangaFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_save_manga, container, false)
-        progressEditText = view.findViewById(R.id.manga_progress_edit_text)
-        progressAddButton = view.findViewById(R.id.manga_progress_add_button)
-        progressDeleteButton = view.findViewById(R.id.manga_progress_delete_button)
-        plusButton = view.findViewById(R.id.manga_plus_button)
+        val view = inflater.inflate(R.layout.fragment_save, container, false)
+        progressEditText = view.findViewById(R.id.anime_progress_edit_text)
+        progressAddButton = view.findViewById(R.id.anime_progress_add_button)
+        progressDeleteButton = view.findViewById(R.id.anime_progress_delete_button)
+        plusButton = view.findViewById(R.id.anime_plus_button)
         return view
     }
 

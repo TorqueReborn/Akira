@@ -8,7 +8,7 @@ import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allManga.AllMangaParser
-import com.ghostreborn.akira.databinding.ActivityMangaDetailsBinding
+import com.ghostreborn.akira.databinding.ActivityAnimeDetailsBinding
 import com.ghostreborn.akira.fragment.SaveMangaFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +17,11 @@ import kotlinx.coroutines.withContext
 
 class MangaDetailsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMangaDetailsBinding
+    private lateinit var binding: ActivityAnimeDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMangaDetailsBinding.inflate(layoutInflater)
+        binding = ActivityAnimeDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         supportFragmentManager.beginTransaction()
@@ -32,18 +32,18 @@ class MangaDetailsActivity : AppCompatActivity() {
             val details = AllMangaParser().mangaDetails(Constants.allMangaID)
             withContext(Dispatchers.Main) {
                 binding.apply {
-                    mangaName.text = details.name
-                    mangaDescription.text = details.description
-                    mangaBanner.load(details.banner)
-                    mangaThumbnail.load(details.thumbnail)
+                    animeName.text = details.name
+                    animeDescription.text = details.description
+                    animeBanner.load(details.banner)
+                    animeThumbnail.load(details.thumbnail)
 
-                    binding.mangaProgressTextView.text = if (Constants.mangaChapter.isNotEmpty()) {
+                    binding.animeProgressTextView.text = if (Constants.mangaChapter.isNotEmpty()) {
                         "Read ${Constants.mangaChapter} chapters"
                     } else {
                         "Not Read"
                     }
 
-                    readFab.setOnClickListener {
+                    watchFab.setOnClickListener {
                         startActivity(
                             Intent(
                                 this@MangaDetailsActivity,
@@ -52,7 +52,7 @@ class MangaDetailsActivity : AppCompatActivity() {
                         )
                     }
 
-                    mangaPrequelButton.apply {
+                    prequelButton.apply {
                         visibility = if (details.prequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
                             Constants.allMangaID = details.prequel
@@ -61,7 +61,7 @@ class MangaDetailsActivity : AppCompatActivity() {
                         }
                     }
 
-                    mangaSequelButton.apply {
+                    sequelButton.apply {
                         visibility = if (details.sequel.isNotEmpty()) View.VISIBLE else View.GONE
                         setOnClickListener {
                             Constants.allMangaID = details.sequel

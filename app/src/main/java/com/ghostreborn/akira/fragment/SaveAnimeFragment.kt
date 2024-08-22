@@ -31,7 +31,7 @@ class SaveAnimeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_save_anime, container, false).apply {
+        return inflater.inflate(R.layout.fragment_save, container, false).apply {
             progressEditText = findViewById(R.id.anime_progress_edit_text)
             progressAddButton = findViewById(R.id.anime_progress_add_button)
             progressDeleteButton = findViewById(R.id.anime_progress_delete_button)
