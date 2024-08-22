@@ -15,6 +15,7 @@ import com.ghostreborn.akira.allAnime.AllAnimeParser
 import com.ghostreborn.akira.database.AnilistDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -40,6 +41,7 @@ class AnilistAnimeFragment : Fragment() {
 
     private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
+            delay(1500)
             val instance = Room.databaseBuilder(
                 requireContext(), AnilistDatabase::class.java, "Akira"
             ).build()
