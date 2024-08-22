@@ -135,7 +135,7 @@ class AllMangaParser {
         return ArrayList<Anime>().apply {
             for (i in 0 until shows.length()) {
                 shows.getJSONObject(i).apply {
-                    add(Anime(getString("_id"), getString("name"), getString("thumbnail")))
+                    add(Anime(getString("_id"), getString("name"), "https://wp.youtube-anime.com/aln.youtube-anime.com/${getString("thumbnail")}"))
                 }
             }
         }
