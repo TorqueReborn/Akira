@@ -1,6 +1,5 @@
 package com.ghostreborn.akira.allManga
 
-import android.util.Log
 import androidx.core.text.HtmlCompat
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeDetails
@@ -9,7 +8,7 @@ import org.json.JSONObject
 class AllMangaParser {
     fun searchManga(manga: String): ArrayList<Anime> {
         return ArrayList<Anime>().apply {
-            val edgesArray = JSONObject(AllMangaNetwork().searchManga(manga).toString())
+            val edgesArray = JSONObject(AllMangaNetwork().searchManga(manga))
                 .getJSONObject("data")
                 .getJSONObject("mangas")
                 .getJSONArray("edges")
@@ -27,24 +26,20 @@ class AllMangaParser {
     }
 
     fun mangaDetails(mangaId: String): AnimeDetails {
-        val manga = JSONObject(AllMangaNetwork().mangaDetails(mangaId).toString())
+        val manga = JSONObject(AllMangaNetwork().mangaDetails(mangaId))
             .getJSONObject("data")
             .getJSONObject("manga")
-
         val description =
             HtmlCompat.fromHtml(manga.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
                 .toString()
         val relatedShows = manga.getJSONArray("relatedMangas")
-
         var prequel = ""
         var sequel = ""
-
         var thumbnail = manga.getString("thumbnail")
         if (!thumbnail.startsWith("http")) {
             thumbnail =
                 "https://wp.youtube-anime.com/aln.youtube-anime.com/${manga.getString("thumbnail")}"
         }
-
         for (i in 0 until relatedShows.length()) {
             relatedShows.getJSONObject(i).apply {
                 when (getString("relation")) {
@@ -53,7 +48,6 @@ class AllMangaParser {
                 }
             }
         }
-
         return AnimeDetails(
             name = manga.getString("name"),
             thumbnail = thumbnail,
@@ -65,18 +59,16 @@ class AllMangaParser {
     }
 
     fun mangaChapters(mangaId: String): ArrayList<ArrayList<String>> {
-        val episodesArray = JSONObject(AllMangaNetwork().mangaChapters(mangaId).toString())
+        val episodesArray = JSONObject(AllMangaNetwork().mangaChapters(mangaId))
             .getJSONObject("data")
             .getJSONObject("manga")
             .getJSONObject("availableChaptersDetail")
             .getJSONArray("sub")
-
         val episodeList = ArrayList<String>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
                 add(episodesArray.getString(i))
             }
         }
-
         return groupChapters(episodeList)
     }
 
@@ -92,7 +84,7 @@ class AllMangaParser {
     }
 
     fun chapterPages(mangaId: String, chapter: String): ArrayList<String> {
-        val edges = JSONObject(AllMangaNetwork().chapterPages(mangaId, chapter).toString())
+        val edges = JSONObject(AllMangaNetwork().chapterPages(mangaId, chapter))
             .getJSONObject("data")
             .getJSONObject("chapterPages")
             .getJSONArray("edges")
@@ -101,9 +93,11 @@ class AllMangaParser {
         for (i in 0 until pictureUrls.length()) {
             var thumbnail =
                 "https://ytimgf.youtube-anime.com/${pictureUrls.getJSONObject(i).getString("url")}"
-            if (!pictureUrls.getJSONObject(i).getString("url").contains("images")){
+            if (!pictureUrls.getJSONObject(i).getString("url").contains("images")) {
                 thumbnail =
-                    "https://ytimgf.youtube-anime.com/images/${pictureUrls.getJSONObject(i).getString("url")}"
+                    "https://ytimgf.youtube-anime.com/images/${
+                        pictureUrls.getJSONObject(i).getString("url")
+                    }"
             }
             thumbnails.add(thumbnail)
         }
@@ -113,10 +107,6 @@ class AllMangaParser {
     fun anilistIdWithAllMangaID(id: String): String {
         val raw = JSONObject(AllMangaNetwork().anilistIdWithAllMangaID(id))
             .getJSONObject("data")
-
-        Log.e("TAG", raw.toString())
-        Log.e("TAG", "id: $id")
-
         if (raw.isNull("manga")) {
             return "null"
         }
@@ -124,12 +114,11 @@ class AllMangaParser {
     }
 
     fun allAnimeIdWithMalId(anime: String, malId: String): String {
-        val rawJSON = AllMangaNetwork().allAnimeIdWithMalId(anime).toString()
+        val rawJSON = AllMangaNetwork().allAnimeIdWithMalId(anime)
         val edgesArray = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("mangas")
             .getJSONArray("edges")
-
         return (0 until edgesArray.length()).firstNotNullOfOrNull { index ->
             val edge = edgesArray.getJSONObject(index)
             if (edge.getString("malId") == malId) edge.getString("_id") else null
@@ -137,15 +126,12 @@ class AllMangaParser {
     }
 
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
-        val show = JSONObject(AllMangaNetwork().getDetailsByIds(ids).toString())
+        val show = JSONObject(AllMangaNetwork().getDetailsByIds(ids))
             .getJSONObject("data")
-
         if (show.isNull("mangasWithIds")) {
             return ArrayList()
         }
-
         val shows = show.getJSONArray("mangasWithIds")
-
         return ArrayList<Anime>().apply {
             for (i in 0 until shows.length()) {
                 shows.getJSONObject(i).apply {

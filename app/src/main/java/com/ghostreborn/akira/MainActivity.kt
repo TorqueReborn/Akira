@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     private fun handleIntentData() {
         intent.data?.getQueryParameter("code")?.let { code ->
             CoroutineScope(Dispatchers.IO).launch {

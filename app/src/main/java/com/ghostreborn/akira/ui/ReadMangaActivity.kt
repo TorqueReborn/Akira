@@ -2,12 +2,12 @@ package com.ghostreborn.akira.ui
 
 import android.os.Bundle
 import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allManga.AllMangaParser
+import com.github.panpf.sketch.loadImage
+import com.github.panpf.zoomimage.CoilZoomImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,11 +20,13 @@ class ReadMangaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_manga)
 
-        val mangaImageView = findViewById<ImageView>(R.id.manga_chapter_image)
+        val mangaImageView = findViewById<CoilZoomImageView>(R.id.manga_chapter_image)
         CoroutineScope(Dispatchers.IO).launch {
             val pages = AllMangaParser().chapterPages(Constants.allMangaID, Constants.mangaChapter)
             withContext(Dispatchers.Main) {
-                fun updateImage() = Glide.with(baseContext).load(pages[page]).into(mangaImageView)
+                fun updateImage(){
+                    mangaImageView.loadImage(pages[page])
+                }
                 updateImage()
                 val buttons = mapOf(
                     R.id.manga_previous_button to -1,

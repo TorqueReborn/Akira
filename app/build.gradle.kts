@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.zoomimage.view.sketch)
+    implementation(libs.zoomimage.view.coil)
     implementation(libs.coil)
     implementation(libs.glide)
     implementation(libs.androidx.media3.exoplayer)

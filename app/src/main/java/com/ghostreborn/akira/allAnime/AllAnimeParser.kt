@@ -6,11 +6,10 @@ import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeDetails
 import com.ghostreborn.akira.model.Episode
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 class AllAnimeParser {
     fun searchAnime(anime: String): ArrayList<Anime> {
@@ -31,15 +30,12 @@ class AllAnimeParser {
         val show = JSONObject(AllAnimeNetwork().animeDetails(animeId))
             .getJSONObject("data")
             .getJSONObject("show")
-
         val description =
             HtmlCompat.fromHtml(show.getString("description"), HtmlCompat.FROM_HTML_MODE_COMPACT)
                 .toString()
         val relatedShows = show.getJSONArray("relatedShows")
-
         var prequel = ""
         var sequel = ""
-
         for (i in 0 until relatedShows.length()) {
             relatedShows.getJSONObject(i).apply {
                 when (getString("relation")) {
@@ -48,7 +44,6 @@ class AllAnimeParser {
                 }
             }
         }
-
         return AnimeDetails(
             name = show.getString("name"),
             thumbnail = show.getString("thumbnail"),
@@ -65,13 +60,11 @@ class AllAnimeParser {
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
             .getJSONArray("sub")
-
         val episodeList = ArrayList<String>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
                 add(episodesArray.getString(i))
             }
         }
-
         return groupEpisodes(episodeList)
     }
 
@@ -90,14 +83,11 @@ class AllAnimeParser {
         val episodeDetails = JSONObject(AllAnimeNetwork().episodeDetails(id, episode))
             .getJSONObject("data")
             .getJSONObject("episode")
-
         val episodeNumber = episodeDetails.getString("episodeString")
         val tempThumbnail = Constants.animeThumbnail
-
         if (episodeDetails.isNull("episodeInfo")) {
             return Episode(episodeNumber, "Episode $episodeNumber", tempThumbnail)
         }
-
         val episodeInfo = episodeDetails.getJSONObject("episodeInfo")
         var episodeName = "Episode $episodeNumber"
         if (!episodeInfo.isNull("notes")) {
@@ -106,20 +96,16 @@ class AllAnimeParser {
         val episodeThumbnail = episodeInfo.optJSONArray("thumbnails")?.getString(0)?.let {
             "https://wp.youtube-anime.com/aln.youtube-anime.com$it"
         } ?: tempThumbnail
-
         return Episode(episodeNumber, episodeName, episodeThumbnail)
     }
 
     fun getDetailsByIds(ids: String): ArrayList<Anime> {
         val show = JSONObject(AllAnimeNetwork().getDetailsByIds(ids))
             .getJSONObject("data")
-
         if (show.isNull("showsWithIds")){
             return ArrayList()
         }
-
         val shows = show.getJSONArray("showsWithIds")
-
         return ArrayList<Anime>().apply {
             for (i in 0 until shows.length()) {
                 shows.getJSONObject(i).apply {
@@ -138,7 +124,6 @@ class AllAnimeParser {
             .getJSONObject("data")
             .getJSONObject("episode")
             .getJSONArray("sourceUrls")
-
         return (0 until sourceUrls.length())
             .map { sourceUrls.getJSONObject(it).getString("sourceUrl") }
             .filter { it.contains("--") }
@@ -166,25 +151,11 @@ class AllAnimeParser {
     }
 
     private fun getJSON(url: String?): String {
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url ?: return "{}")
-            .header("Referer", "https://allanime.to")
-            .header("Cipher", "AES256-SHA256")
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
-            )
-            .build()
-
-        return try {
-            client.newCall(request).execute().use { response ->
-                response.body?.string() ?: "NULL"
-            }
-        } catch (e: IOException) {
-            Log.e("TAG", "Error fetching JSON: ", e)
-            "{}"
-        }
+        val ur = URL(url)
+        val connection = ur.openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("Referer", "https://allanime.to")
+        return connection.inputStream.bufferedReader().use { it.readText() }
     }
 
     private fun decryptAllAnimeServer(decrypt: String): String {
@@ -210,7 +181,6 @@ class AllAnimeParser {
             .getJSONObject("data")
             .getJSONObject("shows")
             .getJSONArray("edges")
-
         return (0 until edgesArray.length()).firstNotNullOfOrNull { index ->
             val edge = edgesArray.getJSONObject(index)
             if (edge.getString("malId") == malId) edge.getString("_id") else null

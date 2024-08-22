@@ -9,17 +9,10 @@ class AllMangaNetwork {
         queryTypes: String,
         query: String
     ): String {
-        val url =
-            URL("https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}")
+        val url = URL("https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}")
         val connection = url.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0")
         connection.setRequestProperty("Referer", "https://allanime.to")
-        connection.setRequestProperty("Cipher", "AES256-SHA256")
-        connection.setRequestProperty(
-            "User-Agent",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0"
-        )
         return connection.inputStream.bufferedReader().use { it.readText() }
     }
 
@@ -31,12 +24,9 @@ class AllMangaNetwork {
         val allowAdult = false
         val allowUnknown = false
         val subDub = "sub"
-        val variables =
-            "\"search\":{\"allowAdult\":$allowAdult,\"allowUnknown\":$allowUnknown,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"$subDub\",\"countryOrigin\":\"JP\""
-        val queryTypes =
-            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeMangaEnumType,\$countryOrigin:VaildCountryOriginEnumType"
-        val query =
-            "mangas(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail,aniListId}}"
+        val variables = "\"search\":{\"allowAdult\":$allowAdult,\"allowUnknown\":$allowUnknown,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"$subDub\",\"countryOrigin\":\"JP\""
+        val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeMangaEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query = "mangas(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,name,thumbnail,aniListId}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
@@ -55,12 +45,9 @@ class AllMangaNetwork {
     }
 
     fun chapterPages(mangaId: String, chapter: String): String {
-        val variables =
-            "\"mangaId\":\"$mangaId\",\"chapterString\":\"$chapter\",\"translationType\":\"sub\""
-        val queryTypes =
-            "\$mangaId:String!,\$chapterString:String!,\$translationType:VaildTranslationTypeMangaEnumType!"
-        val query =
-            "chapterPages(mangaId:\$mangaId,chapterString:\$chapterString,translationType:\$translationType){edges{pictureUrls}}"
+        val variables = "\"mangaId\":\"$mangaId\",\"chapterString\":\"$chapter\",\"translationType\":\"sub\""
+        val queryTypes = "\$mangaId:String!,\$chapterString:String!,\$translationType:VaildTranslationTypeMangaEnumType!"
+        val query = "chapterPages(mangaId:\$mangaId,chapterString:\$chapterString,translationType:\$translationType){edges{pictureUrls}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
@@ -75,12 +62,9 @@ class AllMangaNetwork {
         val allowAdult = false
         val allowUnknown = false
         val subDub = getSubDub(false)
-        val variables =
-            "\"search\":{\"allowAdult\":$allowAdult,\"allowUnknown\":$allowUnknown,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"$subDub\",\"countryOrigin\":\"JP\""
-        val queryTypes =
-            "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeMangaEnumType,\$countryOrigin:VaildCountryOriginEnumType"
-        val query =
-            "mangas(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,malId}}"
+        val variables = "\"search\":{\"allowAdult\":$allowAdult,\"allowUnknown\":$allowUnknown,\"query\":\"$anime\"},\"limit\":39,\"page\":1,\"translationType\":\"$subDub\",\"countryOrigin\":\"JP\""
+        val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeMangaEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query = "mangas(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,malId}}"
         return connectAllAnime(variables, queryTypes, query)
     }
 
