@@ -40,24 +40,23 @@ android {
 }
 
 dependencies {
+    // Zoomable ImageView
     implementation(libs.zoomimage.view.sketch)
     implementation(libs.zoomimage.view.coil)
+
+    // Coil
     implementation(libs.coil)
-    implementation(libs.glide)
-    implementation(libs.androidx.media3.exoplayer)
+
+    // Exoplayer
     implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.hls)
-    implementation(libs.androidx.swiperefreshlayout)
-    implementation(libs.androidx.room.runtime)
+
+    // Room Database
     ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.okhttp)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.room.runtime)
+
+    // UI
     implementation(libs.material)
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
 }

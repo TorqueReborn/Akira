@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.ui.ReadMangaActivity
@@ -37,8 +37,7 @@ class ChapterAdapter(
         val chapterName = "Chapter $chapter"
         holder.chapterTitleTextView.text = chapterName
         holder.chapterNumberTextView.text = chapter
-        Glide.with(holder.itemView.context).load(Constants.mangaThumbnail)
-            .into(holder.chapterThumbnailImageView)
+        holder.chapterThumbnailImageView.load(Constants.mangaThumbnail)
         holder.itemView.setOnClickListener {
             Constants.mangaChapter = chapter
             holder.itemView.context.startActivity(

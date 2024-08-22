@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allAnime.AllAnimeParser
@@ -34,8 +34,8 @@ class AnimeDetailsActivity : AppCompatActivity() {
                 binding.apply {
                     animeName.text = details.name
                     animeDescription.text = details.description
-                    Glide.with(this@AnimeDetailsActivity).load(details.banner).into(animeBanner)
-                    Glide.with(this@AnimeDetailsActivity).load(details.thumbnail).into(animeThumbnail)
+                    animeBanner.load(details.banner)
+                    animeThumbnail.load(details.thumbnail)
 
                     binding.animeProgressTextView.text = if (Constants.animeEpisode.isNotEmpty()) {
                         "Watched ${Constants.animeEpisode} episodes"

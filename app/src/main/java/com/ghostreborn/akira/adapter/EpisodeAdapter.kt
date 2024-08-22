@@ -7,7 +7,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.fragment.ServerFragment
@@ -38,8 +38,7 @@ class EpisodeAdapter(
         val episode = episodeList[position]
         holder.episodeTitleTextView.text = episode.episodeTitle
         holder.episodeNumberTextView.text = episode.episodeNumber
-        Glide.with(holder.itemView.context).load(episode.episodeThumbnail)
-            .into(holder.episodeThumbnailImageView)
+        holder.episodeThumbnailImageView.load(episode.episodeThumbnail)
         holder.itemView.setOnClickListener {
             Constants.animeEpisode = episode.episodeNumber
             ServerFragment()

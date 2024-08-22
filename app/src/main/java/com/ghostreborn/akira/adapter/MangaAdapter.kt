@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
@@ -33,7 +33,7 @@ class MangaAdapter(private val mangas: ArrayList<Anime>) :
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val manga = mangas[position]
         holder.mangaNameTextView.text = manga.name
-        Glide.with(holder.itemView.context).load(manga.thumbnail).into(holder.mangaImageView)
+        holder.mangaImageView.load(manga.thumbnail)
         holder.itemView.setOnClickListener {
             Constants.allMangaID = manga.id
             Constants.mangaThumbnail = manga.thumbnail
