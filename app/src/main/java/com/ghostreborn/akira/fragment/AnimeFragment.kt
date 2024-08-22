@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.allAnime.AllAnimeParser
+import com.ghostreborn.akira.utils.AkiraUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class AnimeFragment : Fragment() {
 
     private fun fetchAnime() {
         CoroutineScope(Dispatchers.IO).launch {
+            AkiraUtils().getLatestPackage()
             val animes = AllAnimeParser().searchAnime("")
             withContext(Dispatchers.Main) {
                 cardView.visibility = View.VISIBLE
