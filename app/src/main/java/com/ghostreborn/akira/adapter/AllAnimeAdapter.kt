@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import coil3.load
+import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
 
