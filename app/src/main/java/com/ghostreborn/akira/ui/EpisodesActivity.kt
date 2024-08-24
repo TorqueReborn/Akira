@@ -23,7 +23,7 @@ class EpisodesActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             val episodes = AllAnime().episodes(Constants.animeId)[0]
             withContext(Dispatchers.Main) {
-                recycler.adapter = EpisodeAdapter(episodes)
+                recycler.adapter = EpisodeAdapter(episodes,supportFragmentManager)
                 recycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
             }
         }
