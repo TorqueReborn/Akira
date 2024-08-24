@@ -13,4 +13,12 @@ class AllAnime: AnimeAbstract() {
     override fun search(anime: String): ArrayList<Anime> {
         return AllAnimeParser().searchAnime(anime)
     }
+
+    override fun episodes(id:String): ArrayList<ArrayList<String>> {
+        return AllAnimeParser().episodes(id)
+    }
+
+    override fun servers(id: String, episode: String): ArrayList<String> {
+        return AllAnimeParser().servers(id,episode)
+    }
 }

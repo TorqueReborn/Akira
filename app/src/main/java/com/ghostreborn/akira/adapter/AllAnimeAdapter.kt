@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +8,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.ui.EpisodesActivity
 
 class AllAnimeAdapter (private val animes: ArrayList<Anime>) :
     RecyclerView.Adapter<AllAnimeAdapter.AnimeViewHolder>() {
@@ -31,6 +34,12 @@ class AllAnimeAdapter (private val animes: ArrayList<Anime>) :
         val anime = animes[position]
         holder.animeNameTextView.text = anime.name
         holder.animeImageView.load(anime.thumbnail)
+        holder.itemView.setOnClickListener {
+            Constants.animeId = anime.id
+            holder.itemView.context.startActivity(
+                Intent(holder.itemView.context, EpisodesActivity::class.java)
+            )
+        }
     }
 
 }
