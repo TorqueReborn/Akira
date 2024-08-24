@@ -3,7 +3,6 @@ package com.ghostreborn.akira.ui
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -12,13 +11,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.parsers.allAnime.AllAnimeParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PlayActivity : AppCompatActivity() {
 

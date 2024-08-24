@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.EpisodeAdapter
+import com.ghostreborn.akira.adapter.EpisodeGroupAdapter
 import com.ghostreborn.akira.parsers.AllAnime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,13 +19,20 @@ class EpisodesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
 
-        val recycler = findViewById<RecyclerView>(R.id.episodes_recycler)
+        val episodesRecycler = findViewById<RecyclerView>(R.id.episodes_recycler_view)
+        val episodesGroupRecycler = findViewById<RecyclerView>(R.id.episode_group_recycler_view)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val episodes = AllAnime().episodes(Constants.animeId)[0]
+            val episodes = AllAnime().episodes(Constants.animeId)
             withContext(Dispatchers.Main) {
-                recycler.adapter = EpisodeAdapter(episodes,supportFragmentManager)
-                recycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
+                episodesRecycler.adapter = EpisodeAdapter(episodes[0],this@EpisodesActivity)
+                episodesRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)
+                episodesGroupRecycler.adapter = EpisodeGroupAdapter(
+                    this@EpisodesActivity, episodes, episodesRecycler
+                )
+                episodesGroupRecycler.layoutManager = LinearLayoutManager(
+                    this@EpisodesActivity, LinearLayoutManager.HORIZONTAL, false
+                )
             }
         }
 
