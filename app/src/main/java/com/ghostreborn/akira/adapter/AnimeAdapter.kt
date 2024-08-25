@@ -36,6 +36,7 @@ class AnimeAdapter (private val animes: ArrayList<Anime>) :
         holder.animeImageView.load(anime.thumbnail)
         holder.itemView.setOnClickListener {
             Constants.animeId = anime.id
+            Constants.animeThumbnail = anime.thumbnail
             holder.itemView.context.startActivity(
                 Intent(holder.itemView.context, EpisodesActivity::class.java)
             )

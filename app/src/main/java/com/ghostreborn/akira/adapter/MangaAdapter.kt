@@ -36,6 +36,7 @@ class MangaAdapter (private val mangas: ArrayList<Manga>) :
         holder.animeImageView.load(manga.thumbnail)
         holder.itemView.setOnClickListener {
             Constants.mangaId = manga.id
+            Constants.mangaThumbnail = manga.thumbnail
             holder.itemView.context.startActivity(
                 Intent(holder.itemView.context, ChaptersActivity::class.java)
             )
