@@ -11,7 +11,7 @@ class GojoNetwork {
     fun search(anime:String):String {
         val url = URL("https://graphql.anilist.co/")
         val query = "query{\n" +
-                "  Page(perPage: 10){\n" +
+                "  Page(perPage: 39){\n" +
                 "    media(search:\"${anime}\",type:ANIME){\n" +
                 "      id\n" +
                 "      title{\n" +
@@ -43,8 +43,8 @@ class GojoNetwork {
     fun recentlyUpdated():String {
         val url = URL("https://graphql.anilist.co/")
         val query = "query {\n" +
-                "  Page(perPage: 10, page: 1) {\n" +
-                "    media(sort: EPISODES_DESC, type: ANIME, status: RELEASING) {\n" +
+                "  Page(perPage: 39, page: 1) {\n" +
+                "    media(sort: TRENDING_DESC, type: ANIME, status: RELEASING) {\n" +
                 "      id\n" +
                 "      title {\n" +
                 "        userPreferred\n" +
