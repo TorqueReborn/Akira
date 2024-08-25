@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.adapter.MangaAdapter
+import com.ghostreborn.akira.parsers.anilist.AnilistUtils
 import com.ghostreborn.akira.ui.HomeActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        handleIntentData()
 
         val animeRecycler = findViewById<RecyclerView>(R.id.anime_recycler)
         animeRecycler.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.HORIZONTAL, false)
@@ -40,6 +43,14 @@ class MainActivity : AppCompatActivity() {
         findViewById<CardView>(R.id.manga_more_card).setOnClickListener {
             Constants.isManga = true
             startActivity(Intent(this, HomeActivity::class.java))
+        }
+    }
+
+    private fun handleIntentData() {
+        intent.data?.getQueryParameter("code")?.let { code ->
+            CoroutineScope(Dispatchers.IO).launch {
+                AnilistUtils().getToken(code, this@MainActivity)
+            }
         }
     }
 

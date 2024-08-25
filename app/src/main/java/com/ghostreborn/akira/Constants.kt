@@ -17,4 +17,9 @@ object Constants {
     val api: AnimeAbstract = Gojo()
     val mangaApi: MangaAbstract = AllManga()
     var isManga: Boolean = false
+
+    val PREF_NAME = "AKIRA"
+    val PREF_TOKEN = "TOKEN"
+    val PREF_USER_ID = "USER_ID"
+
 }
