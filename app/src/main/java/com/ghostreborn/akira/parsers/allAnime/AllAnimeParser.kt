@@ -2,6 +2,8 @@ package com.ghostreborn.akira.parsers.allAnime
 
 import android.util.Log
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.model.Episode
+import com.ghostreborn.akira.model.Server
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -23,22 +25,22 @@ class AllAnimeParser {
         }
     }
 
-    fun episodes(id: String): ArrayList<ArrayList<String>> {
+    fun episodes(id: String): ArrayList<ArrayList<Episode>> {
         val episodesArray = JSONObject(AllAnimeNetwork().episodes(id))
             .getJSONObject("data")
             .getJSONObject("show")
             .getJSONObject("availableEpisodesDetail")
             .getJSONArray("sub")
-        val episodeList = ArrayList<String>().apply {
+        val episodeList = ArrayList<Episode>().apply {
             for (i in episodesArray.length() - 1 downTo 0) {
-                add(episodesArray.getString(i))
+                add(Episode("","Episode ${episodesArray.getString(i)}",episodesArray.getString(i),false))
             }
         }
         return groupEpisodes(episodeList)
     }
 
-    private fun groupEpisodes(episodeList: ArrayList<String>): ArrayList<ArrayList<String>> {
-        val group = ArrayList<ArrayList<String>>()
+    private fun groupEpisodes(episodeList: ArrayList<Episode>): ArrayList<ArrayList<Episode>> {
+        val group = ArrayList<ArrayList<Episode>>()
         var startIndex = 0
         while (startIndex < episodeList.size) {
             val endIndex = (startIndex + 15).coerceAtMost(episodeList.size)
@@ -64,19 +66,25 @@ class AllAnimeParser {
             .filter { it.isNotEmpty() }
     }
 
-    fun servers(id: String?, episode: String?): ArrayList<String> {
+    fun servers(id: String?, episode: String?): ArrayList<Server> {
         return episodeUrls(id!!, episode!!).flatMap { source ->
             try {
                 val rawJSON = getJSON(source)
-                if (rawJSON == "error" || rawJSON == "{}") return@flatMap emptyList<String>()
+                if (rawJSON == "error" || rawJSON == "{}") return@flatMap emptyList<Server>()
 
                 val linksArray = JSONObject(rawJSON).getJSONArray("links")
-                List(linksArray.length()) { linksArray.getJSONObject(it).getString("link") }
+                List(linksArray.length()) {
+                    val linkObject = linksArray.getJSONObject(it)
+                    Server(
+                        quality = "Server ${it + 1}",
+                        url = linkObject.getString("link")
+                    )
+                }
             } catch (e: JSONException) {
                 Log.e("TAG", "Error parsing JSON: ", e)
                 emptyList()
             }
-        } as ArrayList<String>
+        } as ArrayList<Server>
     }
 
     private fun getJSON(url: String?): String {

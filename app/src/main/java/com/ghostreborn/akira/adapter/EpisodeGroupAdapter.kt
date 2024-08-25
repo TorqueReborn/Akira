@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.model.Episode
 import com.google.android.material.button.MaterialButton
 
 class EpisodeGroupAdapter(
     val activity: AppCompatActivity,
-    val episodeGroupList: ArrayList<ArrayList<String>>,
+    val episodeGroupList: ArrayList<ArrayList<Episode>>,
     val episodeRecycler: RecyclerView,
 ) : RecyclerView.Adapter<EpisodeGroupAdapter.EpisodeGroupViewHolder>() {
     class EpisodeGroupViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

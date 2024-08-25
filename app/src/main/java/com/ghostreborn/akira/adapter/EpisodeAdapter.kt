@@ -9,8 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.fragment.ServersFragment
+import com.ghostreborn.akira.model.Episode
 
-class EpisodeAdapter(val episodeList: ArrayList<String>, val activity: AppCompatActivity) : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
+class EpisodeAdapter(val episodeList: ArrayList<Episode>, val activity: AppCompatActivity) : RecyclerView.Adapter<EpisodeAdapter.EpisodeViewHolder>() {
     class EpisodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeTitleText = itemView.findViewById<TextView>(R.id.episode_title_text_view)
     }
@@ -25,9 +26,10 @@ class EpisodeAdapter(val episodeList: ArrayList<String>, val activity: AppCompat
     }
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
-        holder.episodeTitleText.text = episodeList[position]
+        holder.episodeTitleText.text = episodeList[position].title
         holder.itemView.setOnClickListener {
-            Constants.animeEpisode = episodeList[position]
+            Constants.animeEpisode = episodeList[position].epNum
+            Constants.episodeWatchId = episodeList[position].id
             ServersFragment().show(activity.supportFragmentManager, "Select Server")
         }
     }

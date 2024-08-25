@@ -2,6 +2,8 @@ package com.ghostreborn.akira.parsers
 
 import com.ghostreborn.akira.abstr.AnimeAbstract
 import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.model.Episode
+import com.ghostreborn.akira.model.Server
 import com.ghostreborn.akira.parsers.allAnime.AllAnimeParser
 
 class AllAnime: AnimeAbstract() {
@@ -14,11 +16,11 @@ class AllAnime: AnimeAbstract() {
         return AllAnimeParser().searchAnime(anime)
     }
 
-    override fun episodes(id:String): ArrayList<ArrayList<String>> {
+    override fun episodes(id:String): ArrayList<ArrayList<Episode>> {
         return AllAnimeParser().episodes(id)
     }
 
-    override fun servers(id: String, episode: String): ArrayList<String> {
+    override fun servers(id: String, episode: String): ArrayList<Server> {
         return AllAnimeParser().servers(id,episode)
     }
 }

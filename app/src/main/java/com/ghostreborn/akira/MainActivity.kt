@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.adapter.AllAnimeAdapter
 import com.ghostreborn.akira.model.Anime
-import com.ghostreborn.akira.parsers.AllAnime
+import com.ghostreborn.akira.parsers.Gojo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,14 +39,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun fetchRecentAnime(recycler: RecyclerView) {
         ioScope.launch {
-            val anime = AllAnime().recent()
+            val anime = Gojo().recent()
             updateRecycler(recycler, anime)
         }
     }
 
     private fun searchAnime(query: String, recycler: RecyclerView) {
         ioScope.launch {
-            val anime = AllAnime().search(query)
+            val anime = Gojo().search(query)
             updateRecycler(recycler, anime)
         }
     }
