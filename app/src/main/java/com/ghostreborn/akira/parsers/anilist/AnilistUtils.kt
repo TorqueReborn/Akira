@@ -40,7 +40,10 @@ class AnilistUtils {
         val responseBody = AnilistNetwork().connectAnilist(query, activity)
         val id =
             JSONObject(responseBody).getJSONObject("data").getJSONObject("Viewer").getString("id")
-        activity.getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
-            .putString(Constants.PREF_USER_ID, id).apply()
+        activity
+            .getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE).edit()
+            .putString(Constants.PREF_USER_ID, id)
+            .putBoolean(Constants.PREF_LOGGED_IN, true)
+            .apply()
     }
 }
