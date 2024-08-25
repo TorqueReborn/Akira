@@ -8,7 +8,6 @@ import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.EpisodeAdapter
 import com.ghostreborn.akira.adapter.EpisodeGroupAdapter
-import com.ghostreborn.akira.parsers.Gojo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +22,7 @@ class EpisodesActivity : AppCompatActivity() {
         val episodesGroupRecycler = findViewById<RecyclerView>(R.id.episode_group_recycler_view)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val episodes = Gojo().episodes(Constants.animeId)
+            val episodes = Constants.api.episodes(Constants.animeId)
             withContext(Dispatchers.Main) {
                 episodesRecycler.adapter = EpisodeAdapter(episodes[0],this@EpisodesActivity)
                 episodesRecycler.layoutManager = LinearLayoutManager(this@EpisodesActivity)

@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.ServersAdapter
-import com.ghostreborn.akira.parsers.Gojo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,7 +30,7 @@ class ServersFragment : DialogFragment() {
         fragmentRecyclerView.layoutManager = LinearLayoutManager(context)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val sources = Gojo().servers(Constants.animeId, Constants.animeEpisode)
+            val sources = Constants.api.servers(Constants.animeId, Constants.animeEpisode)
             withContext(Dispatchers.Main) {
                 progressBar.visibility = View.GONE
                 fragmentRecyclerView.adapter = ServersAdapter(sources)
