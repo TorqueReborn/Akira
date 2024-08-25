@@ -3,6 +3,7 @@ package com.ghostreborn.akira.ui
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -22,6 +23,8 @@ class PlayActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         val playerView = findViewById<PlayerView>(R.id.anime_video_view)
         exoPlayer = ExoPlayer.Builder(this).build()
         playerView.player = exoPlayer
@@ -36,11 +39,11 @@ class PlayActivity : AppCompatActivity() {
         }
 
         hideSystemBars()
-
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
+        window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         exoPlayer.release()
     }
 
@@ -51,5 +54,4 @@ class PlayActivity : AppCompatActivity() {
             hide(WindowInsetsCompat.Type.navigationBars())
         }
     }
-
 }
