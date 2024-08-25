@@ -14,4 +14,5 @@ object Constants {
     var animeUrl: String = ""
     val api:AnimeAbstract = AllAnime()
     val mangaApi:MangaAbstract = AllManga()
+    var isManga:Boolean = false
 }
