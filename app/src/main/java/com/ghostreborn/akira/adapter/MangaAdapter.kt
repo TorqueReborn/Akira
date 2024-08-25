@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.model.Anime
-import com.ghostreborn.akira.ui.EpisodesActivity
+import com.ghostreborn.akira.model.Manga
+import com.ghostreborn.akira.ui.ChaptersActivity
 
-class AllAnimeAdapter (private val animes: ArrayList<Anime>) :
-    RecyclerView.Adapter<AllAnimeAdapter.AnimeViewHolder>() {
+class MangaAdapter (private val mangas: ArrayList<Manga>) :
+    RecyclerView.Adapter<MangaAdapter.AnimeViewHolder>() {
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val animeImageView: ImageView = itemView.findViewById(R.id.animeImageView)
@@ -27,17 +27,17 @@ class AllAnimeAdapter (private val animes: ArrayList<Anime>) :
     }
 
     override fun getItemCount(): Int {
-        return animes.size
+        return mangas.size
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val anime = animes[position]
-        holder.animeNameTextView.text = anime.name
-        holder.animeImageView.load(anime.thumbnail)
+        val manga = mangas[position]
+        holder.animeNameTextView.text = manga.name
+        holder.animeImageView.load(manga.thumbnail)
         holder.itemView.setOnClickListener {
-            Constants.animeId = anime.id
+            Constants.mangaId = manga.id
             holder.itemView.context.startActivity(
-                Intent(holder.itemView.context, EpisodesActivity::class.java)
+                Intent(holder.itemView.context, ChaptersActivity::class.java)
             )
         }
     }

@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ghostreborn.akira.adapter.AllAnimeAdapter
-import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.adapter.MangaAdapter
+import com.ghostreborn.akira.model.Manga
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,11 +20,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val recycler = findViewById<RecyclerView>(R.id.anime_recycler_view).apply {
+        val recycler = findViewById<RecyclerView>(R.id.manga_recycler_view).apply {
             layoutManager = GridLayoutManager(this@MainActivity, 3)
         }
 
-        val searchView = findViewById<SearchView>(R.id.anime_search_view)
+        val searchView = findViewById<SearchView>(R.id.manga_search_view)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?) = true.also {
                 query?.let { searchAnime(it, recycler) }
@@ -33,26 +33,26 @@ class MainActivity : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?) = true
         })
 
-        fetchRecentAnime(recycler)
+        recentManga(recycler)
     }
 
-    private fun fetchRecentAnime(recycler: RecyclerView) {
+    private fun recentManga(recycler: RecyclerView) {
         ioScope.launch {
-            val anime = Constants.api.recent()
-            updateRecycler(recycler, anime)
+            val manga = Constants.mangaApi.recent()
+            updateRecycler(recycler, manga)
         }
     }
 
     private fun searchAnime(query: String, recycler: RecyclerView) {
         ioScope.launch {
-            val anime = Constants.api.search(query)
-            updateRecycler(recycler, anime)
+            val manga = Constants.mangaApi.search(query)
+            updateRecycler(recycler, manga)
         }
     }
 
-    private suspend fun updateRecycler(recycler: RecyclerView, anime: ArrayList<Anime>) {
+    private suspend fun updateRecycler(recycler: RecyclerView, manga: ArrayList<Manga>) {
         withContext(Dispatchers.Main) {
-            recycler.adapter = AllAnimeAdapter(anime)
+            recycler.adapter = MangaAdapter(manga)
         }
     }
 }

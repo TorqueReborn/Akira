@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Akira"
         tools:targetApi="31">
         <activity
+            android:name=".ui.ReadMangaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ChaptersActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.PlayActivity"
             android:exported="false" />
         <activity
