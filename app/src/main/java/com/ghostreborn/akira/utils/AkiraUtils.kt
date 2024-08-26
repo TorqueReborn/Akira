@@ -8,7 +8,14 @@ class AkiraUtils {
     fun checkLogin(context: Context):Boolean{
         return context
             .getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-            .getBoolean(Constants.LOGGED_IN, false)
+            .getString(Constants.LOGIN_CODE, "") != ""
+    }
+
+    fun storeLoginCode(code: String, context:Context){
+        context
+            .getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).edit()
+            .putString(Constants.LOGIN_CODE, code)
+            .apply()
     }
 
 }

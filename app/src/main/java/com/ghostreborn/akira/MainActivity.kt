@@ -1,7 +1,6 @@
 package com.ghostreborn.akira
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akira.fragments.LoginFragment
 import com.ghostreborn.akira.utils.AkiraUtils
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleIntentData() {
         intent.data?.getQueryParameter("code")?.let { code ->
-            Toast.makeText(this, code, Toast.LENGTH_SHORT).show()
+            AkiraUtils().storeLoginCode(code, this)
         }
     }
 
