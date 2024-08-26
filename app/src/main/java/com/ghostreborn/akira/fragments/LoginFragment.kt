@@ -11,7 +11,9 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.Constants
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.utils.AkiraUtils
 
 class LoginFragment: Fragment() {
     override fun onCreateView(
@@ -29,8 +31,16 @@ class LoginFragment: Fragment() {
 
         loginButton.setOnClickListener {
             constraint.removeAllViews()
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
             LayoutInflater.from(requireContext()).inflate(R.layout.fragment_login_intermediate, frame, true)
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(AkiraUtils().checkLogin(requireContext())){
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            requireActivity().finish()
         }
     }
 
