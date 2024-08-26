@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_constraint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,12 +39,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="@drawable/circular_background"
-            android:padding="15dp"
             android:contentDescription="@string/login_button"
+            android:padding="15dp"
             app:layout_constraintEnd_toEndOf="@+id/login_head_text"
             app:layout_constraintStart_toStartOf="@+id/login_head_text"
             app:layout_constraintTop_toBottomOf="@+id/login_sub_text"
             app:srcCompat="@drawable/right_arrow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/login_intermediate_frame"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
