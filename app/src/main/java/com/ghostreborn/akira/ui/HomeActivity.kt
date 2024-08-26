@@ -17,7 +17,7 @@ class HomeActivity : AppCompatActivity() {
                 .commit()
         }else{
             supportFragmentManager.beginTransaction()
-                .replace(R.id.home_frame, AnimeFragment())
+                .replace(R.id.home_frame, AnimeFragment(true))
                 .commit()
         }
     }
