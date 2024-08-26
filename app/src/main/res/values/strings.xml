@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Akira</string>
     <string name="login">Login</string>
-    <string name="authorize">Authorize this app with Anilist.co to continue</string>
+    <string name="authorize">Authorize this app with Anilist.co in your browser to continue</string>
     <string name="login_button">Login Button</string>
-    <string name="authorize_intermediate">After couple of seconds, this app automatically takes you to home screen</string>
+    <string name="authorize_intermediate">If authorized, after couple of seconds, automatically takes you to home screen</string>
 </resources>

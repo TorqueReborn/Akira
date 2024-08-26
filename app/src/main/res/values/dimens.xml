@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="heading_main">32sp</dimen>
-    <dimen name="heading_sub">15sp</dimen>
+    <dimen name="heading_sub">14sp</dimen>
     <dimen name="background_padding">50dp</dimen>
 </resources>
