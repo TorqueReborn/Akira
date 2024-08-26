@@ -13,4 +13,9 @@ class HomeFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = LayoutInflater.from(context).inflate(R.layout.fragment_home, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        childFragmentManager.beginTransaction().replace(R.id.anime_frame, AnimeFragment()).commit()
+    }
 }

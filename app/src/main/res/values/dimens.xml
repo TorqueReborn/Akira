@@ -2,5 +2,11 @@
 <resources>
     <dimen name="heading_main">32sp</dimen>
     <dimen name="heading_sub">14sp</dimen>
+    <dimen name="desc">10sp</dimen>
+    <dimen name="card_head">20sp</dimen>
     <dimen name="background_padding">50dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="card_text_padding">16dp</dimen>
+    <dimen name="card_sub_text_padding">8dp</dimen>
+    <dimen name="card_image_size">100dp</dimen>
 </resources>

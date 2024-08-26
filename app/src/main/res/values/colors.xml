@@ -7,4 +7,5 @@
 
     <color name="def_bg">#0A0A0A</color>
     <color name="card_bg">#505050</color>
+    <color name="card_background">#313131</color>
 </resources>
