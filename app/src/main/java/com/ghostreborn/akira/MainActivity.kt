@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         checkLogin()
     }
 
-    fun checkLogin(){
+    private fun checkLogin(){
         if (!AkiraUtils().checkLogin(this)) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main_frame, LoginFragment())
