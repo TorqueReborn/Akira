@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.devtools.ksp") version "1.9.0-1.0.13"
 }
 
 android {
@@ -21,9 +20,6 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            viewBinding {
-                enable = true
-            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,25 +36,6 @@ android {
 }
 
 dependencies {
-    // Zoomable ImageView
-    implementation(libs.zoomimage.view.sketch)
-    implementation(libs.zoomimage.view.coil)
-
-    // Coil
-    implementation(libs.coil)
-
-    // Exoplayer
-    implementation(libs.androidx.media3.ui)
-    implementation(libs.androidx.media3.exoplayer)
-    implementation(libs.androidx.media3.exoplayer.hls)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity)
-
-    // Room Database
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.runtime)
-
-    // UI
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
 }
