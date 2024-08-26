@@ -13,7 +13,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         if(Constants.isManga){
             supportFragmentManager.beginTransaction()
-                .replace(R.id.home_frame, MangaFragment())
+                .replace(R.id.home_frame, MangaFragment(true))
                 .commit()
         }else{
             supportFragmentManager.beginTransaction()

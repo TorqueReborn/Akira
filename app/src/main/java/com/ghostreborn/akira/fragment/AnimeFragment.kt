@@ -27,7 +27,9 @@ class AnimeFragment(val enableSearch: Boolean) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val searchView = view.findViewById<SearchView>(R.id.search_view)
+        val searchView = view.findViewById<SearchView>(R.id.search_view).apply {
+            visibility = View.VISIBLE
+        }
         val recycler = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
             layoutManager = GridLayoutManager(requireContext(), 3)
         }
@@ -38,6 +40,7 @@ class AnimeFragment(val enableSearch: Boolean) : Fragment() {
             view.findViewById<TextView>(R.id.common_title).text = getString(R.string.anime)
             searchView.visibility = View.GONE
             view.findViewById<CardView>(R.id.common_more).setOnClickListener{
+                Constants.isManga = false
                 startActivity(Intent(requireActivity(), HomeActivity::class.java))
             }
         }

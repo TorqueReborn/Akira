@@ -20,7 +20,7 @@ class GojoParser {
             val title = media.getJSONObject("title")
                 .getString("userPreferred")
             val image = media.getJSONObject("coverImage")
-                .getString("medium")
+                .getString("extraLarge")
             animes.add(Anime(id, title, image))
         }
         return animes
@@ -39,7 +39,7 @@ class GojoParser {
             val title = media.getJSONObject("title")
                 .getString("userPreferred")
             val image = media.getJSONObject("coverImage")
-                .getString("medium")
+                .getString("extraLarge")
             animes.add(Anime(id, title, image))
         }
         return animes

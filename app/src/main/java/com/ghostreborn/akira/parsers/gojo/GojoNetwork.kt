@@ -18,7 +18,7 @@ class GojoNetwork {
                 "        userPreferred\n" +
                 "      }\n" +
                 "      coverImage {\n" +
-                "        medium\n" +
+                "        extraLarge\n" +
                 "      }\n" +
                 "    }\n" +
                 "  }\n" +
@@ -50,7 +50,7 @@ class GojoNetwork {
                 "        userPreferred\n" +
                 "      }\n" +
                 "      coverImage {\n" +
-                "        medium\n" +
+                "        extraLarge\n" +
                 "      }\n" +
                 "    }\n" +
                 "  }\n" +
