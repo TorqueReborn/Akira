@@ -2,9 +2,9 @@
     <style name="Base.Theme.Akira" parent="Theme.Material3.DayNight.NoActionBar"/>
     <style name="Theme.Akira" parent="Base.Theme.Akira" >
 
-        <item name="android:textColor">#AAAAAA</item>
-        <item name="android:statusBarColor">#0A0A0A</item>
-        <item name="android:windowBackground">#0A0A0A</item>
+        <item name="android:textColor">@color/text_color</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:windowBackground">@color/status_bar_color</item>
         <item name="android:fontFamily">@font/poppins_regular</item>
 
     </style>

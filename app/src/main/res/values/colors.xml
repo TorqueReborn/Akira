@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="text_color">#AAAAAA</color>
+    <color name="status_bar_color">#0A0A0A</color>
+
     <color name="black">#000000</color>
+
+    <color name="def_bg">#0A0A0A</color>
+    <color name="card_bg">#505050</color>
 </resources>
