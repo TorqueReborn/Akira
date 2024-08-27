@@ -31,13 +31,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="@dimen/default_padding"
-            app:cardBackgroundColor="@color/card_bg"
+            app:cardBackgroundColor="@color/card_bg_two"
             app:cardCornerRadius="@dimen/default_corner_radius">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/card_sub_text_padding"
+                android:paddingStart="@dimen/card_sub_text_padding"
+                android:paddingEnd="@dimen/card_sub_text_padding"
+                android:paddingTop="@dimen/card_sub_text_padding_two"
+                android:paddingBottom="@dimen/card_sub_text_padding_two"
                 android:text="@string/more"
                 android:textSize="@dimen/default_desc" />
 
