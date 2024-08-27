@@ -22,11 +22,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = AnilistParser().trending(2)
             val manga = AnilistParser().trending(5)
             withContext(Dispatchers.Main) {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.anime_frame, CommonFragment("Anime", anime))
+                    .replace(R.id.anime_frame, CommonFragment("Anime", ArrayList()))
                     .replace(R.id.manga_frame, CommonFragment("Manga", manga))
                     .commit()
             }
