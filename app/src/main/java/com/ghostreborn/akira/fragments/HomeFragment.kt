@@ -6,8 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.anilist.AnilistParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class HomeFragment: Fragment() {
+class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -16,10 +21,15 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager
-            .beginTransaction()
-            .replace(R.id.anime_frame, AnimeFragment(4))
-            .replace(R.id.manga_frame, AnimeFragment(5))
-            .commit()
+        CoroutineScope(Dispatchers.IO).launch {
+            val anime = AnilistParser().trending(2)
+            val manga = AnilistParser().trending(5)
+            withContext(Dispatchers.Main) {
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.anime_frame, CommonFragment("Anime", anime))
+                    .replace(R.id.manga_frame, CommonFragment("Manga", manga))
+                    .commit()
+            }
+        }
     }
 }

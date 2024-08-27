@@ -4,19 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.anilist.AnilistParser
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.ghostreborn.akira.model.Anime
 
-class AnimeFragment(private val num: Int) : Fragment() {
+class CommonFragment(
+    private val name: String,
+    private val data: ArrayList<Anime>
+) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -28,16 +28,13 @@ class AnimeFragment(private val num: Int) : Fragment() {
         val recycler = view.findViewById<RecyclerView>(R.id.common_recycler).apply {
             layoutManager = LinearLayoutManager(requireContext())
         }
-        val emptyCard: CardView = view.findViewById(R.id.empty_card)
-        CoroutineScope(Dispatchers.IO).launch {
-            val anime = AnilistParser().trending(num)
-            withContext(Dispatchers.Main) {
-                if (anime.isNotEmpty()) {
-                    recycler.adapter = AnimeAdapter(anime)
-                } else {
-                    emptyCard.visibility = View.VISIBLE
-                }
-            }
+        view.findViewById<TextView>(R.id.main_head_text).text = name
+        if (data.isNotEmpty()) {
+            recycler.adapter = AnimeAdapter(data)
+        } else {
+            view.findViewById<CardView>(R.id.empty_card).visibility = View.VISIBLE
         }
     }
+
+
 }
