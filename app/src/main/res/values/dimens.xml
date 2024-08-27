@@ -7,7 +7,8 @@
     <dimen name="login_padding">32dp</dimen>
 
     <!--  CardView  -->
-    <dimen name="card_head">20sp</dimen>
+    <dimen name="card_head">16sp</dimen>
+    <dimen name="card_sub">11sp</dimen>
     <dimen name="corner_radius">10dp</dimen>
     <dimen name="card_text_padding">16dp</dimen>
     <dimen name="card_sub_text_padding">15dp</dimen>
