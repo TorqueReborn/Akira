@@ -16,6 +16,10 @@ class HomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        childFragmentManager.beginTransaction().replace(R.id.anime_frame, AnimeFragment()).commit()
+        childFragmentManager
+            .beginTransaction()
+            .replace(R.id.anime_frame, AnimeFragment(4))
+            .replace(R.id.manga_frame, AnimeFragment(5))
+            .commit()
     }
 }

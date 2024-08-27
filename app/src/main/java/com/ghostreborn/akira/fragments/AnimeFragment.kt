@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.anilist.AnilistParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AnimeFragment : Fragment() {
+class AnimeFragment(private val num: Int) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,11 +30,11 @@ class AnimeFragment : Fragment() {
         }
         val emptyCard: CardView = view.findViewById(R.id.empty_card)
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = ArrayList<Anime>()
+            val anime = AnilistParser().trending(num)
             withContext(Dispatchers.Main) {
                 if (anime.isNotEmpty()) {
                     recycler.adapter = AnimeAdapter(anime)
-                }else{
+                } else {
                     emptyCard.visibility = View.VISIBLE
                 }
             }

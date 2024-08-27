@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/main_head_card"
@@ -38,8 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/card_sub_text_padding"
-                android:paddingEnd="@dimen/card_sub_text_padding"
                 android:paddingTop="@dimen/card_sub_text_padding_two"
+                android:paddingEnd="@dimen/card_sub_text_padding"
                 android:paddingBottom="@dimen/card_sub_text_padding_two"
                 android:text="@string/more"
                 android:textSize="@dimen/default_desc" />
@@ -81,7 +81,7 @@
     <include
         layout="@layout/common_recycler"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_padding"
         android:layout_marginTop="@dimen/default_padding"
         android:layout_marginEnd="@dimen/default_padding"
