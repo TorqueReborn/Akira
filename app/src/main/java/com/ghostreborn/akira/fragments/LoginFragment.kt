@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
@@ -22,33 +21,29 @@ class LoginFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_login, container, false)
 
-    private lateinit var constraint: ConstraintLayout
-    private lateinit var frame: FrameLayout
+
+    private lateinit var loginConstraint: ConstraintLayout
+    private lateinit var loginConstraintIntermediate: ConstraintLayout
+    private lateinit var loginButton: ImageView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val loginButton = view.findViewById<ImageView>(R.id.login_button)
-        frame = view.findViewById(R.id.login_intermediate_frame)
-        constraint = view.findViewById(R.id.login_constraint)
-
-        loginButton.setOnClickListener {
-            Constants.hasClickedLoginButton = true
-            constraint.removeAllViews()
-            LayoutInflater.from(requireContext()).inflate(R.layout.fragment_login_intermediate, frame, true)
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
-        }
+         loginConstraint = view.findViewById(R.id.login_constraint)
+         loginConstraintIntermediate = view.findViewById(R.id.login_intermediate_constraint)
+         loginButton = view.findViewById(R.id.login_button)
     }
 
     override fun onResume() {
         super.onResume()
-        if(AkiraUtils().checkLogin(requireContext())){
-            startActivity(Intent(requireContext(), MainActivity::class.java))
-            requireActivity().finish()
-        }
-        if(Constants.hasClickedLoginButton){
-            constraint.removeAllViews()
-            LayoutInflater.from(requireContext()).inflate(R.layout.fragment_login_intermediate, frame, true)
+        AkiraUtils().checkLogin(requireContext()).takeIf { it }?.run {
+            startActivity(Intent(requireContext(), MainActivity::class.java)).also { requireActivity().finish() }
+        } ?: run {
+            loginConstraint.visibility = if (Constants.hasClickedLoginButton) View.GONE else View.VISIBLE
+            loginConstraintIntermediate.visibility = if (Constants.hasClickedLoginButton) View.VISIBLE else View.GONE
+            loginButton.takeUnless { Constants.hasClickedLoginButton }?.setOnClickListener {
+                Constants.hasClickedLoginButton = true
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
+            }
         }
     }
 
