@@ -8,10 +8,10 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class AnilistNetwork {
-    fun trending(): String {
+    fun trending(num: Int): String {
         val url = URL("https://graphql.anilist.co/")
         val query = "query {\n" +
-                "  Page(perPage: 4) {\n" +
+                "  Page(perPage: $num) {\n" +
                 "    media(type: ANIME, sort: TRENDING_DESC) {\n" +
                 "      id\n" +
                 "      title {\n" +

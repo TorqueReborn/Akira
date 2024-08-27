@@ -4,8 +4,8 @@ import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 
 class AnilistParser {
-    fun trending():ArrayList<Anime>{
-        val search = AnilistNetwork().trending()
+    fun trending(num: Int): ArrayList<Anime> {
+        val search = AnilistNetwork().trending(num)
         val mediaArray = JSONObject(search)
             .getJSONObject("data")
             .getJSONObject("Page")

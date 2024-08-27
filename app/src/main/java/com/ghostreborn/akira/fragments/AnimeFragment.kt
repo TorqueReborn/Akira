@@ -28,7 +28,7 @@ class AnimeFragment:Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
         }
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = AnilistParser().trending()
+            val anime = AnilistParser().trending(4)
             withContext(Dispatchers.Main) {
                 recycler.adapter = AnimeAdapter(anime)
             }
