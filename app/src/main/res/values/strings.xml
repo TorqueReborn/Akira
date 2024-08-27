@@ -11,4 +11,6 @@
     <string name="anime">Anime</string>
     <string name="more">More</string>
     <string name="anime_image">Anime Image</string>
+    <string name="empty_anime_desc">Click more and save Anime to view them here</string>
+    <string name="empty_manga_desc">Click more and save Manga to view them here</string>
 </resources>
