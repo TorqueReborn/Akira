@@ -44,7 +44,6 @@
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/anime_card"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/anime_card"
                 app:layout_constraintTop_toTopOf="@+id/anime_card">
 

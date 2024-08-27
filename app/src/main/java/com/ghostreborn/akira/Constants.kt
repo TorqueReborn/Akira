@@ -1,6 +1,9 @@
 package com.ghostreborn.akira
 
 object Constants {
+
+    var hasClickedLoginButton = false
+
     val SHARED_PREF = "AKIRA_PREF"
     val LOGIN_CODE = "LOGIN_CODE"
 

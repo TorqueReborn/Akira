@@ -11,7 +11,7 @@ class AnilistNetwork {
     fun trending(): String {
         val url = URL("https://graphql.anilist.co/")
         val query = "query {\n" +
-                "  Page(perPage: 20) {\n" +
+                "  Page(perPage: 4) {\n" +
                 "    media(type: ANIME, sort: TRENDING_DESC) {\n" +
                 "      id\n" +
                 "      title {\n" +

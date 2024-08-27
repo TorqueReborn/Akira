@@ -22,14 +22,18 @@ class LoginFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_login, container, false)
 
+    private lateinit var constraint: ConstraintLayout
+    private lateinit var frame: FrameLayout
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val loginButton = view.findViewById<ImageView>(R.id.login_button)
-        val frame = view.findViewById<FrameLayout>(R.id.login_intermediate_frame)
-        val constraint = view.findViewById<ConstraintLayout>(R.id.login_constraint)
+        frame = view.findViewById(R.id.login_intermediate_frame)
+        constraint = view.findViewById(R.id.login_constraint)
 
         loginButton.setOnClickListener {
+            Constants.hasClickedLoginButton = true
             constraint.removeAllViews()
             LayoutInflater.from(requireContext()).inflate(R.layout.fragment_login_intermediate, frame, true)
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.AUTH_URL)))
@@ -41,6 +45,10 @@ class LoginFragment: Fragment() {
         if(AkiraUtils().checkLogin(requireContext())){
             startActivity(Intent(requireContext(), MainActivity::class.java))
             requireActivity().finish()
+        }
+        if(Constants.hasClickedLoginButton){
+            constraint.removeAllViews()
+            LayoutInflater.from(requireContext()).inflate(R.layout.fragment_login_intermediate, frame, true)
         }
     }
 
