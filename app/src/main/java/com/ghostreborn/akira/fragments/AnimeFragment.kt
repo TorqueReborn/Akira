@@ -20,7 +20,7 @@ class AnimeFragment:Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(context).inflate(R.layout.fragment_anime, container, false)
+    ): View? = LayoutInflater.from(context).inflate(R.layout.common_fragment, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
