@@ -8,5 +8,5 @@
     <dimen name="corner_radius">10dp</dimen>
     <dimen name="card_text_padding">16dp</dimen>
     <dimen name="card_sub_text_padding">8dp</dimen>
-    <dimen name="card_image_size">100dp</dimen>
+    <dimen name="card_image_size">80dp</dimen>
 </resources>

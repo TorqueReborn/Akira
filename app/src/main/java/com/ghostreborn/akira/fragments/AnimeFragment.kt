@@ -9,7 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.anilist.AnilistParser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AnimeFragment:Fragment() {
     override fun onCreateView(
@@ -20,10 +24,14 @@ class AnimeFragment:Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val recycler = view.findViewById<RecyclerView>(R.id.anime_recycler)
-        val list = ArrayList<Anime>()
-        list.add(Anime("One Piece", "112", "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21-tXMN3Y20PIL9.jpg?w=250"))
-        recycler.adapter = AnimeAdapter(list)
-        recycler.layoutManager = LinearLayoutManager(context)
+        val recycler = view.findViewById<RecyclerView>(R.id.common_recycler).apply {
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            val anime = AnilistParser().trending()
+            withContext(Dispatchers.Main) {
+                recycler.adapter = AnimeAdapter(anime)
+            }
+        }
     }
 }
