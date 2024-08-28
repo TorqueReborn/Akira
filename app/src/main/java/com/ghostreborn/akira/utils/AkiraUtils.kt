@@ -21,6 +21,12 @@ class AkiraUtils {
             .getString(Constants.PREF_USER_ID, "") != ""
     }
 
+    fun getUserID(context: Context): String {
+        return context
+            .getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
+            .getString(Constants.PREF_USER_ID, "")!!
+    }
+
     fun getTokenAndUserID(code: String, activity: Activity) {
         val client = OkHttpClient()
         val token = client.newCall(Request.Builder()
