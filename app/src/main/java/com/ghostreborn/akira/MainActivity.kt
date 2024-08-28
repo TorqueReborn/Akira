@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
     private fun handleIntentData() {
         intent.data?.getQueryParameter("code")?.let { code ->
             CoroutineScope(Dispatchers.IO).launch {
-                AkiraUtils().getToken(code, this@MainActivity)
+                AkiraUtils().getTokenAndUserID(code, this@MainActivity)
             }
         }
     }

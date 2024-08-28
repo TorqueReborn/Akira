@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.converter.gson)
     implementation(libs.okhttp)
     implementation(libs.coil)
     implementation(libs.material)
