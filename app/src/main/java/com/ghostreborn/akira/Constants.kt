@@ -4,8 +4,8 @@ object Constants {
 
     var hasClickedLoginButton = false
 
-    val SHARED_PREF = "AKIRA_PREF"
-    val LOGIN_CODE = "LOGIN_CODE"
+    const val SHARED_PREF = "AKIRA_PREF"
+    const val PREF_TOKEN = "PREF_TOKEN"
 
     const val AUTH_URL = "https://anilist.co/api/v2/oauth/authorize?client_id=20149&response_type=code&redirect_uri=wanpisu://ghostreborn.in"
 }

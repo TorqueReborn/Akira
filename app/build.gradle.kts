@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.okhttp)
     implementation(libs.coil)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akira.fragments.HomeFragment
 import com.ghostreborn.akira.fragments.LoginFragment
 import com.ghostreborn.akira.utils.AkiraUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +36,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleIntentData() {
         intent.data?.getQueryParameter("code")?.let { code ->
-            AkiraUtils().storeLoginCode(code, this)
+            CoroutineScope(Dispatchers.IO).launch {
+                AkiraUtils().getToken(code, this@MainActivity)
+            }
         }
     }
 
