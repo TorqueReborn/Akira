@@ -10,12 +10,13 @@ import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
 
-class AnimeAdapter (private val animes: ArrayList<Anime>) :
-    RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
+class CommonAdapter (private val animes: ArrayList<Anime>, private val isManga:Boolean) :
+    RecyclerView.Adapter<CommonAdapter.AnimeViewHolder>() {
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val animeImageView: ImageView = itemView.findViewById(R.id.anime_image)
         val animeNameTextView: TextView = itemView.findViewById(R.id.anime_name)
+        val animeProgressTextView: TextView = itemView.findViewById(R.id.anime_progress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeViewHolder {
@@ -29,8 +30,11 @@ class AnimeAdapter (private val animes: ArrayList<Anime>) :
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = animes[position]
+        var progress = "Watched ${anime.progress} episodes"
+        if (isManga) progress = "Read ${anime.progress} chapters"
         holder.animeNameTextView.text = anime.title
         holder.animeImageView.load(anime.thumbnail)
+        holder.animeProgressTextView.text = progress
     }
 
 }

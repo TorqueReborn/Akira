@@ -10,12 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.adapter.AnimeAdapter
+import com.ghostreborn.akira.adapter.CommonAdapter
 import com.ghostreborn.akira.model.Anime
 
 class CommonFragment(
     private val name: String,
-    private val data: ArrayList<Anime>
+    private val data: ArrayList<Anime>,
+    private val isManga:Boolean = false
 ) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +31,7 @@ class CommonFragment(
         }
         view.findViewById<TextView>(R.id.main_head_text).text = name
         if (data.isNotEmpty()) {
-            recycler.adapter = AnimeAdapter(data)
+            recycler.adapter = CommonAdapter(data,isManga)
         } else {
             view.findViewById<CardView>(R.id.empty_card).visibility = View.VISIBLE
         }

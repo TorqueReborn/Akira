@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
                 val manga = AnilistParser().userManga(userID)
                 childFragmentManager.beginTransaction()
                     .replace(R.id.anime_frame, CommonFragment("Anime", anime))
-                    .replace(R.id.manga_frame, CommonFragment("Manga", manga))
+                    .replace(R.id.manga_frame, CommonFragment("Manga", manga, true))
                     .commit()
             }
         }
