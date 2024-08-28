@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.anilist.AnilistParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,9 +23,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.Main) {
+                val anime = AnilistParser().userAnime()
+                val manga = AnilistParser().userManga()
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.anime_frame, CommonFragment("Anime", ArrayList()))
-                    .replace(R.id.manga_frame, CommonFragment("Manga", ArrayList()))
+                    .replace(R.id.anime_frame, CommonFragment("Anime", anime))
+                    .replace(R.id.manga_frame, CommonFragment("Manga", manga))
                     .commit()
             }
         }
