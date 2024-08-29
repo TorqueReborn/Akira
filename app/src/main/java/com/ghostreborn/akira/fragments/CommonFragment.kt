@@ -31,7 +31,7 @@ class CommonFragment(
         }
         view.findViewById<TextView>(R.id.main_head_text).text = name
         if (data.isNotEmpty()) {
-            recycler.adapter = CommonAdapter(data,isManga)
+            recycler.adapter = CommonAdapter(isManga, data)
         } else {
             view.findViewById<CardView>(R.id.empty_card).visibility = View.VISIBLE
         }

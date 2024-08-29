@@ -1,6 +1,6 @@
 package com.ghostreborn.akira
 
-import com.ghostreborn.akira.anilist.AnilistInterface
+import com.ghostreborn.akira.anilist.AnilistApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -13,17 +13,9 @@ object Constants {
 
     const val AUTH_URL = "https://anilist.co/api/v2/oauth/authorize?client_id=20149&response_type=code&redirect_uri=wanpisu://ghostreborn.in"
 
-    // API
-    private const val BASE_URL = "https://graphql.anilist.co/"
-
-    val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    val api: AnilistInterface by lazy {
-        retrofit.create(AnilistInterface::class.java)
+    val api: AnilistApi by lazy {
+        Retrofit.Builder().baseUrl("https://graphql.anilist.co/")
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(AnilistApi::class.java)
     }
 }

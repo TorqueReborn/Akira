@@ -7,7 +7,7 @@ data class GraphQLRequest(
     val query: String
 )
 
-data class UserList(
+data class Anilist(
     @SerializedName("data")
     val `data`: Data
 )

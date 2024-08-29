@@ -10,8 +10,10 @@ import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.model.Anime
 
-class CommonAdapter (private val animes: ArrayList<Anime>, private val isManga:Boolean) :
-    RecyclerView.Adapter<CommonAdapter.AnimeViewHolder>() {
+class CommonAdapter(
+    private val isManga: Boolean,
+    private val animes: ArrayList<Anime>
+) : RecyclerView.Adapter<CommonAdapter.AnimeViewHolder>() {
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val animeImageView: ImageView = itemView.findViewById(R.id.anime_image)
