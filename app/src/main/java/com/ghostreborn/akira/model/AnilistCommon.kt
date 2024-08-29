@@ -14,7 +14,14 @@ data class UserList(
 
 data class Data(
     @SerializedName("MediaListCollection")
-    val mediaListCollection: MediaListCollection
+    val mediaListCollection: MediaListCollection,
+    @SerializedName("Page")
+    val page: Page
+)
+
+data class Page(
+    @SerializedName("media")
+    val media: List<Media>
 )
 
 data class MediaListCollection(
@@ -38,7 +45,13 @@ data class Media(
     @SerializedName("coverImage")
     val coverImage: CoverImage,
     @SerializedName("title")
-    val title: Title
+    val title: Title,
+    @SerializedName("episodes")
+    val episodes: Int,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("nextAiringEpisode")
+    val nextAiringEpisode: Any?
 )
 
 data class Title(

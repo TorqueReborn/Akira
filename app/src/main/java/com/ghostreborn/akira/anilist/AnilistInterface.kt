@@ -6,7 +6,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface UserListInterface {
+interface AnilistInterface {
     @POST("graphql")
-    fun getUserList(@Body query: GraphQLRequest): Call<UserList>
+    fun getData(@Body query: GraphQLRequest): Call<UserList>
 }

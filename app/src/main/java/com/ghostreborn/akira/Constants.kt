@@ -1,6 +1,6 @@
 package com.ghostreborn.akira
 
-import com.ghostreborn.akira.anilist.UserListInterface
+import com.ghostreborn.akira.anilist.AnilistInterface
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -23,7 +23,7 @@ object Constants {
             .build()
     }
 
-    val api: UserListInterface by lazy {
-        retrofit.create(UserListInterface::class.java)
+    val api: AnilistInterface by lazy {
+        retrofit.create(AnilistInterface::class.java)
     }
 }
