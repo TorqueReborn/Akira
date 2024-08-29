@@ -13,4 +13,6 @@
     <string name="anime_image">Anime Image</string>
     <string name="empty_anime_desc">Click more and save to view them here</string>
     <string name="unwatched">Not Yet Watched</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_here">Search here...</string>
 </resources>
