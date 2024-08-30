@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.anilist.AnilistParser
+import com.ghostreborn.akira.utils.AkiraUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,9 +24,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.IO).launch {
+            val userID = AkiraUtils().getUserID(requireContext())
+            val anime = AnilistParser().userAnime(userID)
+            val manga = AnilistParser().userManga(userID)
             withContext(Dispatchers.Main) {
+                view.findViewById<ProgressBar>(R.id.home_progress).visibility = View.GONE
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.anime_frame, SearchFragment("ANIME"))
+                    .replace(R.id.anime_frame, CommonFragment("Anime", anime))
+                    .replace(R.id.manga_frame, CommonFragment("Manga", manga, true))
                     .commit()
             }
         }

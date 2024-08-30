@@ -29,6 +29,12 @@ class CommonFragment(
         val recycler = view.findViewById<RecyclerView>(R.id.common_recycler).apply {
             layoutManager = LinearLayoutManager(requireContext())
         }
+        view.findViewById<CardView>(R.id.main_more_card).setOnClickListener {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.main_frame, SearchFragment(name.uppercase()))
+                .addToBackStack(null)
+                .commit()
+        }
         view.findViewById<TextView>(R.id.main_head_text).text = name
         if (data.isNotEmpty()) {
             recycler.adapter = CommonAdapter(isManga, data)
