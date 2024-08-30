@@ -19,28 +19,29 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:padding="@dimen/search_bar_small_margin">
 
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="@dimen/search_bar_margin"
                 android:src="@drawable/search"
                 android:contentDescription="@string/search_icon"
-                app:layout_constraintBottom_toBottomOf="@+id/editTextText"
+                app:layout_constraintBottom_toBottomOf="@+id/search_edit_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/editTextText" />
+                app:layout_constraintTop_toTopOf="@+id/search_edit_text" />
 
             <EditText
-                android:id="@+id/editTextText"
+                android:id="@+id/search_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="@dimen/search_bar_margin"
+                android:layout_marginEnd="@dimen/search_bar_small_margin"
                 android:background="@null"
                 android:autofillHints="name"
                 android:inputType="text"
+                android:imeOptions="actionGo"
                 android:textColor="@color/text_color"
                 android:textColorHint="@color/text_color_hint"
                 android:hint="@string/search_here"
@@ -49,6 +50,5 @@
                 app:layout_constraintStart_toStartOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

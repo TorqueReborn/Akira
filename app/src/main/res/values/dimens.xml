@@ -15,8 +15,12 @@
     <dimen name="card_sub_text_padding_two">8dp</dimen>
     <dimen name="card_image_size">80dp</dimen>
 
+    <!--  Searchbar  -->
+
     <!--  Default  -->
     <dimen name="default_desc">10sp</dimen>
     <dimen name="default_padding">16dp</dimen>
     <dimen name="default_corner_radius">30dp</dimen>
+    <dimen name="search_bar_margin">16dp</dimen>
+    <dimen name="search_bar_small_margin">8dp</dimen>
 </resources>
