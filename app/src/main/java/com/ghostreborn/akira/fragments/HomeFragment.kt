@@ -23,7 +23,7 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             withContext(Dispatchers.Main) {
                 childFragmentManager.beginTransaction()
-                    .replace(R.id.anime_frame, SearchFragment())
+                    .replace(R.id.anime_frame, SearchFragment("ANIME"))
                     .commit()
             }
         }

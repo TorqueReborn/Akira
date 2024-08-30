@@ -21,4 +21,11 @@ class AnilistParser {
             ?.map { Anime(it.media.title.userPreferred, "${it.progress}", it.media.coverImage.large) }
             ?.let(::ArrayList) ?: arrayListOf()
     }
+
+    suspend fun searchAnime(anime: String,type:String) = withContext(Dispatchers.IO) {
+        Constants.api.getData(GraphQLRequest("{Page{media(search:\"$anime\",type:$type){title{userPreferred},coverImage{large},episodes}}}"))
+            .execute().body()?.data?.page?.media
+            ?.map { Anime(it.title.userPreferred, "${it.episodes}", it.coverImage.large) }
+            ?.let(::ArrayList) ?: arrayListOf()
+    }
 }

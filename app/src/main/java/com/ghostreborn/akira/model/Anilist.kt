@@ -51,7 +51,12 @@ data class Media(
     @SerializedName("id")
     val id: Int,
     @SerializedName("nextAiringEpisode")
-    val nextAiringEpisode: Any?
+    val nextAiringEpisode: NextAiringEpisode
+)
+
+data class NextAiringEpisode(
+    @SerializedName("episode")
+    val episode: Int
 )
 
 data class Title(

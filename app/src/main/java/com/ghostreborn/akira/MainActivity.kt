@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkLogin(){
         if (!AkiraUtils().checkLogin(this)) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.main_frame, SearchFragment())
+                .replace(R.id.main_frame, SearchFragment("ANIME"))
                 .commit()
         }else{
             supportFragmentManager.beginTransaction()
