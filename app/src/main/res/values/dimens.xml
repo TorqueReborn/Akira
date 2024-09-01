@@ -1,3 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="default_padding">16dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="card_text_padding">16dp</dimen>
+    <dimen name="default_corner_radius">30dp</dimen>
+    <dimen name="card_sub_text_padding">15dp</dimen>
+    <dimen name="card_sub_text_padding_two">8dp</dimen>
+    <dimen name="default_desc">10sp</dimen>
 </resources>

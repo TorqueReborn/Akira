@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.kitsu
 
 import com.ghostreborn.akira.Constants
+import com.ghostreborn.kitsumodified.models.Entry
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -24,6 +25,24 @@ class KitsuAPI {
                 userId = userID
             )
             .execute().body()?.meta?.count
+    }
+
+    suspend fun entry(userID: String, num: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .entry(
+                userId = userID,
+                num = num
+            )
+            .execute().body()?.included
+    }
+
+    suspend fun getAll(userId: String): ArrayList<Entry.Included> {
+        val num = entryNum(userId)!!
+        val entries: ArrayList<Entry.Included> = ArrayList()
+        for (offset in 0 until num step 100) {
+            entries.addAll(entry(userId, offset.toString()) as ArrayList<Entry.Included>)
+        }
+        return entries
     }
 
 }

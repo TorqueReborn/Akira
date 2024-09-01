@@ -6,4 +6,7 @@
     <string name="pass_hint">Enter password</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="empty_anime_desc">Click more and save to view them here</string>
+    <string name="more">More</string>
+    <string name="anime">Anime</string>
 </resources>
