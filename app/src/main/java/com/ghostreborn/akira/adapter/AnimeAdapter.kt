@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.Constants
@@ -50,7 +49,6 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
             CoroutineScope(Dispatchers.IO).launch {
                 Constants.animeID = KitsuAPI().anilistID(anime.kitsuID)?.data?.get(0)?.attributes?.externalId!!
                 withContext(Dispatchers.Main){
-                    Toast.makeText(holder.itemView.context, Constants.animeID, Toast.LENGTH_SHORT).show()
                     holder.itemView.context.startActivity(Intent(holder.itemView.context, EpisodesActivity::class.java))
                 }
             }
