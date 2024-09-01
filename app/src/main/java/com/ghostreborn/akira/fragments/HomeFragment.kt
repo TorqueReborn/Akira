@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
+import com.ghostreborn.akira.adapter.SearchAdapter
 import com.ghostreborn.akira.kitsu.KitsuAPI
 import com.ghostreborn.akira.models.Anime
 import kotlinx.coroutines.CoroutineScope
@@ -23,24 +26,26 @@ class HomeFragment : Fragment() {
     private lateinit var userID: String
     private lateinit var animes: ArrayList<Anime>
     private lateinit var recycler: RecyclerView
+    private lateinit var search: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = LayoutInflater.from(context).inflate(R.layout.fragment_home, container, false)
+    ): View = layoutInflater.inflate(R.layout.fragment_home, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        search = view.findViewById(R.id.search_edit_text)
+        recycler= view.findViewById<RecyclerView?>(R.id.search_recycler).apply {
+            layoutManager = LinearLayoutManager(context)
+        }
+        search()
+
         userID = requireContext()
             .getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
             .getString(Constants.PREF_USER_ID, "")!!
-
-        recycler = view.findViewById<RecyclerView>(R.id.home_recycler).apply {
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-
         CoroutineScope(Dispatchers.IO).launch {
             animes = getEntry(Constants.offset)
             withContext(Dispatchers.Main) {
@@ -58,6 +63,7 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+
     }
 
     fun loadMoreItems(){
@@ -87,5 +93,22 @@ class HomeFragment : Fragment() {
             ))
         }
         return animes
+    }
+
+    private fun search(){
+        search.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val animes = KitsuAPI().search(search.text.toString())!!
+                    withContext(Dispatchers.Main) {
+                        val adapter = SearchAdapter(animes)
+                        recycler.adapter = adapter
+                    }
+                }
+                true
+            } else {
+                false
+            }
+        }
     }
 }
