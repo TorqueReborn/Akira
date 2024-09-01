@@ -7,6 +7,8 @@
     <color name="card_background">#1A1A1A</color>
     <color name="card_bg_two">#373737</color>
 
+    <color name="card_bg">#979797</color>
+
     <!--  Default  -->
     <color name="default_background">#1A1A1A</color>
 </resources>

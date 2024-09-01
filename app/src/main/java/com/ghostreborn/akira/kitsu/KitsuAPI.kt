@@ -50,4 +50,12 @@ class KitsuAPI {
             )
             .execute().body()
     }
+
+    suspend fun search(animeName: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .search(
+                animeName = animeName
+            )
+            .execute().body()
+    }
 }

@@ -11,4 +11,6 @@
     <string name="anime">Anime</string>
     <string name="anime_image">Anime Image</string>
     <string name="unwatched">Not Yet Watched</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_here">Search Here</string>
 </resources>

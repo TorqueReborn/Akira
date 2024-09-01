@@ -2,6 +2,7 @@ package com.ghostreborn.akira.provider
 
 import com.ghostreborn.akira.models.AnimeID
 import com.ghostreborn.akira.models.Authentication
+import com.ghostreborn.akira.models.Search
 import com.ghostreborn.kitsumodified.models.Entry
 import com.ghostreborn.kitsumodified.models.EntryNum
 import com.ghostreborn.kitsumodified.models.EntryRequest
@@ -76,4 +77,12 @@ interface KitsuProvider {
         @Query("filter[externalSite]") externalSite: String = "myanimelist/anime",
         @Query("fields[mappings]") mappingFields: String = "externalId"
     ): Call<AnimeID>
+
+    @GET("edge/anime")
+    fun search(
+        @Query("filter[text]") animeName: String,
+        @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage"
+    ): Call<Search>
+
+
 }

@@ -11,17 +11,17 @@ import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.kitsu.KitsuAPI
 import com.ghostreborn.akira.models.Anime
+import com.ghostreborn.akira.models.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AnimeAdapter (private val animes: ArrayList<Anime>
-) : RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
+class SearchAdapter (private val animes: Search
+) : RecyclerView.Adapter<SearchAdapter.AnimeViewHolder>() {
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val thumbnail: ImageView = itemView.findViewById(R.id.anime_image)
-        val progress: TextView = itemView.findViewById(R.id.anime_progress)
         val name: TextView = itemView.findViewById(R.id.anime_name)
     }
 
@@ -31,27 +31,13 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
     }
 
     override fun getItemCount(): Int {
-        return animes.size
+        return animes.data.size
     }
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
-        val anime = animes[position]
-
-        val progress = "Watched ${anime.progress} Episodes"
-
-        holder.name.text = anime.title
-        holder.progress.text = progress
-        holder.thumbnail.load(anime.thumbnail)
-
-        holder.itemView.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val malID = KitsuAPI().malID(anime.kitsuID)
-                withContext(Dispatchers.Main){
-                    Toast.makeText(holder.itemView.context, malID?.data?.get(0)?.attributes?.externalId, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
+        val anime = animes.data[position]
+        holder.name.text = anime.attributes.canonicalTitle
+        holder.thumbnail.load(anime.attributes.posterImage.medium)
     }
 
 }
