@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.kitsu.KitsuAPI
-import com.ghostreborn.akira.models.Anime
 import com.ghostreborn.akira.models.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +37,14 @@ class SearchAdapter (private val animes: Search
         val anime = animes.data[position]
         holder.name.text = anime.attributes.canonicalTitle
         holder.thumbnail.load(anime.attributes.posterImage.medium)
+        holder.itemView.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val malID = KitsuAPI().malID(anime.id)
+                withContext(Dispatchers.Main){
+                    Toast.makeText(holder.itemView.context, malID?.data?.get(0)?.attributes?.externalId, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
 }
