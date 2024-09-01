@@ -6,8 +6,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object Constants {
 
-    val SHARED_PREF = "AKIRA"
-    val PREF_TOKEN = "TOKEN"
+    const val SHARED_PREF = "AKIRA"
+    const val PREF_TOKEN = "TOKEN"
+    const val PREF_REFRESH_TOKEN = "REFRESH_TOKEN"
 
     val api = Retrofit.Builder()
         .baseUrl("https://kitsu.io/api/")

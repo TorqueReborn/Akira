@@ -3,4 +3,7 @@
     <color name="text_color">#A4A4A4</color>
     <color name="text_color_hint">#6F6F6F</color>
     <color name="status_bar_color">#0A0A0A</color>
+
+    <!--  Default  -->
+    <color name="default_background">#1A1A1A</color>
 </resources>

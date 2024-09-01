@@ -1,22 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/search_edit_text"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:autofillHints="name"
-        android:background="@null"
-        android:hint="Enter username"
-        android:imeOptions="actionGo"
-        android:inputType="text"
-        android:textColor="#fff"
-        android:textColorHint="#fff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5">
+
+        <EditText
+            android:id="@+id/login_user"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:autofillHints="name"
+            android:background="@null"
+            android:hint="@string/username_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text|textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/login_pass"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints="name"
+            android:background="@null"
+            android:hint="@string/pass_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text|textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login_user" />
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/default_background"
+            android:text="@string/login"
+            android:textColor="@color/text_color"
+            app:layout_constraintEnd_toStartOf="@+id/register_button"
+            app:layout_constraintStart_toStartOf="@+id/login_pass"
+            app:layout_constraintTop_toBottomOf="@+id/login_pass" />
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/default_background"
+            android:text="@string/register"
+            android:textColor="@color/text_color"
+            app:layout_constraintEnd_toEndOf="@+id/login_pass"
+            app:layout_constraintStart_toEndOf="@+id/login_button"
+            app:layout_constraintTop_toBottomOf="@+id/login_pass" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

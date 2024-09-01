@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Akira</string>
+
+    <!--  Login  -->
+    <string name="username_hint">Enter username</string>
+    <string name="pass_hint">Enter password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
 </resources>
