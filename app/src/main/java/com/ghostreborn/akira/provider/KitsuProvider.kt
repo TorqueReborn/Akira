@@ -48,8 +48,8 @@ interface KitsuProvider {
     @GET("edge/users/{id}/library-entries")
     fun entry(
         @Path("id") userId: String,
-        @Query("page[offset]") num: String,
-        @Query("page[limit]") limit: Int = 100,
+        @Query("page[offset]") num: Int,
+        @Query("page[limit]") limit: Int = 10,
         @Query("fields[library-entries]") libraryFields: String = "id,progress,status",
         @Query("include") include: String = "anime",
         @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage",
