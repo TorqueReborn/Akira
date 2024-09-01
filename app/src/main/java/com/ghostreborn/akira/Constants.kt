@@ -6,11 +6,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object Constants {
 
-    var userName = ""
-    var pass = ""
-    var token = "hKnGjxHngD-pdORMAv98deAlmb7foqmpw8XQxYdl99U"
-    var userId = "1402888"
-    var entryNum = ""
+    val SHARED_PREF = "AKIRA"
+    val PREF_TOKEN = "TOKEN"
 
     val api = Retrofit.Builder()
         .baseUrl("https://kitsu.io/api/")
