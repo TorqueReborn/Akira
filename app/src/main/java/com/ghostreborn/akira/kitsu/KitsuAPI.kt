@@ -34,4 +34,20 @@ class KitsuAPI {
             )
             .execute().body()
     }
+
+    suspend fun anilistID(animeID: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .anilistID(
+                animeID = animeID
+            )
+            .execute().body()
+    }
+
+    suspend fun malID(animeID: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .malID(
+                animeID = animeID
+            )
+            .execute().body()
+    }
 }
