@@ -1,13 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="text_color">#A4A4A4</color>
-    <color name="text_color_hint">#6F6F6F</color>
-    <color name="status_bar_color">#0A0A0A</color>
-
     <color name="black">#000000</color>
-
-    <color name="def_bg">#0A0A0A</color>
-    <color name="card_bg">#979797</color>
-    <color name="card_bg_two">#373737</color>
-    <color name="card_background">#212121</color>
 </resources>

@@ -6,31 +6,17 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/login_user"
-        android:layout_width="wrap_content"
+        android:id="@+id/search_edit_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:autofillHints="name"
+        android:background="@null"
+        android:hint="Enter username"
+        android:imeOptions="actionGo"
         android:inputType="text"
-        android:text="Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="#fff"
+        android:textColorHint="#fff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/login_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_user" />
-
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        app:layout_constraintEnd_toEndOf="@+id/login_pass"
-        app:layout_constraintStart_toStartOf="@+id/login_pass"
-        app:layout_constraintTop_toBottomOf="@+id/login_pass" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,27 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--  Login  -->
-    <dimen name="heading_main">32sp</dimen>
-    <dimen name="heading_sub">14sp</dimen>
-    <dimen name="background_padding">50dp</dimen>
-    <dimen name="login_padding">32dp</dimen>
-
-    <!--  CardView  -->
-    <dimen name="card_head">16sp</dimen>
-    <dimen name="card_sub">11sp</dimen>
-    <dimen name="corner_radius">10dp</dimen>
-    <dimen name="card_text_padding">16dp</dimen>
-    <dimen name="card_sub_text_padding">15dp</dimen>
-    <dimen name="card_sub_text_padding_two">8dp</dimen>
-    <dimen name="card_image_size">80dp</dimen>
-
-    <!--  Searchbar  -->
-    <dimen name="search_bar_margin">16dp</dimen>
-    <dimen name="search_bar_small_margin">8dp</dimen>
-
-    <!--  Default  -->
-    <dimen name="default_desc">10sp</dimen>
-    <dimen name="default_padding">16dp</dimen>
-    <dimen name="default_padding_big">24dp</dimen>
-    <dimen name="default_corner_radius">30dp</dimen>
 </resources>

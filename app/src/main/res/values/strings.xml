@@ -1,18 +1,3 @@
 <resources>
     <string name="app_name">Akira</string>
-
-    <!--  Login  -->
-    <string name="login">Login</string>
-    <string name="authorize">Authorize this app with Anilist.co in your browser to continue</string>
-    <string name="login_button">Login Button</string>
-    <string name="authorize_intermediate">If authorized, after couple of seconds, automatically takes you to home screen</string>
-
-    <!--  Misc  -->
-    <string name="anime">Anime</string>
-    <string name="more">More</string>
-    <string name="anime_image">Anime Image</string>
-    <string name="empty_anime_desc">Click more and save to view them here</string>
-    <string name="unwatched">Not Yet Watched</string>
-    <string name="search_icon">Search Icon</string>
-    <string name="search_here">Search here...</string>
 </resources>
