@@ -38,19 +38,17 @@ class KitsuAPI {
     }
 
     suspend fun getAll(userId: String): ArrayList<Anime> {
-        val num = entryNum(userId)!!
-        val entries: ArrayList<Entry.Included> = ArrayList()
-        for (offset in 0 until num step 100) {
-            entries.addAll(entry(userId, offset.toString()) as ArrayList<Entry.Included>)
-        }
         val anime = ArrayList<Anime>()
-        for (entry in entries) {
-            anime.add(Anime(
-                entry.attributes.canonicalTitle,
-                entry.attributes.posterImage.medium
-            ))
+        for (offset in 0 until entryNum(userId)!! step 100) {
+            anime.addAll(
+                (entry(userId, offset.toString()) as List<Entry.Included>).map { entry ->
+                    Anime(
+                        entry.attributes.canonicalTitle,
+                        entry.attributes.posterImage.medium
+                    )
+                }
+            )
         }
-        entries.clear()
         return anime
     }
 

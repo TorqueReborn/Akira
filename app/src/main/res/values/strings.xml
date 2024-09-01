@@ -9,4 +9,6 @@
     <string name="empty_anime_desc">Click more and save to view them here</string>
     <string name="more">More</string>
     <string name="anime">Anime</string>
+    <string name="anime_image">Anime Image</string>
+    <string name="unwatched">Not Yet Watched</string>
 </resources>
