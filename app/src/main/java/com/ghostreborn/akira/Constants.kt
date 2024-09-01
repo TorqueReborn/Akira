@@ -9,6 +9,7 @@ object Constants {
     const val SHARED_PREF = "AKIRA"
     const val PREF_TOKEN = "TOKEN"
     const val PREF_REFRESH_TOKEN = "REFRESH_TOKEN"
+    const val PREF_USER_ID = "USER_ID"
 
     val api = Retrofit.Builder()
         .baseUrl("https://kitsu.io/api/")
