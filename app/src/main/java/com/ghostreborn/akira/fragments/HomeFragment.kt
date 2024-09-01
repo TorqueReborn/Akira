@@ -80,6 +80,7 @@ class HomeFragment : Fragment() {
         val included = entry.included
         for (i in 0 until included.size){
             animes.add(Anime(
+                kitsuID = included[i].id,
                 title = included[i].attributes.canonicalTitle,
                 progress = data[i].attributes.progress.toString(),
                 thumbnail = included[i].attributes.posterImage.large
