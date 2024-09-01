@@ -73,16 +73,17 @@ class HomeFragment : Fragment() {
         }
     }
 
-    suspend fun getEntry(offset: Int): ArrayList<Anime> {
+    private suspend fun getEntry(offset: Int): ArrayList<Anime> {
         val entry = KitsuAPI().entry(userID, offset)!!
         val animes = ArrayList<Anime>()
-        for (ent in entry) {
-            animes.add(
-                Anime(
-                    ent.attributes.canonicalTitle,
-                    ent.attributes.posterImage.medium
-                )
-            )
+        val data = entry.data
+        val included = entry.included
+        for (i in 0 until included.size){
+            animes.add(Anime(
+                title = included[i].attributes.canonicalTitle,
+                progress = data[i].attributes.progress.toString(),
+                thumbnail = included[i].attributes.posterImage.large
+            ))
         }
         return animes
     }

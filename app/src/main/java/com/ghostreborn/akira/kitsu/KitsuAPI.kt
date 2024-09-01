@@ -32,6 +32,6 @@ class KitsuAPI {
                 userId = userID,
                 num = num
             )
-            .execute().body()?.included
+            .execute().body()
     }
 }
