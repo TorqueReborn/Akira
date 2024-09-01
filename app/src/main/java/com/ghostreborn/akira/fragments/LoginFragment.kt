@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.kitsu.KitsuAPI
+import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

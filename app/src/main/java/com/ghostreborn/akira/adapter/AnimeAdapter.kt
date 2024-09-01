@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.Constants
+import com.ghostreborn.akira.ui.EpisodesActivity
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.kitsu.KitsuAPI
+import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 import com.ghostreborn.akira.models.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,9 +48,10 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
 
         holder.itemView.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val malID = KitsuAPI().malID(anime.kitsuID)
+                Constants.animeID = KitsuAPI().anilistID(anime.kitsuID)?.data?.get(0)?.attributes?.externalId!!
                 withContext(Dispatchers.Main){
-                    Toast.makeText(holder.itemView.context, malID?.data?.get(0)?.attributes?.externalId, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(holder.itemView.context, Constants.animeID, Toast.LENGTH_SHORT).show()
+                    holder.itemView.context.startActivity(Intent(holder.itemView.context, EpisodesActivity::class.java))
                 }
             }
         }

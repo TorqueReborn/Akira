@@ -1,5 +1,6 @@
 package com.ghostreborn.akira
 
+import com.ghostreborn.akira.parser.Gojo
 import com.ghostreborn.akira.provider.KitsuProvider
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,6 +14,13 @@ object Constants {
     const val PREF_TOTAL_LIST = "TOTAL_LIST"
 
     var offset = 0
+    var animeID = ""
+    var animeThumbnail = ""
+    var animeEpisode = ""
+    var episodeWatchId = ""
+    var animeUrl = ""
+
+    val animeAPI = Gojo()
 
     val api = Retrofit.Builder()
         .baseUrl("https://kitsu.io/api/")

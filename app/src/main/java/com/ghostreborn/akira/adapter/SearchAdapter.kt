@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.kitsu.KitsuAPI
+import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 import com.ghostreborn.akira.models.Search
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -14,7 +14,7 @@ import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.adapter.SearchAdapter
-import com.ghostreborn.akira.kitsu.KitsuAPI
+import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 import com.ghostreborn.akira.models.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

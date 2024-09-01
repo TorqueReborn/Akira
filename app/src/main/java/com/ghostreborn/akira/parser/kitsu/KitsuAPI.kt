@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.kitsu
+package com.ghostreborn.akira.parser.kitsu
 
 import com.ghostreborn.akira.Constants
 import kotlinx.coroutines.Dispatchers
