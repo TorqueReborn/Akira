@@ -6,18 +6,30 @@ import kotlinx.coroutines.withContext
 
 class KitsuAPI {
 
-    suspend fun login(username: String, password: String) = withContext(Dispatchers.IO) {
-        return@withContext Constants.api
-            .login(username = username, password = password)
+    suspend fun login() = withContext(Dispatchers.IO) {
+        Constants.token =  Constants.api
+            .login(username = Constants.userName, password = Constants.pass)
             .execute()
             .body()
+            ?.access_token.toString()
     }
 
-    suspend fun user(token: String) = withContext(Dispatchers.IO) {
-        return@withContext Constants.api
-            .user("Bearer $token")
+    suspend fun user() = withContext(Dispatchers.IO) {
+        Constants.userId = Constants.api
+            .user("Bearer ${Constants.token}")
+            .execute()
+            .body()?.data?.get(0)?.id.toString()
+    }
+
+    suspend fun entryNum() = withContext(Dispatchers.IO) {
+        Constants.entryNum = Constants.api
+            .entryNumber(
+                userId = Constants.userId
+            )
             .execute()
             .body()
+            ?.meta
+            ?.count.toString()
     }
 
 }
