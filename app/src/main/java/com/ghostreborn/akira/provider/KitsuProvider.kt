@@ -1,12 +1,11 @@
 package com.ghostreborn.akira.provider
 
-import com.ghostreborn.akira.models.AnimeID
-import com.ghostreborn.akira.models.Authentication
-import com.ghostreborn.akira.models.Entry
-import com.ghostreborn.akira.models.Search
-import com.ghostreborn.kitsumodified.models.EntryNum
-import com.ghostreborn.kitsumodified.models.EntryRequest
-import com.ghostreborn.kitsumodified.models.User
+import com.ghostreborn.akira.models.retro.AnimeID
+import com.ghostreborn.akira.models.retro.Authentication
+import com.ghostreborn.akira.models.retro.Entry
+import com.ghostreborn.akira.models.retro.Search
+import com.ghostreborn.akira.models.retro.EntryRequest
+import com.ghostreborn.akira.models.retro.User
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -58,23 +57,10 @@ interface KitsuProvider {
         @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage",
     ): Call<Entry>
 
-    @GET("edge/users/{id}/library-entries")
-    fun entryNumber(
-        @Path("id") userId: String,
-        @Query("filter[status]") status: String = "current"
-    ): Call<EntryNum>
-
     @GET("edge/anime/{id}/mappings")
     fun anilistID(
         @Path("id") animeID: String,
         @Query("filter[externalSite]") externalSite: String = "anilist/anime",
-        @Query("fields[mappings]") mappingFields: String = "externalId"
-    ): Call<AnimeID>
-
-    @GET("edge/anime/{id}/mappings")
-    fun malID(
-        @Path("id") animeID: String,
-        @Query("filter[externalSite]") externalSite: String = "myanimelist/anime",
         @Query("fields[mappings]") mappingFields: String = "externalId"
     ): Call<AnimeID>
 

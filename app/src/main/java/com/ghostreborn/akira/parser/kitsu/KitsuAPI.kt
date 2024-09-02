@@ -18,14 +18,6 @@ class KitsuAPI {
             .execute().body()?.data?.get(0)?.id
     }
 
-    suspend fun entryNum(userID: String) = withContext(Dispatchers.IO) {
-        return@withContext Constants.api
-            .entryNumber(
-                userId = userID
-            )
-            .execute().body()?.meta?.count
-    }
-
     suspend fun entry(userID: String, num: Int) = withContext(Dispatchers.IO) {
         return@withContext Constants.api
             .entry(
@@ -38,14 +30,6 @@ class KitsuAPI {
     suspend fun anilistID(animeID: String) = withContext(Dispatchers.IO) {
         return@withContext Constants.api
             .anilistID(
-                animeID = animeID
-            )
-            .execute().body()
-    }
-
-    suspend fun malID(animeID: String) = withContext(Dispatchers.IO) {
-        return@withContext Constants.api
-            .malID(
                 animeID = animeID
             )
             .execute().body()

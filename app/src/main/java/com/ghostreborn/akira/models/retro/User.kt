@@ -1,4 +1,4 @@
-package com.ghostreborn.kitsumodified.models
+package com.ghostreborn.akira.models.retro
 
 data class User(
     val data: List<Data>

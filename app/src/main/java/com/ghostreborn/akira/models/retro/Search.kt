@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.models
+package com.ghostreborn.akira.models.retro
 
 
 import com.google.gson.annotations.SerializedName

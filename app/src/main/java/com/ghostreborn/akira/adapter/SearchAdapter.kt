@@ -11,7 +11,7 @@ import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.parser.kitsu.KitsuAPI
-import com.ghostreborn.akira.models.Search
+import com.ghostreborn.akira.models.retro.Search
 import com.ghostreborn.akira.ui.EpisodesActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.models
+package com.ghostreborn.akira.models.retro
 
 
 import com.google.gson.annotations.SerializedName
@@ -19,7 +19,7 @@ data class Entry(
     ) {
         data class Attributes(
             @SerializedName("progress")
-            val progress: Int,
+            val progress: String,
             @SerializedName("status")
             val status: String
         )

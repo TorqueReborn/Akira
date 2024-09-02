@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.models
+package com.ghostreborn.akira.models.retro
 
 data class Authentication(
     val access_token: String,
