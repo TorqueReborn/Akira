@@ -11,9 +11,9 @@ object Constants {
     const val PREF_TOKEN = "TOKEN"
     const val PREF_REFRESH_TOKEN = "REFRESH_TOKEN"
     const val PREF_USER_ID = "USER_ID"
-    const val PREF_TOTAL_LIST = "TOTAL_LIST"
 
     var offset = 0
+    var total = 0
     var animeID = ""
     var animeThumbnail = ""
     var animeEpisode = ""

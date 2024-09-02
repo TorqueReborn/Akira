@@ -1,4 +1,4 @@
-package com.ghostreborn.kitsumodified.models
+package com.ghostreborn.akira.models
 
 
 import com.google.gson.annotations.SerializedName
@@ -7,7 +7,9 @@ data class Entry(
     @SerializedName("data")
     val `data`: List<Data>,
     @SerializedName("included")
-    val included: List<Included>
+    val included: List<Included>,
+    @SerializedName("meta")
+    val meta: Meta
 ) {
     data class Data(
         @SerializedName("attributes")
@@ -33,17 +35,10 @@ data class Entry(
             @SerializedName("canonicalTitle")
             val canonicalTitle: String,
             @SerializedName("coverImage")
-            val coverImage: CoverImage,
+            val coverImage: Any?,
             @SerializedName("posterImage")
             val posterImage: PosterImage
         ) {
-            data class CoverImage(
-                @SerializedName("large")
-                val large: String,
-                @SerializedName("original")
-                val original: String
-            )
-
             data class PosterImage(
                 @SerializedName("large")
                 val large: String,
@@ -54,4 +49,9 @@ data class Entry(
             )
         }
     }
+
+    data class Meta(
+        @SerializedName("count")
+        val count: Int
+    )
 }

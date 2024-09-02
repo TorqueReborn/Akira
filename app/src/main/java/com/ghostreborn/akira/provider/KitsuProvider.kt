@@ -2,8 +2,8 @@ package com.ghostreborn.akira.provider
 
 import com.ghostreborn.akira.models.AnimeID
 import com.ghostreborn.akira.models.Authentication
+import com.ghostreborn.akira.models.Entry
 import com.ghostreborn.akira.models.Search
-import com.ghostreborn.kitsumodified.models.Entry
 import com.ghostreborn.kitsumodified.models.EntryNum
 import com.ghostreborn.kitsumodified.models.EntryRequest
 import com.ghostreborn.kitsumodified.models.User

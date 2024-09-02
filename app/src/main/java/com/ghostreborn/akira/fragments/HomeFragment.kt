@@ -37,21 +37,25 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        search = view.findViewById(R.id.search_edit_text)
-        recycler= view.findViewById<RecyclerView?>(R.id.search_recycler).apply {
-            layoutManager = LinearLayoutManager(context)
-        }
-        search()
-
-        userID = requireContext()
-            .getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-            .getString(Constants.PREF_USER_ID, "")!!
         CoroutineScope(Dispatchers.IO).launch {
             animes = getEntry(Constants.offset)
             withContext(Dispatchers.Main) {
                 recycler.adapter = AnimeAdapter(animes)
             }
         }
+
+        search = view.findViewById(R.id.search_edit_text)
+        recycler= view.findViewById<RecyclerView?>(R.id.search_recycler).apply {
+            layoutManager = LinearLayoutManager(context)
+        }
+        userID = requireContext()
+            .getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
+            .getString(Constants.PREF_USER_ID, "")!!
+    }
+
+    override fun onResume() {
+        super.onResume()
+        search()
 
         recycler.addOnScrollListener(object : RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -63,12 +67,11 @@ class HomeFragment : Fragment() {
                 }
             }
         })
-
     }
 
     fun loadMoreItems(){
         Constants.offset += 10
-        if (Constants.offset <= requireContext().getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).getInt(Constants.PREF_TOTAL_LIST, 0)){
+        if (Constants.offset <= Constants.total){
             CoroutineScope(Dispatchers.IO).launch {
                 val moreAnimes = getEntry(Constants.offset)
                 animes.addAll(moreAnimes)
@@ -84,6 +87,7 @@ class HomeFragment : Fragment() {
         val animes = ArrayList<Anime>()
         val data = entry.data
         val included = entry.included
+        Constants.total = entry.meta.count
         for (i in 0 until included.size){
             animes.add(Anime(
                 kitsuID = included[i].id,

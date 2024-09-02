@@ -46,15 +46,14 @@ class LoginFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val login = KitsuAPI().login(userName, pass)
             val userID = KitsuAPI().user(login!!.access_token)
-            val total = KitsuAPI().entryNum(userID!!)!!
             withContext(Dispatchers.Main){
                 requireContext().getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE).edit()
                     .putString(Constants.PREF_TOKEN, login.access_token)
                     .putString(Constants.PREF_REFRESH_TOKEN, login.refresh_token)
                     .putString(Constants.PREF_USER_ID, userID)
-                    .putInt(Constants.PREF_TOTAL_LIST, total)
                     .apply()
                 startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
             }
         }
     }
