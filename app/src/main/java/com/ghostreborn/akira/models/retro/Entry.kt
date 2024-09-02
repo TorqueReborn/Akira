@@ -8,6 +8,8 @@ data class Entry(
     val `data`: List<Data>,
     @SerializedName("included")
     val included: List<Included>,
+    @SerializedName("links")
+    val links: Links,
     @SerializedName("meta")
     val meta: Meta
 ) {
@@ -35,20 +37,44 @@ data class Entry(
             @SerializedName("canonicalTitle")
             val canonicalTitle: String,
             @SerializedName("coverImage")
-            val coverImage: Any?,
+            val coverImage: CoverImage,
             @SerializedName("posterImage")
             val posterImage: PosterImage
         ) {
+            data class CoverImage(
+                @SerializedName("large")
+                val large: String,
+                @SerializedName("original")
+                val original: String,
+                @SerializedName("small")
+                val small: String,
+                @SerializedName("tiny")
+                val tiny: String
+            )
+
             data class PosterImage(
                 @SerializedName("large")
                 val large: String,
                 @SerializedName("medium")
                 val medium: String,
                 @SerializedName("original")
-                val original: String
+                val original: String,
+                @SerializedName("small")
+                val small: String,
+                @SerializedName("tiny")
+                val tiny: String
             )
         }
     }
+
+    data class Links(
+        @SerializedName("first")
+        val first: String,
+        @SerializedName("last")
+        val last: String,
+        @SerializedName("next")
+        val next: String
+    )
 
     data class Meta(
         @SerializedName("count")

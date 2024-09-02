@@ -21,25 +21,23 @@ class AkiraUtils {
 
     suspend fun entry(context: Context): ArrayList<Anime> {
         val userID = getUserID(context)
-        if (Constants.offset <= Constants.total) {
-            val entry = KitsuAPI().entry(userID, Constants.offset)
-            if (entry != null) {
-                Constants.total = entry.meta.count
-                return ArrayList<Anime>().apply {
-                    for (i in 0 until entry.data.size) {
-                        add(
-                            Anime(
-                                kitsuID = entry.data[i].id,
-                                title = entry.included[i].attributes.canonicalTitle,
-                                progress = entry.data[i].attributes.progress,
-                                thumbnail = entry.included[i].attributes.posterImage.medium
-                            )
-                        )
-                    }
-                }
-            }
+        val entry = KitsuAPI().entry(userID, Constants.offset)
+        if (entry?.links?.next != null) {
+            Constants.offset += 10
+        }else{
+            return ArrayList()
         }
-        Constants.offset += 10
-        return ArrayList()
+        val anime = ArrayList<Anime>()
+        for (i in 0 until entry.data.size) {
+            anime.add(
+                Anime(
+                    kitsuID = entry.data[i].id,
+                    title = entry.included[i].attributes.canonicalTitle,
+                    progress = entry.data[i].attributes.progress,
+                    thumbnail = entry.included[i].attributes.posterImage.medium
+                )
+            )
+        }
+        return anime
     }
 }

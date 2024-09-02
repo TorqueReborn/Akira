@@ -13,7 +13,6 @@ object Constants {
     const val PREF_USER_ID = "USER_ID"
 
     var offset = 0
-    var total = 0
     var animeID = ""
     var animeThumbnail = ""
     var animeEpisode = ""

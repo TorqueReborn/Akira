@@ -51,7 +51,6 @@ interface KitsuProvider {
         @Path("id") userId: String,
         @Query("page[offset]") num: Int,
         @Query("page[limit]") limit: Int = 10,
-        @Query("filter[status]") status: String = "current",
         @Query("fields[library-entries]") libraryFields: String = "id,progress,status",
         @Query("include") include: String = "anime",
         @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage",
