@@ -3,7 +3,7 @@
     <style name="Theme.Akira" parent="Base.Theme.Akira" >
 
         <!-- General text color -->
-        <item name="android:textColor">#898989</item>
+        <item name="android:textColor">@color/text_color</item>
         <item name="android:textColorHint">@color/text_color_hint</item>
 
         <!-- Status bar color -->
