@@ -71,13 +71,11 @@ interface KitsuProvider {
     ): Call<Search>
 
     @GET("edge/users/{id}/library-entries")
-    fun test(
-        @Path("id") userId: String = "1402888",
+    fun ids(
+        @Path("id") userId: String,
         @Query("page[offset]") num: Int,
         @Query("page[limit]") limit: Int = 50,
-        @Query("fields[library-entries]") libraryFields: String = "id,progress,status",
-        @Query("include") include: String = "anime",
-        @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage",
+        @Query("fields[library-entries]") libraryFields: String = "id"
     ): Call<EntryMinimized>
 
 }

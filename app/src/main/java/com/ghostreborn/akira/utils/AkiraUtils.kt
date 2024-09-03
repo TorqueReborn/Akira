@@ -3,7 +3,7 @@ package com.ghostreborn.akira.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import com.ghostreborn.akira.Constants
-import com.ghostreborn.akira.models.Anime
+import com.ghostreborn.akira.models.retro.EntryMinimized
 import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 
 class AkiraUtils {
@@ -19,25 +19,14 @@ class AkiraUtils {
             .getString(Constants.PREF_USER_ID, "")!!
     }
 
-    suspend fun entry(context: Context): ArrayList<Anime> {
+    suspend fun ids(context: Context): List<String> {
         val userID = getUserID(context)
-        val entry = KitsuAPI().entry(userID, Constants.offset)
-        if (entry?.links?.next != null) {
-            Constants.offset += 10
-        }else{
-            return ArrayList()
+        val entryMinimized = ArrayList<EntryMinimized>()
+        KitsuAPI().ids(userID, 0)?.meta?.count?.let { total ->
+            for (i in 0 until total step 50) {
+                entryMinimized.add(KitsuAPI().ids(userID, i)!!)
+            }
         }
-        val anime = ArrayList<Anime>()
-        for (i in 0 until entry.data.size) {
-            anime.add(
-                Anime(
-                    kitsuID = entry.data[i].id,
-                    title = entry.included[i].attributes.canonicalTitle,
-                    progress = entry.data[i].attributes.progress,
-                    thumbnail = entry.included[i].attributes.posterImage.medium
-                )
-            )
-        }
-        return anime
+        return entryMinimized.flatMap { it.data.map { entry -> entry.id } }
     }
 }

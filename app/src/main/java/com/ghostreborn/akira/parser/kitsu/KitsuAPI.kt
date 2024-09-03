@@ -43,9 +43,10 @@ class KitsuAPI {
             .execute().body()
     }
 
-    suspend fun test(num: Int) = withContext(Dispatchers.IO) {
+    suspend fun ids(userId: String, num: Int) = withContext(Dispatchers.IO) {
         return@withContext Constants.api
-            .test(
+            .ids(
+                userId = userId,
                 num = num
             )
             .execute().body()
