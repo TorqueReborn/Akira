@@ -3,6 +3,7 @@ package com.ghostreborn.akira.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import com.ghostreborn.akira.Constants
+import com.ghostreborn.akira.models.LibraryEntry
 import com.ghostreborn.akira.models.retro.EntryMinimized
 import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 
@@ -19,7 +20,7 @@ class AkiraUtils {
             .getString(Constants.PREF_USER_ID, "")!!
     }
 
-    suspend fun ids(context: Context): List<String> {
+    suspend fun ids(context: Context): ArrayList<LibraryEntry> {
         val userID = getUserID(context)
         val entryMinimized = ArrayList<EntryMinimized>()
         KitsuAPI().ids(userID, 0)?.meta?.count?.let { total ->
@@ -27,6 +28,17 @@ class AkiraUtils {
                 entryMinimized.add(KitsuAPI().ids(userID, i)!!)
             }
         }
-        return entryMinimized.flatMap { it.data.map { entry -> entry.id } }
+        val libraryEntries = ArrayList<LibraryEntry>()
+        for (entry in entryMinimized) {
+            for (data in entry.data) {
+                libraryEntries.add(LibraryEntry(
+                    data.id,
+                    data.attributes.progress,
+                    data.attributes.status
+                ))
+            }
+        }
+        return libraryEntries
+
     }
 }
