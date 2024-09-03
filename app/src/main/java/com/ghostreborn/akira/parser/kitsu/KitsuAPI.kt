@@ -42,4 +42,12 @@ class KitsuAPI {
             )
             .execute().body()
     }
+
+    suspend fun test(num: Int) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .test(
+                num = num
+            )
+            .execute().body()
+    }
 }

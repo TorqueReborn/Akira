@@ -3,6 +3,7 @@ package com.ghostreborn.akira.provider
 import com.ghostreborn.akira.models.retro.AnimeID
 import com.ghostreborn.akira.models.retro.Authentication
 import com.ghostreborn.akira.models.retro.Entry
+import com.ghostreborn.akira.models.retro.EntryMinimized
 import com.ghostreborn.akira.models.retro.Search
 import com.ghostreborn.akira.models.retro.EntryRequest
 import com.ghostreborn.akira.models.retro.User
@@ -69,5 +70,14 @@ interface KitsuProvider {
         @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage"
     ): Call<Search>
 
+    @GET("edge/users/{id}/library-entries")
+    fun test(
+        @Path("id") userId: String = "1402888",
+        @Query("page[offset]") num: Int,
+        @Query("page[limit]") limit: Int = 50,
+        @Query("fields[library-entries]") libraryFields: String = "id,progress,status",
+        @Query("include") include: String = "anime",
+        @Query("fields[anime]") animeFields: String = "canonicalTitle,posterImage,coverImage",
+    ): Call<EntryMinimized>
 
 }
