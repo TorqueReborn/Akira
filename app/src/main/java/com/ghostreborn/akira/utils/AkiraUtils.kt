@@ -2,7 +2,9 @@ package com.ghostreborn.akira.utils
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import androidx.room.Room
 import com.ghostreborn.akira.Constants
+import com.ghostreborn.akira.database.SavedEntryDatabase
 import com.ghostreborn.akira.models.LibraryEntry
 import com.ghostreborn.akira.models.retro.EntryMinimized
 import com.ghostreborn.akira.parser.kitsu.KitsuAPI
@@ -18,6 +20,13 @@ class AkiraUtils {
         return context
             .getSharedPreferences(Constants.SHARED_PREF, MODE_PRIVATE)
             .getString(Constants.PREF_USER_ID, "")!!
+    }
+
+    fun getDB(context: Context): SavedEntryDatabase {
+        return Room.databaseBuilder(
+            context,
+            SavedEntryDatabase::class.java, "my-database"
+        ).build()
     }
 
     suspend fun ids(context: Context): ArrayList<LibraryEntry> {
