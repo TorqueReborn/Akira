@@ -19,4 +19,7 @@ interface SavedEntryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(entry: SavedEntry)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAll(vararg entries: SavedEntry)
+
 }

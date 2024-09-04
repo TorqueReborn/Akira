@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.database.SavedEntryDatabase
 import com.ghostreborn.akira.models.LibraryEntry
+import com.ghostreborn.akira.models.retro.Authentication
 import com.ghostreborn.akira.models.retro.EntryMinimized
 import com.ghostreborn.akira.parser.kitsu.KitsuAPI
 
@@ -29,8 +30,7 @@ class AkiraUtils {
         ).build()
     }
 
-    suspend fun ids(context: Context): ArrayList<LibraryEntry> {
-        val userID = getUserID(context)
+    suspend fun ids(userID: String): ArrayList<LibraryEntry> {
         val entryMinimized = ArrayList<EntryMinimized>()
         KitsuAPI().ids(userID, 0)?.meta?.count?.let { total ->
             for (i in 0 until total step 50) {
@@ -48,6 +48,9 @@ class AkiraUtils {
             }
         }
         return libraryEntries
+    }
 
+    suspend fun login(userName: String, pass: String): Authentication? {
+        return KitsuAPI().login(userName = userName, pass = pass)
     }
 }
