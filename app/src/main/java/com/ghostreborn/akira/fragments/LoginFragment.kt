@@ -1,6 +1,5 @@
 package com.ghostreborn.akira.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,17 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.ghostreborn.akira.Constants
-import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.parser.kitsu.KitsuAPI
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LoginFragment : Fragment() {
     override fun onCreateView(
@@ -30,33 +22,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
-            loginAndStoreToken(
-                view.findViewById<EditText>(R.id.login_user).text.toString(),
-                view.findViewById<EditText>(R.id.login_pass).text.toString()
-            )
+            view.findViewById<ConstraintLayout>(R.id.login_constraint).visibility = View.GONE
+            view.findViewById<ConstraintLayout>(R.id.login_info_constraint).visibility = View.VISIBLE
         }
         view.findViewById<Button>(R.id.register_button).setOnClickListener {
             Toast.makeText(requireContext(), "SignUp using browser", Toast.LENGTH_SHORT).show()
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://kitsu.app/explore/anime")))
-        }
-    }
-
-    private fun loginAndStoreToken(userName: String, pass: String) {
-        if (userName.isNotEmpty() && pass.isNotEmpty()) {
-            CoroutineScope(Dispatchers.IO).launch {
-                val login = KitsuAPI().login(userName, pass)
-                val userID = KitsuAPI().user(login?.access_token.toString())
-                withContext(Dispatchers.Main) {
-                    requireContext().getSharedPreferences(Constants.SHARED_PREF, Context.MODE_PRIVATE)
-                        .edit()
-                        .putString(Constants.PREF_TOKEN, login?.access_token)
-                        .putString(Constants.PREF_REFRESH_TOKEN, login?.refresh_token)
-                        .putString(Constants.PREF_USER_ID, userID)
-                        .apply()
-                    startActivity(Intent(requireContext(), MainActivity::class.java))
-                    requireActivity().finish()
-                }
-            }
         }
     }
 }
