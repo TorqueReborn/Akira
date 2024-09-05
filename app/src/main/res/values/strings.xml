@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Akira</string>
+    <string name="kitsu_logo">Kitsu LOGO</string>
+    <string name="login_user_hint">Enter user name</string>
+    <string name="login_pass_hint">Enter password</string>
+    <string name="login">Login</string>
+    <string name="signup">Signup</string>
 </resources>
