@@ -2,10 +2,6 @@
     <style name="Base.Theme.Akira" parent="Theme.Material3.DayNight.NoActionBar"/>
     <style name="Theme.Akira" parent="Base.Theme.Akira" >
 
-        <!-- General text color -->
-        <item name="android:textColor">@color/text_color</item>
-        <item name="android:textColorHint">@color/text_color_hint</item>
-
         <!-- Status bar color -->
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="android:windowBackground">@color/status_bar_color</item>

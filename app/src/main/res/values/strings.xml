@@ -1,17 +1,3 @@
 <resources>
     <string name="app_name">Akira</string>
-
-    <!--  Login  -->
-    <string name="username_hint">Enter username</string>
-    <string name="pass_hint">Enter password</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="empty_anime_desc">Click more and save to view them here</string>
-    <string name="more">More</string>
-    <string name="anime">Anime</string>
-    <string name="anime_image">Anime Image</string>
-    <string name="unwatched">Not Yet Watched</string>
-    <string name="search_icon">Search Icon</string>
-    <string name="search_here">Search Here</string>
-    <string name="kitsu_icon">Kitsu Icon</string>
 </resources>
