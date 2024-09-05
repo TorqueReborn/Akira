@@ -6,49 +6,48 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5">
 
         <ImageView
             android:id="@+id/login_logo"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:contentDescription="@string/kitsu_logo"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/kitsu" />
 
         <EditText
             android:id="@+id/login_user_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/AkiraEditText"
             android:autofillHints="username"
             android:hint="@string/login_user_hint"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/login_logo"
-            app:layout_constraintStart_toStartOf="@+id/login_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_logo" />
 
         <EditText
             android:id="@+id/login_pass_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/AkiraEditText"
             android:autofillHints="password"
             android:hint="@string/login_pass_hint"
             android:inputType="textEmailAddress"
-            app:layout_constraintEnd_toEndOf="@+id/login_user_edit"
-            app:layout_constraintStart_toStartOf="@+id/login_user_edit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/login_user_edit" />
 
         <Button
             android:id="@+id/login_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/AkiraButton"
             android:text="@string/login"
             app:layout_constraintEnd_toStartOf="@+id/signup_buttton"
             app:layout_constraintStart_toStartOf="@+id/login_pass_edit"
@@ -56,8 +55,7 @@
 
         <Button
             android:id="@+id/signup_buttton"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            style="@style/AkiraButton"
             android:text="@string/signup"
             app:layout_constraintEnd_toEndOf="@+id/login_pass_edit"
             app:layout_constraintStart_toEndOf="@+id/login_button"
