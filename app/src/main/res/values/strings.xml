@@ -5,4 +5,6 @@
     <string name="login_pass_hint">Enter password</string>
     <string name="login">Login</string>
     <string name="signup">Signup</string>
+    <string name="login_info_one">Logging in…</string>
+    <string name="login_info_two">Getting user details…</string>
 </resources>
