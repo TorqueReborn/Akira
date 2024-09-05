@@ -66,6 +66,8 @@ class LoginFragment : Fragment() {
                         .putString(Constants.PREF_REFRESH_TOKEN, loginResponse.refresh_token)
                         .apply()
                 }
+                val totalList = KitsuAPI().ids(userResponse!!.data[0].id,0)?.meta?.count
+                loginInfoText.text = getString(R.string.you_have_anime, totalList)
             }
         }
     }

@@ -17,4 +17,11 @@ class KitsuAPI {
             .execute()
             .body()
     }
+
+    suspend fun ids(userID: String, offset: Int) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .ids(userID, offset)
+            .execute()
+            .body()
+    }
 }
