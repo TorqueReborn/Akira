@@ -12,6 +12,8 @@ object Constants {
     const val PREF_USER_ID = "USER_ID"
     const val PREF_USER_NAME = "USER_ID"
 
+    var hasShownInfo = false
+
     val api = Retrofit.Builder()
         .baseUrl("https://kitsu.io/api/")
         .addConverterFactory(GsonConverterFactory.create())
