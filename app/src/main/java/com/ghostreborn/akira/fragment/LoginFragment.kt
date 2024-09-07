@@ -1,7 +1,7 @@
 package com.ghostreborn.akira.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +15,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.KitsuAPI
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.database.SavedEntry
+import com.ghostreborn.akira.utils.AkiraUtils
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginFragment : Fragment() {
 
@@ -39,8 +44,9 @@ class LoginFragment : Fragment() {
         loginInfoText = view.findViewById(R.id.login_info_text)
         loginConstraint = view.findViewById(R.id.login_constraint)
         loginInfoConstraint = view.findViewById(R.id.login_info_constraint)
-        view.findViewById<ImageView>(R.id.login_right_image).setOnClickListener{
-            view.findViewById<ConstraintLayout>(R.id.login_details_constraint).visibility = View.GONE
+        view.findViewById<ImageView>(R.id.login_right_image).setOnClickListener {
+            view.findViewById<ConstraintLayout>(R.id.login_details_constraint).visibility =
+                View.GONE
             loginConstraint.visibility = View.VISIBLE
         }
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
@@ -58,7 +64,8 @@ class LoginFragment : Fragment() {
                 val loginResponse = KitsuAPI().login(userName, userPass)
                 if (loginResponse == null) {
                     showViews()
-                    Toast.makeText(requireContext(), "Login failed, Signed Up?", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Login failed, Signed Up?", Toast.LENGTH_SHORT)
+                        .show()
                     return@launch
                 }
                 loginInfoText.text = getString(R.string.login_info_two)
@@ -72,13 +79,38 @@ class LoginFragment : Fragment() {
                         .putString(Constants.PREF_REFRESH_TOKEN, loginResponse.refresh_token)
                         .apply()
                 }
-                val totalList = KitsuAPI().ids(userResponse!!.data[0].id,0)
+                val totalList = KitsuAPI().ids(userResponse!!.data[0].id, 0)
                 loginInfoText.text = getString(R.string.you_have_anime, totalList?.meta?.count)
 
-                for (i in 0 until totalList!!.data.size){
-                    val anime = KitsuAPI().anime(totalList.data[i].id)
-                    Log.e("TAG", anime?.data?.attributes?.canonicalTitle.toString())
+                val db = AkiraUtils().getDB(requireContext())
+
+                withContext(Dispatchers.IO) {
+                    for (i in 0 until totalList!!.data.size) {
+                        val anime = KitsuAPI().anime(totalList.data[i].id)
+                        withContext(Dispatchers.Main) {
+                            loginInfoText.text =
+                                getString(
+                                    R.string.inserting_to_database,
+                                    anime?.data?.attributes?.canonicalTitle
+                                )
+                        }
+                        val entry = SavedEntry(
+                            totalList.data[i].id,
+                            totalList.data[i].attributes.progress,
+                            anime?.data?.attributes?.canonicalTitle.toString(),
+                            anime?.data?.attributes?.posterImage?.large.toString()
+                        )
+                        db.savedEntryDao().insert(entry)
+                    }
                 }
+
+                requireContext().getSharedPreferences(Constants.SHARED_PREF, 0)
+                    .edit()
+                    .putBoolean(Constants.PREF_LOGGED_IN, true)
+                    .apply()
+
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+                requireActivity().finish()
 
             }
         }
