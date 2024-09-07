@@ -35,6 +35,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.legacy.support.v4)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.media3.ui)

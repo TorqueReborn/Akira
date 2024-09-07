@@ -13,4 +13,6 @@
     <string name="inserting_to_database">Inserting %1$s to database…</string>
     <string name="anime_image">Anime Image</string>
     <string name="unwatched">Not yet Watched</string>
+    <string name="current_anime">Current Anime</string>
+    <string name="completed_anime">Completed Anime</string>
 </resources>

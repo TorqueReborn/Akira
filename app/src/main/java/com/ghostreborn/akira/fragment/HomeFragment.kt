@@ -17,6 +17,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
+
+    val currentAnime: ArrayList<Anime> = ArrayList()
+    val completedAnime: ArrayList<Anime> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,20 +30,33 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.home_recycler)
+        val currentRecycler = view.findViewById<RecyclerView>(R.id.current_recycler)
+        val completedRecycler = view.findViewById<RecyclerView>(R.id.completed_recycler)
 
+        val db = AkiraUtils().getDB(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
-            val db = AkiraUtils().getDB(requireContext())
-            val list = db.savedEntryDao().getAll()
-            val anime = ArrayList<Anime>()
+            val list = db.savedEntryDao().getCurrent()
             for (entry in list) {
-                anime.add(Anime(entry.kitsuID, entry.anime, entry.progress,entry.thumbnail))
+                currentAnime.add(Anime(entry.kitsuID, entry.anime, entry.progress,entry.thumbnail))
             }
 
             withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(anime)
-                recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                val adapter = AnimeAdapter(currentAnime)
+                currentRecycler.adapter = adapter
+                currentRecycler.layoutManager = LinearLayoutManager(requireContext())
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val list = db.savedEntryDao().getCompleted()
+            for (entry in list) {
+                completedAnime.add(Anime(entry.kitsuID, entry.anime, entry.progress,entry.thumbnail))
+            }
+
+            withContext(Dispatchers.Main) {
+                val adapter = AnimeAdapter(completedAnime)
+                completedRecycler.adapter = adapter
+                completedRecycler.layoutManager = LinearLayoutManager(requireContext())
             }
         }
 

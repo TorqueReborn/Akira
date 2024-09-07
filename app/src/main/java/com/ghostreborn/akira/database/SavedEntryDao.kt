@@ -13,6 +13,12 @@ interface SavedEntryDao {
     @Query("SELECT * FROM saved_entries WHERE kitsuID = :id")
     fun getById(id: String): SavedEntry?
 
+    @Query("SELECT * FROM saved_entries WHERE status ='current'")
+    fun getCurrent(): List<SavedEntry>
+
+    @Query("SELECT * FROM saved_entries WHERE status ='completed'")
+    fun getCompleted(): List<SavedEntry>
+
     @Query("DELETE FROM saved_entries WHERE kitsuID = :id")
     fun deleteById(id: String)
 
