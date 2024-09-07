@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +38,10 @@ class LoginFragment : Fragment() {
         loginInfoText = view.findViewById(R.id.login_info_text)
         loginConstraint = view.findViewById(R.id.login_constraint)
         loginInfoConstraint = view.findViewById(R.id.login_info_constraint)
+        view.findViewById<ImageView>(R.id.login_right_image).setOnClickListener{
+            view.findViewById<ConstraintLayout>(R.id.login_details_constraint).visibility = View.GONE
+            loginConstraint.visibility = View.VISIBLE
+        }
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
             checkLogin()
         }

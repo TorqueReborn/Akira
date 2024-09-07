@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
+    <!-- Login with username and password -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_constraint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +64,7 @@
             app:layout_constraintTop_toBottomOf="@+id/login_pass_edit" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Provide info of data parsing to the user and show progress bar -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_info_constraint"
         android:layout_width="0dp"
@@ -90,6 +92,50 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/login_info_text"
             app:layout_constraintTop_toBottomOf="@+id/login_info_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- App required login to kitsu dialogue -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/login_details_constraint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/login_right_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:contentDescription="@string/login_image"
+            android:background="@drawable/rounded_background"
+            app:layout_constraintEnd_toEndOf="@+id/info_two"
+            app:layout_constraintStart_toStartOf="@+id/info_two"
+            app:layout_constraintTop_toBottomOf="@+id/info_two"
+            app:srcCompat="@drawable/right" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login"
+            android:textSize="48sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/info_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_info"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/info"
+            app:layout_constraintStart_toStartOf="@+id/info"
+            app:layout_constraintTop_toBottomOf="@+id/info" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

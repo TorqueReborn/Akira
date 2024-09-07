@@ -8,4 +8,6 @@
     <string name="login_info_one">Logging in…</string>
     <string name="login_info_two">Getting user details…</string>
     <string name="you_have_anime">You have %d anime</string>
+    <string name="login_image">Login Image</string>
+    <string name="login_info">Authorize this app to Kitsu to continue</string>
 </resources>
