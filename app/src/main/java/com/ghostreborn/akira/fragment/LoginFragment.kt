@@ -54,9 +54,9 @@ class LoginFragment : Fragment() {
             checkLogin()
         }
         view.findViewById<Button>(R.id.signup_buttton).setOnClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("kitsu://explore/anime")
-            })
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://kitsu.app/explore/anime")
+            startActivity(intent)
         }
     }
 
