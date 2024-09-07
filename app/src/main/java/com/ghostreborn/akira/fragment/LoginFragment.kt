@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,11 @@ class LoginFragment : Fragment() {
         }
         view.findViewById<Button>(R.id.login_button).setOnClickListener {
             checkLogin()
+        }
+        view.findViewById<Button>(R.id.signup_buttton).setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("kitsu://explore/anime")
+            })
         }
     }
 
