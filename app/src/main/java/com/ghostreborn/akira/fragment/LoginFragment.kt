@@ -14,7 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.ghostreborn.akira.Constants
-import com.ghostreborn.akira.KitsuAPI
+import com.ghostreborn.akira.api.KitsuAPI
 import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.database.SavedEntry

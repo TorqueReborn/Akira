@@ -1,5 +1,6 @@
-package com.ghostreborn.akira
+package com.ghostreborn.akira.api
 
+import com.ghostreborn.akira.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
