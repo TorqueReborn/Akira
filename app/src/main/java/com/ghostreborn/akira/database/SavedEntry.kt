@@ -8,6 +8,7 @@ data class SavedEntry(
     @PrimaryKey
     val kitsuID: String,
     val progress: String,
+    val animeID: String,
     val anime: String,
     val thumbnail: String
 )
