@@ -30,7 +30,7 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = animes[position]
-        val progress = "Watched ${position+1} Episodes"
+        val progress = "Watched ${anime.progress} Episodes"
         holder.name.text = anime.name
         holder.progress.text = progress
         holder.thumbnail.load(anime.thumbnail)
