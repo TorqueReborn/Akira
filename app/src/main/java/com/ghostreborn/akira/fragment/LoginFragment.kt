@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,8 +72,14 @@ class LoginFragment : Fragment() {
                         .putString(Constants.PREF_REFRESH_TOKEN, loginResponse.refresh_token)
                         .apply()
                 }
-                val totalList = KitsuAPI().ids(userResponse!!.data[0].id,0)?.meta?.count
-                loginInfoText.text = getString(R.string.you_have_anime, totalList)
+                val totalList = KitsuAPI().ids(userResponse!!.data[0].id,0)
+                loginInfoText.text = getString(R.string.you_have_anime, totalList?.meta?.count)
+
+                for (i in 0 until totalList!!.data.size){
+                    val anime = KitsuAPI().anime(totalList.data[i].id)
+                    Log.e("TAG", anime?.data?.attributes?.canonicalTitle.toString())
+                }
+
             }
         }
     }

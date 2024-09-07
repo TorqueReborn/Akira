@@ -24,4 +24,11 @@ class KitsuAPI {
             .execute()
             .body()
     }
+
+    suspend fun anime(entryID: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .anime(entryID)
+            .execute()
+            .body()
+    }
 }
