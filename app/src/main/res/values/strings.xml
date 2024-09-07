@@ -11,4 +11,6 @@
     <string name="login_image">Login Image</string>
     <string name="login_info">Authorize this app to Kitsu to continue</string>
     <string name="inserting_to_database">Inserting %1$s to database…</string>
+    <string name="anime_image">Anime Image</string>
+    <string name="unwatched">Not yet Watched</string>
 </resources>

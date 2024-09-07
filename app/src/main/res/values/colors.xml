@@ -7,4 +7,6 @@
     <color name="default_hint_color">#B4B4B4</color>
     <color name="default_text_color">#E9E9E9</color>
 
+    <color name="card_background">#1A1A1A</color>
+
 </resources>
