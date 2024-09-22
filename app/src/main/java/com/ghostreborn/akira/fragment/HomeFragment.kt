@@ -18,8 +18,7 @@ import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
-    val currentAnime: ArrayList<Anime> = ArrayList()
-    val completedAnime: ArrayList<Anime> = ArrayList()
+    private val anime: ArrayList<Anime> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,36 +29,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val currentRecycler = view.findViewById<RecyclerView>(R.id.current_recycler)
-        val completedRecycler = view.findViewById<RecyclerView>(R.id.completed_recycler)
+        val currentRecycler = view.findViewById<RecyclerView>(R.id.anime_recycler)
 
         val db = AkiraUtils().getDB(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
-            val list = db.savedEntryDao().getCurrent()
-            for (entry in list) {
-                currentAnime.add(Anime(entry.kitsuID, entry.anime, entry.progress,entry.thumbnail))
+            val savedAnime = db.savedEntryDao().getCurrent()
+            for (saved in savedAnime) {
+                anime.add(Anime(saved.kitsuID, saved.anime, saved.progress,saved.thumbnail))
             }
 
             withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(currentAnime)
-                currentRecycler.adapter = adapter
+                currentRecycler.adapter =  AnimeAdapter(anime)
                 currentRecycler.layoutManager = LinearLayoutManager(requireContext())
             }
         }
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val list = db.savedEntryDao().getCompleted()
-            for (entry in list) {
-                completedAnime.add(Anime(entry.kitsuID, entry.anime, entry.progress,entry.thumbnail))
-            }
-
-            withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(completedAnime)
-                completedRecycler.adapter = adapter
-                completedRecycler.layoutManager = LinearLayoutManager(requireContext())
-            }
-        }
-
 
     }
 }

@@ -21,37 +21,19 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/anime_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/default_background"
                 android:padding="16dp"
-                android:text="@string/current_anime"
+                android:text="@string/anime"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/current_recycler"
+                android:id="@+id/anime_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/default_background"
-                android:padding="16dp"
-                android:text="@string/completed_anime"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/completed_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
 
             </androidx.recyclerview.widget.RecyclerView>
 

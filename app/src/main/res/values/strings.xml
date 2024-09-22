@@ -15,4 +15,5 @@
     <string name="unwatched">Not yet Watched</string>
     <string name="current_anime">Current Anime</string>
     <string name="completed_anime">Completed Anime</string>
+    <string name="anime">Anime</string>
 </resources>
