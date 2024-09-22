@@ -33,7 +33,8 @@ interface KitsuProvider {
         @Query("page[offset]") num: Int,
         @Query("page[limit]") limit: Int = 50,
         @Query("fields[library-entries]") libraryFields: String = "id,status,progress",
-        @Query("filter[status]") filter: String = "current"
+        @Query("filter[status]") filter: String = "current",
+        @Query("filter[kind]") kind: String = "anime"
     ): Call<Entry>
 
     @GET("edge/library-entries/{id}/anime")
