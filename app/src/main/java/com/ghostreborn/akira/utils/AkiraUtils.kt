@@ -16,7 +16,7 @@ class AkiraUtils {
     fun getDB(context: Context): SavedEntryDatabase {
         return Room.databaseBuilder(
             context,
-            SavedEntryDatabase::class.java, "my-database"
+            SavedEntryDatabase::class.java, "Akira"
         ).build()
     }
 
