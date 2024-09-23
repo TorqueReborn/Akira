@@ -35,11 +35,19 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val savedAnime = db.savedEntryDao().getCurrent()
             for (saved in savedAnime) {
-                anime.add(Anime(saved.kitsuID, saved.anime, saved.progress,saved.thumbnail))
+                anime.add(
+                    Anime(
+                        saved.kitsuID,
+                        saved.anime,
+                        saved.progress,
+                        saved.episodeCount,
+                        saved.thumbnail
+                    )
+                )
             }
 
             withContext(Dispatchers.Main) {
-                currentRecycler.adapter =  AnimeAdapter(anime)
+                currentRecycler.adapter = AnimeAdapter(anime)
                 currentRecycler.layoutManager = LinearLayoutManager(requireContext())
             }
         }

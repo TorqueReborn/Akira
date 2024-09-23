@@ -15,8 +15,8 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val thumbnail: ImageView = itemView.findViewById(R.id.anime_image)
-        val progress: TextView = itemView.findViewById(R.id.anime_progress)
         val name: TextView = itemView.findViewById(R.id.anime_name)
+        val progress: TextView = itemView.findViewById(R.id.anime_progress)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeViewHolder {
@@ -30,7 +30,7 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
 
     override fun onBindViewHolder(holder: AnimeViewHolder, position: Int) {
         val anime = animes[position]
-        val progress = "Watched ${anime.progress} Episodes"
+        val progress = "${anime.progress}/${anime.episodeCount}"
         holder.name.text = anime.name
         holder.progress.text = progress
         holder.thumbnail.load(anime.thumbnail)
