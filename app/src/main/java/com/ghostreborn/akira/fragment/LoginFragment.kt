@@ -103,6 +103,7 @@ class LoginFragment : Fragment() {
                         val entry = SavedEntry(
                             totalList.data[i].id,
                             totalList.data[i].attributes.progress,
+                            anime?.data?.attributes?.episodeCount.toString(),
                             totalList.data[i].attributes.status,
                             anime?.data?.id.toString(),
                             anime?.data?.attributes?.canonicalTitle.toString(),

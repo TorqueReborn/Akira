@@ -40,6 +40,6 @@ interface KitsuProvider {
     @GET("edge/library-entries/{id}/anime")
     fun anime(
         @Path("id") entryID: String,
-        @Query("fields[anime]") libraryFields: String = "canonicalTitle,posterImage"
+        @Query("fields[anime]") libraryFields: String = "canonicalTitle,posterImage,episodeCount"
     ): Call<AnimeEntry>
 }

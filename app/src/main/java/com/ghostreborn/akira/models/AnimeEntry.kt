@@ -16,6 +16,8 @@ data class AnimeEntry(
         data class Attributes(
             @SerializedName("canonicalTitle")
             val canonicalTitle: String,
+            @SerializedName("episodeCount")
+            val episodeCount: String,
             @SerializedName("posterImage")
             val posterImage: PosterImage
         ) {
