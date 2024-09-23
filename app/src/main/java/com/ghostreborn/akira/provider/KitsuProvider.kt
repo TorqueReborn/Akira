@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.provider
 
 import com.ghostreborn.akira.models.AnimeEntry
+import com.ghostreborn.akira.models.AnimeSearch
 import com.ghostreborn.akira.models.Authentication
 import com.ghostreborn.akira.models.Entry
 import com.ghostreborn.akira.models.User
@@ -42,4 +43,10 @@ interface KitsuProvider {
         @Path("id") entryID: String,
         @Query("fields[anime]") libraryFields: String = "canonicalTitle,posterImage,episodeCount"
     ): Call<AnimeEntry>
+
+    @GET("edge/anime")
+    fun search(
+        @Query("filter[text]") anime: String,
+        @Query("fields[anime]") fields: String = "id,canonicalTitle,episodeCount,posterImage"
+    ): Call<AnimeSearch>
 }
