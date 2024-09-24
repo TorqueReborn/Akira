@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.api.KitsuAPI
-import com.ghostreborn.akira.models.Anime
+import com.ghostreborn.akira.models.kitsu.Anime
 import com.ghostreborn.akira.utils.AkiraUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

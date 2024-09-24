@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.models
+package com.ghostreborn.akira.models.kitsu
 
 data class User(
     val data: List<Data>

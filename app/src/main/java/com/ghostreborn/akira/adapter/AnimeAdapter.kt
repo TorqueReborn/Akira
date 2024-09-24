@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.models.Anime
+import com.ghostreborn.akira.models.kitsu.Anime
 
 class AnimeAdapter (private val animes: ArrayList<Anime>
 ) : RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {

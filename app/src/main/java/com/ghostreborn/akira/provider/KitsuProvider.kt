@@ -1,10 +1,10 @@
 package com.ghostreborn.akira.provider
 
-import com.ghostreborn.akira.models.AnimeEntry
-import com.ghostreborn.akira.models.AnimeSearch
-import com.ghostreborn.akira.models.Authentication
-import com.ghostreborn.akira.models.Entry
-import com.ghostreborn.akira.models.User
+import com.ghostreborn.akira.models.kitsu.AnimeEntry
+import com.ghostreborn.akira.models.kitsu.AnimeSearch
+import com.ghostreborn.akira.models.kitsu.Authentication
+import com.ghostreborn.akira.models.kitsu.Entry
+import com.ghostreborn.akira.models.kitsu.User
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
