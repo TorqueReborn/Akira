@@ -41,6 +41,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/anime_card"
                 app:layout_constraintTop_toTopOf="@+id/anime_card">
+
                 <TextView
                     android:id="@+id/anime_name"
                     android:layout_width="0dp"
@@ -48,6 +49,7 @@
                     android:maxLines="1"
                     android:textSize="@dimen/card_head"
                     android:textStyle="bold"
+                    app:autoSizeTextType="uniform"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
