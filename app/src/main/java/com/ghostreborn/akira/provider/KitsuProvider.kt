@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.provider
 
+import com.ghostreborn.akira.models.AnimeMapping
 import com.ghostreborn.akira.models.kitsu.AnimeEntry
 import com.ghostreborn.akira.models.kitsu.AnimeSearch
 import com.ghostreborn.akira.models.kitsu.Authentication
@@ -49,4 +50,11 @@ interface KitsuProvider {
         @Query("filter[text]") anime: String,
         @Query("fields[anime]") fields: String = "id,canonicalTitle,episodeCount,posterImage"
     ): Call<AnimeSearch>
+
+    @GET("edge/anime/{id}/mappings")
+    fun mapping(
+        @Path("id") entryID: String,
+        @Query("filter[externalSite]") filter: String = "anilist/anime",
+        @Query("fields[mappings]") fields: String = "externalId"
+    ): Call<AnimeMapping>
 }

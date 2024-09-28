@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.models.kitsu.Anime
 import com.ghostreborn.akira.ui.DetailsActivity
@@ -37,6 +38,7 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
         holder.progress.text = progress
         holder.thumbnail.load(anime.thumbnail)
         holder.itemView.setOnClickListener {
+            Constants.animeID = anime.id
             holder.itemView.context.startActivity(Intent(holder.itemView.context, DetailsActivity::class.java))
         }
     }

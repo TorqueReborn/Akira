@@ -39,4 +39,11 @@ class KitsuAPI {
             .execute()
             .body()
     }
+
+    suspend fun mapping(animeID: String) = withContext(Dispatchers.IO) {
+        return@withContext Constants.api
+            .mapping(animeID)
+            .execute()
+            .body()
+    }
 }
