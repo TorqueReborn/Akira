@@ -14,7 +14,7 @@ class AnilistAPI {
 
         val query = """
         {
-          "query": "query { Media(id: $anilistID, type: ANIME) { episodes title { userPreferred } description studios { nodes { name } } nextAiringEpisode { episode airingAt timeUntilAiring } relations { edges { relationType node { title { userPreferred } id type } } } } }"
+          "query": "query { Media(id: $anilistID, type: ANIME) { episodes coverImage { large } title { userPreferred } description studios { nodes { name } } nextAiringEpisode { episode airingAt timeUntilAiring } relations { edges { relationType node { title { userPreferred } id type } } } } }"
         }
     """.trimIndent()
 
@@ -27,6 +27,7 @@ class AnilistAPI {
         val rawJSON = OkHttpClient().newCall(request).execute().body?.string().toString()
 
         val media = JSONObject(rawJSON).getJSONObject("data").getJSONObject("Media")
+        val thumbnail = media.getJSONObject("coverImage").getString("large")
         val title = media.getJSONObject("title").getString("userPreferred")
         val desc = media.getString("description")
         val studio = media.getJSONObject("studios").getJSONArray("nodes").getJSONObject(0).getString("name")
@@ -65,7 +66,8 @@ class AnilistAPI {
             airingAt,
             timeUntilAiring,
             prequel,
-            sequel
+            sequel,
+            thumbnail
         )
 
     }

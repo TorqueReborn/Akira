@@ -8,6 +8,6 @@ data class AnimeDetails(
     val airingAt: String,
     val timeLeft: String,
     val prequel: String,
-    val sequel: String
-
+    val sequel: String,
+    val thumbnail: String
 )
