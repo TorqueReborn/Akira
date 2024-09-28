@@ -8,9 +8,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class AnilistAPI {
     fun details(): String {
 
-        val query = """{
-          "query": "query { Media(id: 21, type: ANIME) { title { userPreferred } nextAiringEpisode { episode airingAt timeUntilAiring } } }"
-        }""".trimIndent()
+        val query = """
+        {
+          "query": "query { Media(id: 21, type: ANIME) { title { userPreferred } description studios { nodes { name } } nextAiringEpisode { episode airingAt timeUntilAiring } relations { edges { relationType node { title { userPreferred } id type } } } } }"
+        }
+    """.trimIndent()
 
         val request = Request.Builder()
             .url("https://graphql.anilist.co")
