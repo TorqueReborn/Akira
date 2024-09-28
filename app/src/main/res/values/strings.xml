@@ -16,4 +16,7 @@
     <string name="current_anime">Current Anime</string>
     <string name="completed_anime">Completed Anime</string>
     <string name="anime">Anime</string>
+    <string name="episode_count_down">Episode Count Down</string>
+    <string name="sequel">Sequel</string>
+    <string name="prequel">Prequel</string>
 </resources>
