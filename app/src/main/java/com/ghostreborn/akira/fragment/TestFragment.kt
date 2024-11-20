@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.api.allAnime.AllAnime
+import com.ghostreborn.akira.api.allAnime.AllAnimeParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,7 +23,7 @@ class TestFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         CoroutineScope(Dispatchers.IO).launch {
-            val test = AllAnime().server("ReooPAxPMsHM4KPMY", "21", "")
+            val test = AllAnimeParser().episodes("One Piece", "21")
             withContext(Dispatchers.Main) {
                 view.findViewById<TextView>(R.id.test_text).text = test.toString()
             }

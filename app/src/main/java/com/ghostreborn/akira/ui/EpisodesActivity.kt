@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.api.allAnime.AllAnime
+import com.ghostreborn.akira.api.allAnime.AllAnimeParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class EpisodesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_episodes)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val test = AllAnime().allAnimeID("One Piece", "21")
+            val test = AllAnimeParser().allAnimeID("One Piece", "21")
             withContext(Dispatchers.Main) {
                 findViewById<TextView>(R.id.test_text).text = test.toString()
             }
