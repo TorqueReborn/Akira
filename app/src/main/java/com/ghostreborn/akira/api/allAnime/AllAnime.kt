@@ -1,5 +1,6 @@
-package com.ghostreborn.akira.api
+package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.api.AnimeAPI
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -18,8 +19,25 @@ class AllAnime: AnimeAPI() {
         return connection.inputStream.bufferedReader().use { it.readText() }
     }
 
-    override fun episode(animeID: String): ArrayList<String> {
-        val variables = "\"showId\":\"$animeID\""
+    fun allAnimeID(anime: String, anilistID: String): String {
+        val variables = "\"search\":{\"allowAdult\":false,\"allowUnknown\":false,\"query\":\"$anime\"},\"limit\":20,\"page\":1,\"translationType\":\"sub\",\"countryOrigin\":\"ALL\""
+        val queryTypes = "\$search:SearchInput,\$limit:Int,\$page:Int,\$translationType:VaildTranslationTypeEnumType,\$countryOrigin:VaildCountryOriginEnumType"
+        val query = "shows(search:\$search,limit:\$limit,page:\$page,translationType:\$translationType,countryOrigin:\$countryOrigin){edges{_id,aniListId}}"
+        val rawJSON = connectAllAnime(variables, queryTypes, query)
+        val edges = JSONObject(rawJSON).getJSONObject("data").getJSONObject("shows").getJSONArray("edges")
+        var allAnimeID = ""
+        for (i in 0 until edges.length()) {
+            if (edges.getJSONObject(i).getString("aniListId") == anilistID) {
+               allAnimeID = edges.getJSONObject(i).getString("_id")
+                break
+            }
+        }
+        return allAnimeID
+    }
+
+    override fun episode(animeName: String, animeID: String): ArrayList<String> {
+        var allAnimeID = allAnimeID(animeName, animeID)
+        val variables = "\"showId\":\"$allAnimeID\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){availableEpisodesDetail}"
         val rawJSON = connectAllAnime(variables, queryTypes, query)

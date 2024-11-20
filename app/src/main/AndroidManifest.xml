@@ -12,7 +12,7 @@
         android:theme="@style/Akira"
         tools:targetApi="31">
         <activity
-            android:name=".ui.DetailsActivity"
+            android:name=".ui.EpisodesActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

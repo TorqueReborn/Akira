@@ -11,6 +11,7 @@ import coil.load
 import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.models.kitsu.Anime
+import com.ghostreborn.akira.ui.EpisodesActivity
 
 class AnimeAdapter (private val animes: ArrayList<Anime>
 ) : RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
@@ -38,7 +39,7 @@ class AnimeAdapter (private val animes: ArrayList<Anime>
         holder.thumbnail.load(anime.thumbnail)
         holder.itemView.setOnClickListener {
             Constants.animeID = anime.id
-            holder.itemView.context.startActivity(Intent(holder.itemView.context, holder.itemView.context::class.java))
+            holder.itemView.context.startActivity(Intent(holder.itemView.context, EpisodesActivity::class.java))
         }
     }
 
