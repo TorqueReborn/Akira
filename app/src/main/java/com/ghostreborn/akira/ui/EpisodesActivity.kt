@@ -1,9 +1,13 @@
 package com.ghostreborn.akira.ui
 
 import android.os.Bundle
-import android.widget.TextView
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.Constants
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.adapter.EpisodeAdapter
 import com.ghostreborn.akira.api.allAnime.AllAnimeParser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +19,16 @@ class EpisodesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
 
+        val recycler = findViewById<RecyclerView>(R.id.episode_recycler)
         CoroutineScope(Dispatchers.IO).launch {
-            val test = AllAnimeParser().allAnimeID("One Piece", "21")
+
+            Log.e("TAG", Constants.animeID)
+            Log.e("TAG", Constants.animeName)
+
+            val episodes = AllAnimeParser().episodes(Constants.animeName, Constants.animeID)
             withContext(Dispatchers.Main) {
-                findViewById<TextView>(R.id.test_text).text = test.toString()
+                recycler.adapter = EpisodeAdapter(episodes[0])
+                recycler.layoutManager = GridLayoutManager(this@EpisodesActivity, 3)
             }
         }
 

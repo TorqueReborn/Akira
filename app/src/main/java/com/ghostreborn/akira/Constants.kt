@@ -12,6 +12,7 @@ object Constants {
     const val PREF_USER_ID = "USER_ID"
     const val PREF_USER_NAME = "USER_ID"
 
+    var animeName: String = ""
     var animeID: String = ""
 
     val api = Retrofit.Builder()

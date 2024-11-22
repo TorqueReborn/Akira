@@ -1,14 +1,16 @@
 package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.api.KitsuAPI
 import org.json.JSONObject
 
 class AllAnimeParser {
 
-    fun allAnimeID(anime: String, anilistID: String): String {
+    suspend fun allAnimeID(anime: String, kitsuID: String): String {
+        val aniListID = KitsuAPI().mapping(kitsuID)!!.data[0].attributes.externalId
         val edges = JSONObject(AllAnimeNetwork().allAnimeID(anime)).getJSONObject("data").getJSONObject("shows").getJSONArray("edges")
         var allAnimeID = ""
         for (i in 0 until edges.length()) {
-            if (edges.getJSONObject(i).getString("aniListId") == anilistID) {
+            if (edges.getJSONObject(i).getString("aniListId") == aniListID) {
                 allAnimeID = edges.getJSONObject(i).getString("_id")
                 break
             }
@@ -16,7 +18,7 @@ class AllAnimeParser {
         return allAnimeID
     }
 
-    fun episodes(anime: String, aniListID: String): ArrayList<ArrayList<String>> {
+    suspend fun episodes(anime: String, aniListID: String): ArrayList<ArrayList<String>> {
         val id = allAnimeID(anime, aniListID)
         val episodesArray = JSONObject(AllAnimeNetwork().episodes(id).toString())
             .getJSONObject("data")
