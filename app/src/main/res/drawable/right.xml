@@ -1,9 +1,0 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="@dimen/arrow_icon_size"
-    android:height="@dimen/arrow_icon_size"
-    android:viewportWidth="960"
-    android:viewportHeight="960">
-  <path
-      android:pathData="M504,480 L320,296l56,-56 240,240 -240,240 -56,-56 184,-184Z"
-      android:fillColor="@color/default_icon_color"/>
-</vector>
