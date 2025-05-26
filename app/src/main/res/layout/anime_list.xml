@@ -7,15 +7,19 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="@dimen/corner_radius"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/anime_image"
-            android:layout_width="150dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/card_width"
+            android:layout_height="@dimen/card_height"
             android:contentDescription="@string/anime_image"
             android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>

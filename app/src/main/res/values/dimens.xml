@@ -5,4 +5,6 @@
     <dimen name="default_padding">16dp</dimen>
     <dimen name="card_head">16sp</dimen>
     <dimen name="card_sub">11sp</dimen>
+    <dimen name="card_width">120dp</dimen>
+    <dimen name="card_height">160dp</dimen>
 </resources>
