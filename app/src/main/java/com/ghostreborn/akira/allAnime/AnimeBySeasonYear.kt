@@ -8,11 +8,11 @@ import java.net.URL
 
 class AnimeBySeasonYear {
 
-    fun animeBySeasonYear(season: String, year: String): Anime {
+    fun animeBySeasonYear(season: String, year: String, page: Int = 1): Anime {
 
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
-        val variables = "\"search\":{\"season\":\"$season\",\"year\":$year},\"limit\":12,\"page\":1"
+        val variables = "\"search\":{\"season\":\"$season\",\"year\":$year},\"limit\":12,\"page\":$page"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
         val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"

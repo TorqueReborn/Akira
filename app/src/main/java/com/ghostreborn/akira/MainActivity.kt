@@ -27,17 +27,16 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.test_recycler)
+        val recyclerView = findViewById<RecyclerView>(R.id.main_recycler)
         var adapter: AnimeAdapter
 
         CoroutineScope(Dispatchers.IO).launch {
             val season = Utils().calculateQuarter(0)
-            var anime = ArrayList<Anime>()
-            anime.add(AnimeBySeasonYear().animeBySeasonYear(season.first, season.second))
+            val anime = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
             count++
 
             withContext(Dispatchers.Main) {
-                adapter = AnimeAdapter(anime)
+                adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<Anime>)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
             }

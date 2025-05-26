@@ -1,6 +1,5 @@
 package com.ghostreborn.akira.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +20,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.jvm.java
 
-class AnimeAdapter(
+class SeasonalAdapter(
     private val animeItems: ArrayList<Anime>
-) : RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
+) : RecyclerView.Adapter<SeasonalAdapter.AnimeViewHolder>() {
 
     fun addItem(anime: Anime) {
         animeItems.add(anime)
@@ -38,6 +36,7 @@ class AnimeAdapter(
     ): AnimeViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.anime_item, parent, false)
+        itemView.findViewById<TextView>(R.id.anime_season).visibility = View.GONE
         return AnimeViewHolder(itemView)
     }
 
@@ -47,16 +46,16 @@ class AnimeAdapter(
     ) {
         if (position == itemCount - 1) {
             val season = Utils().calculateQuarter(MainActivity.count)
-            MainActivity.count++
             CoroutineScope(Dispatchers.IO).launch {
-                val anime = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
+                val anime = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second,
+                    SeasonalActivity.page)
+                SeasonalActivity.page++
                 withContext(Dispatchers.Main) {
                     addItem(anime)
                 }
             }
         }
         val adapter = AnimeItemAdapter(animeItems[position].animeList)
-        holder.animeSeason.text = animeItems[position].animeSeason
         holder.animeRecycler.adapter = adapter
         holder.animeRecycler.layoutManager = GridLayoutManager(
             holder.animeRecycler.context,
@@ -64,11 +63,6 @@ class AnimeAdapter(
             LinearLayoutManager.VERTICAL,
             false
         )
-        holder.animeSeason.setOnClickListener {
-            val intent = Intent(holder.animeSeason.context, SeasonalActivity::class.java)
-            intent.putExtra("animeSeason", animeItems[position].animeSeason)
-            holder.itemView.context.startActivity(intent)
-        }
     }
 
     override fun getItemCount(): Int {
@@ -76,7 +70,6 @@ class AnimeAdapter(
     }
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val animeSeason: TextView = itemView.findViewById(R.id.anime_season)
         val animeRecycler: RecyclerView = itemView.findViewById(R.id.anime_recycler)
     }
 
