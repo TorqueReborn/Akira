@@ -13,6 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,9 +29,11 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.test_recycler)
 
-
         CoroutineScope(Dispatchers.IO).launch {
-            val animes = AnimeBySeasonYear().animeBySeasonYear("Spring", "2025")
+            val month = Calendar.getInstance().get(Calendar.MONTH)
+            val year = Calendar.getInstance().get(Calendar.YEAR)
+            val season = Utils().calculateQuarter(month, year)
+            val animes = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
             withContext(Dispatchers.Main) {
                 val adapter = AnimeAdapter(listOf(animes))
                 recyclerView.adapter = adapter
