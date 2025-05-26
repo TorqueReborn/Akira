@@ -9,9 +9,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.Utils
+import com.ghostreborn.akira.allAnime.AnimeBySeasonYear
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AnimeAdapter(
     private val animeItems: ArrayList<Anime>
@@ -35,6 +42,16 @@ class AnimeAdapter(
         holder: AnimeViewHolder,
         position: Int
     ) {
+        if(position == itemCount - 1) {
+            val season = Utils().calculateQuarter(MainActivity.count)
+            MainActivity.count++
+            CoroutineScope(Dispatchers.IO).launch {
+                val anime = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
+                withContext(Dispatchers.Main) {
+                    addItem(anime)
+                }
+            }
+        }
         val adapter = AnimeItemAdapter(animeItems[position].animeList)
         holder.animeSeason.text = animeItems[position].animeSeason
         holder.animeRecycler.adapter = adapter

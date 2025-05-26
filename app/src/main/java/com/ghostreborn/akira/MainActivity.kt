@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,26 +31,20 @@ class MainActivity : AppCompatActivity() {
         var adapter: AnimeAdapter
 
         CoroutineScope(Dispatchers.IO).launch {
-            val month = Calendar.getInstance().get(Calendar.MONTH)
-            val year = Calendar.getInstance().get(Calendar.YEAR)
-            val season = Utils().calculateQuarter(month, year)
+            val season = Utils().calculateQuarter(0)
             var anime = ArrayList<Anime>()
             anime.add(AnimeBySeasonYear().animeBySeasonYear(season.first, season.second))
+            count++
 
             withContext(Dispatchers.Main) {
                 adapter = AnimeAdapter(anime)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
             }
-
-            CoroutineScope(Dispatchers.IO).launch {
-                val test = AnimeBySeasonYear().animeBySeasonYear("Winter", "2023")
-                withContext(Dispatchers.Main) {
-                    adapter.addItem(test)
-                }
-            }
-
         }
+    }
 
+    companion object {
+        var count = 0
     }
 }
