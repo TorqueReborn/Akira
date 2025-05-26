@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.allAnime.AnimeBySeasonYear
+import com.ghostreborn.akira.model.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,17 +29,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.test_recycler)
+        var adapter: AnimeAdapter
 
         CoroutineScope(Dispatchers.IO).launch {
             val month = Calendar.getInstance().get(Calendar.MONTH)
             val year = Calendar.getInstance().get(Calendar.YEAR)
             val season = Utils().calculateQuarter(month, year)
-            val animes = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
+            var anime = ArrayList<Anime>()
+            anime.add(AnimeBySeasonYear().animeBySeasonYear(season.first, season.second))
+
             withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(listOf(animes))
+                adapter = AnimeAdapter(anime)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(applicationContext)
             }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                val test = AnimeBySeasonYear().animeBySeasonYear("Winter", "2023")
+                withContext(Dispatchers.Main) {
+                    adapter.addItem(test)
+                }
+            }
+
         }
 
     }

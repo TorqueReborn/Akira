@@ -14,8 +14,14 @@ import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.R
 
 class AnimeAdapter(
-    private val animeItems: List<Anime>
+    private val animeItems: ArrayList<Anime>
 ): RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
+
+    fun addItem(anime: Anime) {
+        animeItems.add(anime)
+        notifyItemInserted(animeItems.size - 1)
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int

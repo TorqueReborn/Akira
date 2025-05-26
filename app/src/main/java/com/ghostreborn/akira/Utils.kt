@@ -9,7 +9,7 @@ class Utils {
             m = 12
             y -= 1
         }
-        var quarter = (m / 3) + 1
+        val quarter = (m / 3) + 1
         return Pair(getMonth(quarter), year.toString())
     }
 
