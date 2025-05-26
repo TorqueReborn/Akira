@@ -8,8 +8,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.model.Anime
-import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.allAnime.AnimeBySeasonYear
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,48 +27,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.test_recycler)
-        val animes = listOf(
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            ),
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            ),
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            ),
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            ),
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            ),
-            AnimeItem(
-                "1",
-                "One Piece",
-                "https://wp.youtube-anime.com/s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-YCDoj1EkAxFn.jpg?w=250"
-            )
-        )
-        val animeItems = listOf<Anime>(
-            Anime("Spring 2025", animes),
-            Anime("Spring 2025", animes),
-            Anime("Spring 2025", animes),
-            Anime("Spring 2025", animes),
-            Anime("Spring 2025", animes),
-        )
-        val adapter = AnimeAdapter(animeItems)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val animes = AnimeBySeasonYear().animeBySeasonYear("Spring", "2025")
+            withContext(Dispatchers.Main) {
+                val adapter = AnimeAdapter(listOf(animes))
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(applicationContext)
+            }
+        }
 
     }
 }
