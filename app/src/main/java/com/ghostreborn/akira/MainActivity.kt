@@ -18,5 +18,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.main_frame, TestFragment())
+            .commit()
+
     }
 }
