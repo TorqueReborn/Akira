@@ -12,9 +12,9 @@ class AnimeBySeasonYear {
 
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
-        val variables = "\"search\":{\"season\":\"$season\",\"year\":$year}"
-        val queryTypes = "\$search:SearchInput!"
-        val query = "shows(search:\$search){edges{_id,name,thumbnail}}"
+        val variables = "\"search\":{\"season\":\"$season\",\"year\":$year},\"limit\":12,\"page\":1"
+        val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
+        val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
@@ -29,8 +29,17 @@ class AnimeBySeasonYear {
         for(i in 0 until edges.length()) {
             val edge = edges.getJSONObject(i)
             val id = edge.getString("_id")
-            val name = edge.getString("name")
-            val thumbnail = edge.getString("thumbnail")
+            var name = edge.getString("englishName")
+            var thumbnail = edge.getString("thumbnail")
+
+            if (name.equals("null")) {
+                name = edge.getString("name")
+            }
+
+            if (!thumbnail.contains("https")) {
+                thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
+            }
+
             animeList.add(AnimeItem(id, name, thumbnail))
         }
 
