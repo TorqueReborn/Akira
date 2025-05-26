@@ -1,6 +1,7 @@
 package com.ghostreborn.akira
 
-data class Anime(
-    val animeSeason: String,
-    val animeImageList: List<String>
+data class Anime (
+    val id: String,
+    val name: String,
+    val thumbnail: String
 )

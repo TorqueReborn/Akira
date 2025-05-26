@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TestFragment: Fragment() {
 
@@ -21,21 +25,38 @@ class TestFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val animeImages = listOf(
-            "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg",
-            "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx179979-OiIKSkhJRmvo.jpg",
-            "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx178781-pbk5FgfiAJxS.jpg"
-        )
-        val anime = listOf<Anime>(
-            Anime("Spring 2025", animeImages),
-            Anime("Spring 2025", animeImages),
-            Anime("Spring 2025", animeImages)
-        )
-        val animeItemAdapter = AnimeItemAdapter(anime)
-        val animeRecyclerView = view.findViewById<RecyclerView>(R.id.anime_recycler_view)
-        animeRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        animeRecyclerView.adapter = animeItemAdapter
+//        CoroutineScope(Dispatchers.IO).launch {
+//            val test = AllAnimeTest().getSomething()
+//            withContext(Dispatchers.Main) {
+//                view.findViewById<TextView>(R.id.test_text).text = test
+//            }
+//        }
 
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val animeList = listOf<Anime>(
+                Anime("1", "One Piece", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg"),
+                Anime("1", "One Piece", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg"),
+                Anime("1", "One Piece", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg"),
+                Anime("1", "One Piece", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg"),
+                Anime("1", "One Piece", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx165445-qwVP0w5NIaBW.jpg"),
+            )
+            val animeItem = listOf(
+                AnimeItem("Spring 2025", animeList),
+                AnimeItem("Spring 2025", animeList),
+                AnimeItem("Spring 2025", animeList),
+                AnimeItem("Spring 2025", animeList),
+                AnimeItem("Spring 2025", animeList),
+            )
+
+            val adapter = AnimeItemAdapter(animeItem)
+
+            withContext(Dispatchers.Main) {
+                val recycler = view.findViewById<RecyclerView>(R.id.test_recycler)
+                recycler.adapter = adapter
+                recycler.layoutManager = LinearLayoutManager(context)
+            }
+        }
 
     }
 

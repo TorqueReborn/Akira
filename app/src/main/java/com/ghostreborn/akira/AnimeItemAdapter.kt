@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class AnimeItemAdapter(
-    private val anime: List<Anime>
+    private val animeItems: List<AnimeItem>
 ) : RecyclerView.Adapter<AnimeItemAdapter.AnimeItemViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,8 +24,8 @@ class AnimeItemAdapter(
         holder: AnimeItemViewHolder,
         position: Int
     ) {
-        val adapter = AnimeListAdapter(anime[position].animeImageList)
-        holder.animeSeason.text = anime[position].animeSeason
+        val adapter = AnimeListAdapter(animeItems[position].animeList)
+        holder.animeSeason.text = animeItems[position].animeSeason
         holder.animeRecycler.adapter = adapter
         holder.animeRecycler.layoutManager = GridLayoutManager(
             holder.animeRecycler.context,
@@ -36,7 +36,7 @@ class AnimeItemAdapter(
     }
 
     override fun getItemCount(): Int {
-        return anime.size
+        return animeItems.size
     }
 
     class AnimeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

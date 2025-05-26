@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 
 class AnimeListAdapter(
-    private val animeImageList: List<String>
+    private val animeList: List<Anime>
 ) : RecyclerView.Adapter<AnimeListAdapter.AnimeViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,12 +23,12 @@ class AnimeListAdapter(
         holder: AnimeViewHolder,
         position: Int
     ) {
-        val animeImage = animeImageList[position]
-        holder.animeImage.load(animeImage)
+        val anime = animeList[position]
+        holder.animeImage.load(anime.thumbnail)
     }
 
     override fun getItemCount(): Int {
-        return animeImageList.size
+        return animeList.size
     }
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
