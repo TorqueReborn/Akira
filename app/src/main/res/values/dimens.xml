@@ -7,4 +7,7 @@
     <dimen name="card_sub">11sp</dimen>
     <dimen name="card_width">120dp</dimen>
     <dimen name="card_height">160dp</dimen>
+    <dimen name="text_heading">20sp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="small_margin">8dp</dimen>
 </resources>
