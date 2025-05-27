@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.MainActivity
-import com.ghostreborn.akira.model.Anime
-import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.ui.SeasonalActivity
 import com.ghostreborn.akira.Utils
 import com.ghostreborn.akira.allAnime.AnimeSeason
+import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.ui.DetailsActivity
+import com.ghostreborn.akira.ui.SeasonalActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.jvm.java
 
 class AnimeAdapter(
     private val animeItems: ArrayList<Anime>
@@ -98,6 +98,13 @@ class AnimeAdapter(
         ) {
             val animeItem = animeList[position]
             holder.animeImage.load(animeItem.thumbnail)
+            holder.animeImage.setOnClickListener {
+                holder.itemView.context.startActivity(
+                    Intent(holder.animeImage.context, DetailsActivity::class.java).apply {
+                        putExtra("animeID", animeItem.id)
+                    }
+                )
+            }
         }
 
         override fun getItemCount(): Int {

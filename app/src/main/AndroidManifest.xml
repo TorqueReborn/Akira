@@ -9,8 +9,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Akira"
+        android:theme="@style/Base.Theme.Akira"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.EpisodesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.DetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.SeasonalActivity"
             android:exported="false" />
