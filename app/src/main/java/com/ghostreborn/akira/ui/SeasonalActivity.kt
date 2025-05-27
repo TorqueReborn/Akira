@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.SeasonalAdapter
-import com.ghostreborn.akira.allAnime.AnimeBySeasonYear
+import com.ghostreborn.akira.allAnime.AnimeSeason
 import com.ghostreborn.akira.model.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ class SeasonalActivity : AppCompatActivity() {
             val season = intent.getStringExtra("animeSeason")!!.split(" ")
             findViewById<TextView>(R.id.seasonal_text).text = intent.getStringExtra("animeSeason")
             CoroutineScope(Dispatchers.IO).launch {
-                val anime = AnimeBySeasonYear().animeBySeasonYear(season[0], season[1], page)
+                val anime = AnimeSeason().animeBySeasonYear(season[0], season[1], page)
                 withContext(Dispatchers.Main) {
                     val adapter = SeasonalAdapter(mutableListOf(anime) as ArrayList<Anime>)
                     seasonalRecycler.adapter = adapter

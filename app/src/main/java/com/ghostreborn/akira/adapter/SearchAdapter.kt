@@ -9,21 +9,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.ui.SeasonalActivity
-import com.ghostreborn.akira.Utils
-import com.ghostreborn.akira.allAnime.AnimeSeason
+import com.ghostreborn.akira.allAnime.AnimeSearch
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SeasonalAdapter(
+class SearchAdapter(
+    private val query: String,
     private val animeItems: ArrayList<Anime>
-) : RecyclerView.Adapter<SeasonalAdapter.AnimeViewHolder>() {
+) : RecyclerView.Adapter<SearchAdapter.AnimeViewHolder>() {
 
     fun addItem(anime: Anime) {
         animeItems.add(anime)
@@ -45,11 +43,8 @@ class SeasonalAdapter(
         position: Int
     ) {
         if (position == itemCount - 1) {
-            val season = Utils().calculateQuarter(MainActivity.count)
             CoroutineScope(Dispatchers.IO).launch {
-                val anime = AnimeSeason().animeBySeasonYear(season.first, season.second,
-                    SeasonalActivity.page)
-                SeasonalActivity.page++
+                val anime = AnimeSearch().animeSearch(query)
                 withContext(Dispatchers.Main) {
                     addItem(anime)
                 }

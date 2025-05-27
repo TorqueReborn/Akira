@@ -2,7 +2,6 @@ package com.ghostreborn.akira.model
 
 data class AnimeItem(
     val id: String,
-    val name: String,
     val thumbnail: String
 )
 

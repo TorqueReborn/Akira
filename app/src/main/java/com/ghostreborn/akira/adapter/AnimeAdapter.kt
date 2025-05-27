@@ -16,7 +16,7 @@ import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.ui.SeasonalActivity
 import com.ghostreborn.akira.Utils
-import com.ghostreborn.akira.allAnime.AnimeBySeasonYear
+import com.ghostreborn.akira.allAnime.AnimeSeason
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +49,7 @@ class AnimeAdapter(
             val season = Utils().calculateQuarter(MainActivity.count)
             MainActivity.count++
             CoroutineScope(Dispatchers.IO).launch {
-                val anime = AnimeBySeasonYear().animeBySeasonYear(season.first, season.second)
+                val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
                 withContext(Dispatchers.Main) {
                     addItem(anime)
                 }

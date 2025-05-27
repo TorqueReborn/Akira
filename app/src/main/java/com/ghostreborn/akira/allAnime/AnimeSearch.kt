@@ -1,18 +1,18 @@
 package com.ghostreborn.akira.allAnime
 
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AnimeBySeasonYear {
+class AnimeSearch {
 
-    fun animeBySeasonYear(season: String, year: String, page: Int = 1): Anime {
-
+    fun animeSearch(query: String): Anime {
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
-        val variables = "\"search\":{\"season\":\"$season\",\"year\":$year},\"limit\":12,\"page\":$page"
+        val variables = "\"search\":{\"query\":\"$query\"},\"limit\":12,\"page\":${MainActivity.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
         val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
@@ -31,20 +31,16 @@ class AnimeBySeasonYear {
             val id = edge.getString("_id")
             var name = edge.getString("englishName")
             var thumbnail = edge.getString("thumbnail")
-
             if (name.equals("null")) {
                 name = edge.getString("name")
             }
-
             if (!thumbnail.contains("https")) {
                 thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
             }
-
-            animeList.add(AnimeItem(id, name, thumbnail))
+            animeList.add(AnimeItem(id, thumbnail))
         }
-
-        return Anime("$season $year", animeList)
-
+        MainActivity.page++
+        return Anime("", animeList)
     }
 
 }
