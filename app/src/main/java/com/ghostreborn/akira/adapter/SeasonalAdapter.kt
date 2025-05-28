@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.Utils
 import com.ghostreborn.akira.allAnime.AnimeSeason
+import com.ghostreborn.akira.fragment.SeasonalFragment
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.ui.DetailsActivity
@@ -47,7 +47,7 @@ class SeasonalAdapter(
         position: Int
     ) {
         if (position == itemCount - 1) {
-            val season = Utils().calculateQuarter(MainActivity.count)
+            val season = Utils().calculateQuarter(SeasonalFragment.count)
             CoroutineScope(Dispatchers.IO).launch {
                 val anime = AnimeSeason().animeBySeasonYear(season.first, season.second,
                     SeasonalActivity.page)

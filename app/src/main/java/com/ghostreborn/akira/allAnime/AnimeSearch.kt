@@ -1,6 +1,6 @@
 package com.ghostreborn.akira.allAnime
 
-import com.ghostreborn.akira.MainActivity
+import com.ghostreborn.akira.fragment.SeasonalFragment
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import org.json.JSONObject
@@ -12,7 +12,7 @@ class AnimeSearch {
     fun animeSearch(query: String): Anime {
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
-        val variables = "\"search\":{\"query\":\"$query\"},\"limit\":12,\"page\":${MainActivity.page}"
+        val variables = "\"search\":{\"query\":\"$query\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
         val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
@@ -39,7 +39,7 @@ class AnimeSearch {
             }
             animeList.add(AnimeItem(id, thumbnail))
         }
-        MainActivity.page++
+        SeasonalFragment.page++
         return Anime("", animeList)
     }
 
