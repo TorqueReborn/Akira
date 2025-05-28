@@ -47,4 +47,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity)
+
+    implementation(libs.androidx.media3.exoplayer.v131)
+    implementation(libs.androidx.media3.ui.v131)
 }

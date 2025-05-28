@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.EpisodeAdapter
+import com.ghostreborn.akira.allAnime.AnimeServers
 import com.ghostreborn.akira.allAnime.FullDetails
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,6 +81,15 @@ class DetailsActivity : AppCompatActivity() {
                             startActivity(Intent(this@DetailsActivity, EpisodesActivity::class.java).apply {
                                 putStringArrayListExtra("animeEpisodes", animeDetail.animeEpisodes)
                             })
+                        }
+
+                        watchButton.setOnClickListener {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val servers = AnimeServers().servers(id.toString(), animeDetail.animeEpisodes[0])
+                                withContext(Dispatchers.Main) {
+                                    ServerFragment(servers).show(supportFragmentManager, "server")
+                                }
+                            }
                         }
 
                         animeName.text = animeDetail.animeName
