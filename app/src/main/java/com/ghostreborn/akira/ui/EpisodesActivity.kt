@@ -31,7 +31,10 @@ class EpisodesActivity : AppCompatActivity() {
             for(i in episodes!!.size - 1 downTo 0) {
                 reversedEpisodes.add(episodes[i])
             }
-            episodesRecycler.adapter = EpisodeAdapter(reversedEpisodes)
+            episodesRecycler.adapter = EpisodeAdapter(
+                reversedEpisodes,
+                "ReooPAxPMsHM4KPMY"
+            )
         }
     }
 }
