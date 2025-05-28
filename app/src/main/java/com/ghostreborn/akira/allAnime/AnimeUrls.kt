@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.allAnime
 
 import com.ghostreborn.akira.model.SourceName
+import okio.IOException
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -11,7 +12,13 @@ class AnimeUrls {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")
-        val rawJSON = connection.inputStream.bufferedReader().readText()
+        var rawJSON: String
+        try{
+            rawJSON = connection.inputStream.bufferedReader().readText()
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return ArrayList()
+        }
 
         val urls: ArrayList<SourceName> = ArrayList()
         val links = JSONObject(rawJSON)
