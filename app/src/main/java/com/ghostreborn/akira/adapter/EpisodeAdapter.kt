@@ -4,12 +4,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
+import com.ghostreborn.akira.allAnime.AnimeServers
+import com.ghostreborn.akira.ui.ServerFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EpisodeAdapter(
     val episodes: List<String>,
-    val id: String
+    val id: String,
+    val support: FragmentManager
 ): RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -23,6 +31,14 @@ class EpisodeAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.episodeNumber.text = episodes[position]
+        holder.itemView.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                val servers = AnimeServers().servers(id, episodes[position])
+                withContext(Dispatchers.Main) {
+                    ServerFragment(servers).show(support, "server")
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {

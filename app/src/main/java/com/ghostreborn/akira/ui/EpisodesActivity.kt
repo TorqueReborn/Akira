@@ -33,7 +33,8 @@ class EpisodesActivity : AppCompatActivity() {
             }
             episodesRecycler.adapter = EpisodeAdapter(
                 reversedEpisodes,
-                "ReooPAxPMsHM4KPMY"
+                "ReooPAxPMsHM4KPMY",
+                supportFragmentManager
             )
         }
     }

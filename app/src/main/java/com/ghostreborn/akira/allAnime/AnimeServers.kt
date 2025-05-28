@@ -5,9 +5,9 @@ import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
-class AnimeStream {
+class AnimeServers {
 
-    fun connectAllAnime(id: String, episode: String): ArrayList<SourceName> {
+    fun servers(id: String, episode: String): ArrayList<SourceName> {
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
         val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
         val query =  "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){sourceUrls}"
@@ -24,7 +24,7 @@ class AnimeStream {
             .getJSONArray("sourceUrls")
         for (i in 0 until edges.length()) {
             val edge = edges.getJSONObject(i)
-            sources.add(SourceName(edge.getString("sourceUrl"), edge.getString("sourceName")))
+            sources.add(SourceName(edge.getString("sourceName"), edge.getString("sourceUrl")))
         }
         return sources
     }
