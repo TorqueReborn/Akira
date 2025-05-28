@@ -4,21 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.FragmentManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allAnime.AnimeUrls
 import com.ghostreborn.akira.model.SourceName
-import com.ghostreborn.akira.ui.LinkFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class ServerAdapter(
+class LinkAdapter(
     private val server: ArrayList<SourceName>,
-    val support: FragmentManager
-) : RecyclerView.Adapter<ServerAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<LinkAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val serverName: TextView =
@@ -31,15 +24,9 @@ class ServerAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentServer = server[position]
-        holder.serverName.text = currentServer.name
+        holder.serverName.text = server[position].name
         holder.itemView.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val servers = AnimeUrls().urls(currentServer.url)
-                withContext(Dispatchers.Main) {
-                    LinkFragment(servers).show(support, "link")
-                }
-            }
+            Toast.makeText(holder.itemView.context, server[position].url, Toast.LENGTH_SHORT).show()
         }
     }
 

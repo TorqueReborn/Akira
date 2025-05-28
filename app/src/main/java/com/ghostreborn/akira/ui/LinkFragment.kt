@@ -8,10 +8,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.adapter.ServerAdapter
+import com.ghostreborn.akira.adapter.LinkAdapter
 import com.ghostreborn.akira.model.SourceName
 
-class ServerFragment(
+class LinkFragment(
     val servers: ArrayList<SourceName>
 ): DialogFragment() {
 
@@ -27,7 +27,7 @@ class ServerFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val recycler = view.findViewById<RecyclerView>(R.id.server_recycler)
-        recycler.adapter = ServerAdapter(servers, requireActivity().supportFragmentManager)
+        recycler.adapter = LinkAdapter(servers)
         recycler.layoutManager = LinearLayoutManager(context)
 
     }

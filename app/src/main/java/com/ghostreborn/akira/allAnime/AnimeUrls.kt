@@ -1,0 +1,26 @@
+package com.ghostreborn.akira.allAnime
+
+import com.ghostreborn.akira.model.SourceName
+import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
+
+class AnimeUrls {
+
+    fun urls(url: String): ArrayList<SourceName> {
+        val connection = URL(url).openConnection() as HttpURLConnection
+        connection.requestMethod = "GET"
+        connection.setRequestProperty("Referer", "https://allmanga.to")
+        val rawJSON = connection.inputStream.bufferedReader().readText()
+
+        val urls: ArrayList<SourceName> = ArrayList()
+        val links = JSONObject(rawJSON)
+            .getJSONArray("links")
+        for (i in 0 until links.length()) {
+            val link = links.getJSONObject(i)
+            urls.add(SourceName(link.getString("resolutionStr"), link.getString("link")))
+        }
+        return urls
+    }
+
+}

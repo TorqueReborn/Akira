@@ -25,4 +25,14 @@ class Utils {
         }
     }
 
+    fun decrypt(decrypt: String): String {
+        val decryptedString = StringBuilder()
+        var i = 2
+        while (i < decrypt.length) {
+            decryptedString.append((decrypt.substring(i, i + 2).toInt(16) xor 56).toChar())
+            i += 2
+        }
+        return decryptedString.toString()
+    }
+
 }

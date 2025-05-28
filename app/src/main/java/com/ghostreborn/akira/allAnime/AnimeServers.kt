@@ -1,5 +1,7 @@
 package com.ghostreborn.akira.allAnime
 
+import android.util.Log
+import com.ghostreborn.akira.Utils
 import com.ghostreborn.akira.model.SourceName
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -24,8 +26,18 @@ class AnimeServers {
             .getJSONArray("sourceUrls")
         for (i in 0 until edges.length()) {
             val edge = edges.getJSONObject(i)
-            sources.add(SourceName(edge.getString("sourceName"), edge.getString("sourceUrl")))
+            if(!edge.getString("sourceUrl").contains("--")) {
+                continue
+            }
+            val decrypted = Utils().decrypt(edge.getString("sourceUrl"))
+            if(decrypted.contains("fast4speed")) {
+                continue
+            }
+            val url = "https://allanime.day" + decrypted.replace("clock", "clock.json")
+            Log.e("URL", url)
+            sources.add(SourceName(edge.getString("sourceName"), url))
         }
+
         return sources
     }
 
