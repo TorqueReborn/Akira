@@ -74,7 +74,7 @@ class DetailsActivity : AppCompatActivity() {
                             }
                         }
 
-                        recycler.adapter = EpisodeAdapter(animeDetail.animeEpisodes)
+                        recycler.adapter = EpisodeAdapter(animeDetail.animeEpisodes.take(5))
 
                         moreButton.setOnClickListener {
                             startActivity(Intent(this@DetailsActivity, EpisodesActivity::class.java).apply {
