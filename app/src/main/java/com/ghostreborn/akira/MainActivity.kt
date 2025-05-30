@@ -21,10 +21,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        val pref = getSharedPreferences("AKIRA", MODE_PRIVATE)
+        val loggedIn = getSharedPreferences("AKIRA", MODE_PRIVATE)
             .getBoolean("LOGIN", false)
 
-        val fragment: Fragment = if(pref) {
+        val fragment: Fragment = if(loggedIn) {
             SeasonalFragment()
         } else {
             LoginFragment()
