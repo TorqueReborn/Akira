@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.application)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -41,9 +42,16 @@ dependencies {
 
     // Extra dependencies
     implementation(libs.coil)
+
+    // Exoplayer
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui.compose)
     implementation(libs.androidx.media3.exoplayer.dash)
+
+    // Room Database
+    ksp(libs.room.compiler)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
 
 }

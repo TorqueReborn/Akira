@@ -1,7 +1,6 @@
 package com.ghostreborn.akira
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -30,8 +29,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             LoginFragment()
         }
-
-        Log.e("TAG", getSharedPreferences("AKIRA", MODE_PRIVATE).getString("USER", "NULL").toString())
 
         supportFragmentManager
             .beginTransaction()
