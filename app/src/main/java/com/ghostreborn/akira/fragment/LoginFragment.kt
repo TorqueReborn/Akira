@@ -63,10 +63,7 @@ class LoginFragment: Fragment() {
                                 putString("TOKEN", token)
                                 putString("USER", userID)
                             }
-                            activity.supportFragmentManager
-                                .beginTransaction()
-                                .replace(R.id.main_frame, SeasonalFragment())
-                                .commit()
+                            activity.finish()
                         }
                     }
                 }

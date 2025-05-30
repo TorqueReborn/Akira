@@ -20,6 +20,10 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         val loggedIn = getSharedPreferences("AKIRA", MODE_PRIVATE)
             .getBoolean("LOGIN", false)
@@ -34,6 +38,6 @@ class MainActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.main_frame, fragment)
             .commit()
-
     }
+
 }
