@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EpisodeAdapter(
-    val episodes: List<String>,
-    val id: String,
-    val support: FragmentManager
+    private val id: String,
+    private val episodes: List<String>,
+    private val support: FragmentManager
 ): RecyclerView.Adapter<EpisodeAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -48,6 +48,4 @@ class EpisodeAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val episodeNumber: TextView = itemView.findViewById(R.id.episodeNumber)
     }
-
-
 }

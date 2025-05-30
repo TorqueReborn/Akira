@@ -11,7 +11,7 @@ import java.net.URL
 
 class FullDetails {
 
-    fun fullDetail(id: String): AnimeDetails? {
+    fun fullDetail(id: String): AnimeDetails {
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){aniListId,name,englishName,description,thumbnail,banner,availableEpisodesDetail,relatedShows}"
@@ -66,7 +66,6 @@ class FullDetails {
                 }
             }
 
-            // thumbnail fix
             if (!thumbnail.contains("https")) {
                 thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
             }

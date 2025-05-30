@@ -17,7 +17,7 @@ import kotlinx.coroutines.withContext
 
 class ServerAdapter(
     private val server: ArrayList<SourceName>,
-    val support: FragmentManager
+    private val support: FragmentManager
 ) : RecyclerView.Adapter<ServerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

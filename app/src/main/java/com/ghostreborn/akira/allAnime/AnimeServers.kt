@@ -1,6 +1,5 @@
 package com.ghostreborn.akira.allAnime
 
-import android.util.Log
 import com.ghostreborn.akira.Utils
 import com.ghostreborn.akira.model.SourceName
 import org.json.JSONObject
@@ -13,7 +12,7 @@ class AnimeServers {
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
         val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
         val query =  "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){sourceUrls}"
-        val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
+        var url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")
@@ -33,8 +32,7 @@ class AnimeServers {
             if(decrypted.contains("fast4speed")) {
                 continue
             }
-            val url = "https://allanime.day" + decrypted.replace("clock", "clock.json")
-            Log.e("URL", url)
+            url = "https://allanime.day" + decrypted.replace("clock", "clock.json")
             sources.add(SourceName(edge.getString("sourceName"), url))
         }
 

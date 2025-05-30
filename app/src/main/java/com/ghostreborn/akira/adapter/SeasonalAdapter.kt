@@ -27,7 +27,7 @@ class SeasonalAdapter(
     private val animeItems: ArrayList<Anime>
 ) : RecyclerView.Adapter<SeasonalAdapter.AnimeViewHolder>() {
 
-    fun addItem(anime: Anime) {
+    private fun addItem(anime: Anime) {
         animeItems.add(anime)
         notifyItemInserted(animeItems.size - 1)
     }

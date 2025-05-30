@@ -26,14 +26,15 @@ class EpisodesActivity : AppCompatActivity() {
         episodesRecycler.layoutManager = GridLayoutManager(this, 5, LinearLayoutManager.VERTICAL, false)
 
         if(intent != null) {
+            val id = intent.getStringExtra("animeID")
             val episodes = intent.getStringArrayListExtra("animeEpisodes")
             val reversedEpisodes: ArrayList<String> = ArrayList()
             for(i in episodes!!.size - 1 downTo 0) {
                 reversedEpisodes.add(episodes[i])
             }
             episodesRecycler.adapter = EpisodeAdapter(
+                id.toString(),
                 reversedEpisodes,
-                "ReooPAxPMsHM4KPMY",
                 supportFragmentManager
             )
         }

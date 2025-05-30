@@ -12,7 +12,7 @@ class AnimeUrls {
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")
-        var rawJSON: String
+        val rawJSON: String
         try{
             rawJSON = connection.inputStream.bufferedReader().readText()
         } catch (e: IOException) {

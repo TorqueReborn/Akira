@@ -27,7 +27,7 @@ class AnimeAdapter(
     private val animeItems: ArrayList<Anime>
 ) : RecyclerView.Adapter<AnimeAdapter.AnimeViewHolder>() {
 
-    fun addItem(anime: Anime) {
+    private fun addItem(anime: Anime) {
         animeItems.add(anime)
         notifyItemInserted(animeItems.size - 1)
     }

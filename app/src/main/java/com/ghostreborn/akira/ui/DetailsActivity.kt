@@ -48,57 +48,75 @@ class DetailsActivity : AppCompatActivity() {
         val loadingProgress = findViewById<ProgressBar>(R.id.loading_progress)
 
         val intent = intent
-        if(intent != null) {
+        if (intent != null) {
             val id = intent.getStringExtra("animeID")
             CoroutineScope(Dispatchers.IO).launch {
                 val animeDetail = FullDetails().fullDetail(id.toString())
                 withContext(Dispatchers.Main) {
-                    if(animeDetail == null) {
-                        finish()
-                    }
 
-                    if(animeDetail != null) {
-                        if(animeDetail.animePrequel.isNotEmpty()) {
-                            animePrequel.visibility = View.VISIBLE
-                            animePrequel.setOnClickListener {
-                                startActivity(Intent(this@DetailsActivity, DetailsActivity::class.java).apply {
+                    if (animeDetail.animePrequel.isNotEmpty()) {
+                        animePrequel.visibility = View.VISIBLE
+                        animePrequel.setOnClickListener {
+                            startActivity(
+                                Intent(
+                                    this@DetailsActivity,
+                                    DetailsActivity::class.java
+                                ).apply {
                                     putExtra("animeID", animeDetail.animePrequel)
                                 })
-                            }
                         }
+                    }
 
-                        if(animeDetail.animeSequel.isNotEmpty()) {
-                            animeSequel.visibility = View.VISIBLE
-                            animeSequel.setOnClickListener {
-                                startActivity(Intent(this@DetailsActivity, DetailsActivity::class.java).apply {
+                    if (animeDetail.animeSequel.isNotEmpty()) {
+                        animeSequel.visibility = View.VISIBLE
+                        animeSequel.setOnClickListener {
+                            startActivity(
+                                Intent(
+                                    this@DetailsActivity,
+                                    DetailsActivity::class.java
+                                ).apply {
                                     putExtra("animeID", animeDetail.animeSequel)
                                 })
-                            }
                         }
-
-                        recycler.adapter = EpisodeAdapter(animeDetail.animeEpisodes.take(5), id.toString(), supportFragmentManager)
-
-                        moreButton.setOnClickListener {
-                            startActivity(Intent(this@DetailsActivity, EpisodesActivity::class.java).apply {
-                                putStringArrayListExtra("animeEpisodes", animeDetail.animeEpisodes)
-                            })
-                        }
-
-                        watchButton.setOnClickListener {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                val servers = AnimeServers().servers(id.toString(), animeDetail.animeEpisodes[0])
-                                withContext(Dispatchers.Main) {
-                                    ServerFragment(servers).show(supportFragmentManager, "server")
-                                }
-                            }
-                        }
-
-                        animeName.text = animeDetail.animeName
-                        animeDescription.text = animeDetail.animeDescription
-                        animeImage.load(animeDetail.animeThumbnail)
-                        animeBanner.load(animeDetail.animeBanner)
-                        loadingProgress.visibility = View.GONE
                     }
+
+                    recycler.adapter = EpisodeAdapter(
+                        id.toString(),
+                        animeDetail.animeEpisodes.take(5),
+                        supportFragmentManager
+                    )
+
+                    moreButton.setOnClickListener {
+                        startActivity(
+                            Intent(
+                                this@DetailsActivity,
+                                EpisodesActivity::class.java
+                            ).apply {
+                                putStringArrayListExtra(
+                                    "animeEpisodes",
+                                    animeDetail.animeEpisodes
+                                )
+                                putExtra("animeID", id.toString())
+                            })
+                    }
+
+                    watchButton.setOnClickListener {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val servers = AnimeServers().servers(
+                                id.toString(),
+                                animeDetail.animeEpisodes[0]
+                            )
+                            withContext(Dispatchers.Main) {
+                                ServerFragment(servers).show(supportFragmentManager, "server")
+                            }
+                        }
+                    }
+
+                    animeName.text = animeDetail.animeName
+                    animeDescription.text = animeDetail.animeDescription
+                    animeImage.load(animeDetail.animeThumbnail)
+                    animeBanner.load(animeDetail.animeBanner)
+                    loadingProgress.visibility = View.GONE
                 }
             }
         }
