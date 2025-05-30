@@ -7,4 +7,6 @@
     <color name="black">#000</color>
 
     <color name="card_background">#1A1A1A</color>
+    <color name="background_color_dark">#1B1B1B</color>
+    <color name="background_color_darker">#131313</color>
 </resources>
