@@ -14,7 +14,7 @@ class AnimeSearch {
 
         val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
-        val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
+        val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
