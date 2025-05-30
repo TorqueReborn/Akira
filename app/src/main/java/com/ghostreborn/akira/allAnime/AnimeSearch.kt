@@ -9,10 +9,10 @@ import java.net.URL
 
 class AnimeSearch {
 
-    fun animeSearch(query: String): Anime {
+    fun animeSearch(search: String): Anime {
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
-        val variables = "\"search\":{\"query\":\"$query\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
+        val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
         val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,name,englishName,thumbnail}}"
         val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
@@ -29,11 +29,7 @@ class AnimeSearch {
         for(i in 0 until edges.length()) {
             val edge = edges.getJSONObject(i)
             val id = edge.getString("_id")
-            var name = edge.getString("englishName")
             var thumbnail = edge.getString("thumbnail")
-            if (name.equals("null")) {
-                name = edge.getString("name")
-            }
             if (!thumbnail.contains("https")) {
                 thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
             }
