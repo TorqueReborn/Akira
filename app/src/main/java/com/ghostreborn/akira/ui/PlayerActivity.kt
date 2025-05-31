@@ -63,7 +63,7 @@ class PlayerActivity : AppCompatActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
     }
 
-    fun initializePlayer(url: String) {
+    private fun initializePlayer(url: String) {
         player = ExoPlayer.Builder(this).build()
         playerView.player = player
 
