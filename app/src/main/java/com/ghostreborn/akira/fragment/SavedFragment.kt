@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.AnimeAdapter
-import com.ghostreborn.akira.allAnime.AnimeById
+import com.ghostreborn.akira.api.allAnime.AnimeById
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

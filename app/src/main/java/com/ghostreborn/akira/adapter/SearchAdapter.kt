@@ -8,7 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allAnime.AnimeSearch
+import com.ghostreborn.akira.api.allAnime.AnimeSearch
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.ui.DetailsActivity
 import kotlinx.coroutines.CoroutineScope

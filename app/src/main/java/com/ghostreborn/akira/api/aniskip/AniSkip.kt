@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.aniskip
+package com.ghostreborn.akira.api.aniskip
 
 import android.util.Log
 import org.json.JSONException

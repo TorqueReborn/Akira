@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.Utils
-import com.ghostreborn.akira.allAnime.AnimeSeason
+import com.ghostreborn.akira.api.allAnime.AnimeSeason
 import com.ghostreborn.akira.fragment.SeasonalFragment
 import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.model.Anime

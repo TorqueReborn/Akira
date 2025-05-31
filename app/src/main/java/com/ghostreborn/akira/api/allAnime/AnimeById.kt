@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.allAnime
+package com.ghostreborn.akira.api.allAnime
 
 import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject

@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.anilList
+package com.ghostreborn.akira.api.anilList
 
 import android.util.Log
 import org.json.JSONObject

@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.EpisodeAdapter
-import com.ghostreborn.akira.allAnime.AnimeServers
-import com.ghostreborn.akira.allAnime.FullDetails
+import com.ghostreborn.akira.api.allAnime.AnimeServers
+import com.ghostreborn.akira.api.allAnime.FullDetails
 import com.ghostreborn.akira.fragment.ServerFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

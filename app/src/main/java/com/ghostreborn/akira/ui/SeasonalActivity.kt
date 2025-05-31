@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.SeasonalAdapter
-import com.ghostreborn.akira.allAnime.AnimeSeason
+import com.ghostreborn.akira.api.allAnime.AnimeSeason
 import com.ghostreborn.akira.model.AnimeItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

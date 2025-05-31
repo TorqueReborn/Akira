@@ -11,7 +11,7 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.anilList.AniListAuthorize
+import com.ghostreborn.akira.api.anilList.AniListAuthorize
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.allAnime.AnimeUrls
+import com.ghostreborn.akira.api.allAnime.AnimeUrls
 import com.ghostreborn.akira.model.Server
 import com.ghostreborn.akira.ui.LinkFragment
 import kotlinx.coroutines.CoroutineScope

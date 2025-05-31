@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.allAnime
+package com.ghostreborn.akira.api.allAnime
 
 import android.text.Html
 import android.util.Log
