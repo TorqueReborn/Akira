@@ -46,8 +46,8 @@ class AnimeAdapter(
         position: Int
     ) {
         if (position == itemCount - 1) {
-            val season = Utils().calculateQuarter(SeasonalFragment.count)
             SeasonalFragment.count++
+            val season = Utils().calculateQuarter(SeasonalFragment.count)
             CoroutineScope(Dispatchers.IO).launch {
                 val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
                 withContext(Dispatchers.Main) {

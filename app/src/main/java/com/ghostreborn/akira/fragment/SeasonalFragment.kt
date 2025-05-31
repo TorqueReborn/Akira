@@ -22,6 +22,9 @@ import kotlinx.coroutines.withContext
 
 class SeasonalFragment: Fragment() {
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var searchView: SearchView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,9 +36,9 @@ class SeasonalFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.seasonal_recycler)
-        var adapter: AnimeAdapter
-        val searchView = view.findViewById<SearchView>(R.id.seasonal_search)
+        recyclerView = view.findViewById(R.id.seasonal_recycler)
+        searchView = view.findViewById(R.id.seasonal_search)
+
         searchView.setIconifiedByDefault(false)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -58,17 +61,23 @@ class SeasonalFragment: Fragment() {
             }
         })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         CoroutineScope(Dispatchers.IO).launch {
             val season = Utils().calculateQuarter(0)
             val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
-            count++
+            count = 0
 
             withContext(Dispatchers.Main) {
-                adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<Anime>)
+                val adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<Anime>)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
             }
         }
+
     }
 
     companion object {
