@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.api.allAnime.AnimeSearch
 import com.ghostreborn.akira.model.Anime
@@ -39,7 +40,7 @@ class SearchAdapter(
         holder: AnimeViewHolder,
         position: Int
     ) {
-        if (position == itemCount - 1) {
+        if (position == itemCount - 1 && MainActivity.internetAvailable) {
             CoroutineScope(Dispatchers.IO).launch {
                 val anime = AnimeSearch().animeSearch(query)
                 withContext(Dispatchers.Main) {

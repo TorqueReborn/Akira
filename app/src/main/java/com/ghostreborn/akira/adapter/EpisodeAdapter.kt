@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.api.allAnime.AnimeServers
 import com.ghostreborn.akira.fragment.ServerFragment
@@ -32,10 +33,12 @@ class EpisodeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.episodeNumber.text = episodes[position]
         holder.itemView.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val servers = AnimeServers().servers(id, episodes[position])
-                withContext(Dispatchers.Main) {
-                    ServerFragment(servers).show(support, "server")
+            if(MainActivity.internetAvailable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val servers = AnimeServers().servers(id, episodes[position])
+                    withContext(Dispatchers.Main) {
+                        ServerFragment(servers).show(support, "server")
+                    }
                 }
             }
         }

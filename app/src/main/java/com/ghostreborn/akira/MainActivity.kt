@@ -36,27 +36,42 @@ class MainActivity : AppCompatActivity() {
         val loggedIn = getSharedPreferences("AKIRA", MODE_PRIVATE)
             .getBoolean("LOGIN", false)
 
+        if(internetAvailable) {
+            val fragment: Fragment = if(loggedIn) {
+                SeasonalFragment()
+            } else {
+                LoginFragment()
+            }
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.main_frame, fragment)
+                .commit()
+        } else {
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.main_frame, NoInternetFragment())
+                .commit()
+        }
+
         noInternetMonitor = NoInternetMonitor(
             noInternet = {
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.main_frame, NoInternetFragment())
-                    .commit()
+                internetAvailable = false
             },
             internetAvailable = {
-                val fragment: Fragment = if(loggedIn) {
-                    SeasonalFragment()
-                } else {
-                    LoginFragment()
-                }
-                supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.main_frame, fragment)
-                    .commit()
+                internetAvailable = true
             }
         )
         connectivityManager.registerDefaultNetworkCallback(noInternetMonitor)
 
+    }
+
+//    override fun onPause() {
+//        super.onPause()
+//        connectivityManager.unregisterNetworkCallback(noInternetMonitor)
+//    }
+
+    companion object {
+        var internetAvailable = false
     }
 
 }

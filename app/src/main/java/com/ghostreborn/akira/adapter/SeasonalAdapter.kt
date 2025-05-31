@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.api.allAnime.AnimeSeason
@@ -48,13 +49,15 @@ class SeasonalAdapter(
     ) {
         if (position == itemCount - 1) {
             val season = Utils().calculateQuarter(SeasonalFragment.count)
-            CoroutineScope(Dispatchers.IO).launch {
-                val anime = AnimeSeason().animeBySeasonYear(season.first, season.second,
-                    SeasonalActivity.page)
-                SeasonalActivity.page++
-                withContext(Dispatchers.Main) {
-                    if(anime.animeList.isNotEmpty()) {
-                        addItem(anime)
+            if(MainActivity.internetAvailable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val anime = AnimeSeason().animeBySeasonYear(season.first, season.second,
+                        SeasonalActivity.page)
+                    SeasonalActivity.page++
+                    withContext(Dispatchers.Main) {
+                        if(anime.animeList.isNotEmpty()) {
+                            addItem(anime)
+                        }
                     }
                 }
             }

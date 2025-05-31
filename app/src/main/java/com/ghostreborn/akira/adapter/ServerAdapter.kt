@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.api.allAnime.AnimeUrls
 import com.ghostreborn.akira.model.Server
@@ -34,10 +35,12 @@ class ServerAdapter(
         val currentServer = server[position]
         holder.serverName.text = currentServer.name
         holder.itemView.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                val servers = AnimeUrls().urls(currentServer.url)
-                withContext(Dispatchers.Main) {
-                    LinkFragment(servers).show(support, "link")
+            if(MainActivity.internetAvailable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val servers = AnimeUrls().urls(currentServer.url)
+                    withContext(Dispatchers.Main) {
+                        LinkFragment(servers).show(support, "link")
+                    }
                 }
             }
         }
