@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.api.allAnime.AnimeServers
-import com.ghostreborn.akira.fragment.ServerFragment
+import com.ghostreborn.akira.fragment.anime.ServerFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

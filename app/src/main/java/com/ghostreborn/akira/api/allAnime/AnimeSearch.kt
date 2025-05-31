@@ -1,7 +1,7 @@
 package com.ghostreborn.akira.api.allAnime
 
 import com.ghostreborn.akira.MainActivity
-import com.ghostreborn.akira.fragment.SeasonalFragment
+import com.ghostreborn.akira.fragment.anime.SeasonalFragment
 import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 import java.net.HttpURLConnection

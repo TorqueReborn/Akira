@@ -14,7 +14,7 @@ import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.api.allAnime.AnimeSeason
-import com.ghostreborn.akira.fragment.SeasonalFragment
+import com.ghostreborn.akira.fragment.anime.SeasonalFragment
 import com.ghostreborn.akira.model.AnimeItem
 import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.ui.DetailsActivity

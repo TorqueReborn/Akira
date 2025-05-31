@@ -9,7 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.fragment.LoginFragment
 import com.ghostreborn.akira.fragment.NoInternetFragment
-import com.ghostreborn.akira.fragment.SeasonalFragment
+import com.ghostreborn.akira.fragment.anime.SeasonalFragment
 import com.ghostreborn.akira.utils.NoInternetMonitor
 
 class MainActivity : AppCompatActivity() {

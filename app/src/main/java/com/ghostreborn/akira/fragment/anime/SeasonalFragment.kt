@@ -1,4 +1,4 @@
-package com.ghostreborn.akira.fragment
+package com.ghostreborn.akira.fragment.anime
 
 import android.os.Bundle
 import android.view.LayoutInflater
