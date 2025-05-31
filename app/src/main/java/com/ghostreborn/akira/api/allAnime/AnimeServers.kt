@@ -35,6 +35,9 @@ class AnimeServers {
             if(decrypted.contains("fast4speed")) {
                 continue
             }
+            if(edge.getString("sourceName") == "Ak") {
+                continue
+            }
             url = "https://allanime.day" + decrypted.replace("clock", "clock.json")
             sources.add(Server(edge.getString("sourceName"), url))
         }
