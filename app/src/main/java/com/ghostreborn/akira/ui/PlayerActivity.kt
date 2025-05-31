@@ -2,7 +2,6 @@ package com.ghostreborn.akira.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -36,7 +35,6 @@ class PlayerActivity : AppCompatActivity() {
 
         if (intent != null) {
             val url = intent.getStringExtra("url")
-            Log.e("TAG", url.toString())
             playerView = findViewById(R.id.player_view)
 
             setFullscreen()
