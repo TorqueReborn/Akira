@@ -9,14 +9,16 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.adapter.AnimeAdapter
+import com.ghostreborn.akira.adapter.FavoritesAdapter
 import com.ghostreborn.akira.api.allAnime.AnimeById
+import com.ghostreborn.akira.database.AkiraDatabase
+import com.ghostreborn.akira.model.Anime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FavoritesFragment: Fragment() {
+class FavoritesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,17 +34,18 @@ class FavoritesFragment: Fragment() {
         val recycler = view.findViewById<RecyclerView>(R.id.saved_recycler)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val anime = AnimeById().animeByID("ReooPAxPMsHM4KPMY")
-            if(anime != null) {
-                val adapter = AnimeAdapter.AnimeItemAdapter(mutableListOf(anime))
-                withContext(Dispatchers.Main) {
-                    recycler.adapter = adapter
-                    recycler.layoutManager = GridLayoutManager(
-                        recycler.context,
-                        3,
-                        LinearLayoutManager.VERTICAL,
-                        false
-                    )
+            val animeList = AkiraDatabase.getDatabase(requireContext()).akiraDao().getAll()
+            if(animeList != null) {
+                val anime = AnimeById().animeByID(animeList[0])
+                (animeList as ArrayList<String>).removeAt(0)
+                if(anime != null) {
+                    val adapter = FavoritesAdapter(mutableListOf(anime) as ArrayList<Anime>, animeList)
+                    withContext(Dispatchers.Main) {
+                        recycler.adapter = adapter
+                        recycler.layoutManager = GridLayoutManager(
+                            recycler.context, 3, LinearLayoutManager.VERTICAL, false
+                        )
+                    }
                 }
             }
         }
