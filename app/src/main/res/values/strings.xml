@@ -13,4 +13,6 @@
     <string name="rewind">Rewind</string>
     <string name="add_to_favorites">Add</string>
     <string name="remove_from_favorites">Remove</string>
+    <string name="latest">Latest</string>
+    <string name="favorites">Favorites</string>
 </resources>
