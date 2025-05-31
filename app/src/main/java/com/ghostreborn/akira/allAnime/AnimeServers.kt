@@ -1,14 +1,14 @@
 package com.ghostreborn.akira.allAnime
 
 import com.ghostreborn.akira.Utils
-import com.ghostreborn.akira.model.SourceName
+import com.ghostreborn.akira.model.Server
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
 class AnimeServers {
 
-    fun servers(id: String, episode: String): ArrayList<SourceName> {
+    fun servers(id: String, episode: String): ArrayList<Server> {
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
         val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
         val query =  "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){sourceUrls}"
@@ -18,7 +18,7 @@ class AnimeServers {
         connection.setRequestProperty("Referer", "https://allmanga.to")
         val rawJSON = connection.inputStream.bufferedReader().readText()
 
-        val sources: ArrayList<SourceName> = ArrayList()
+        val sources: ArrayList<Server> = ArrayList()
         val edges = JSONObject(rawJSON)
             .getJSONObject("data")
             .getJSONObject("episode")
@@ -33,7 +33,7 @@ class AnimeServers {
                 continue
             }
             url = "https://allanime.day" + decrypted.replace("clock", "clock.json")
-            sources.add(SourceName(edge.getString("sourceName"), url))
+            sources.add(Server(edge.getString("sourceName"), url))
         }
 
         return sources

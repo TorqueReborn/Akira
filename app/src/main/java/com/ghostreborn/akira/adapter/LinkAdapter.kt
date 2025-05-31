@@ -7,11 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.model.SourceName
+import com.ghostreborn.akira.model.Server
 import com.ghostreborn.akira.ui.PlayerActivity
 
 class LinkAdapter(
-    private val server: ArrayList<SourceName>,
+    private val server: ArrayList<Server>,
 ) : RecyclerView.Adapter<LinkAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

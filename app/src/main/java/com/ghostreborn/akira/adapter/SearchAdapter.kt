@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allAnime.AnimeSearch
-import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.ui.DetailsActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,12 +18,12 @@ import kotlinx.coroutines.withContext
 
 class SearchAdapter(
     private val query: String,
-    private val animeItems: ArrayList<AnimeItem>
+    private val anime: ArrayList<Anime>
 ) : RecyclerView.Adapter<SearchAdapter.AnimeViewHolder>() {
 
-    private fun addItem(anime: ArrayList<AnimeItem>) {
-        animeItems.addAll(anime)
-        notifyItemInserted(animeItems.size - 1)
+    private fun addItem(anime: ArrayList<Anime>) {
+        this.anime.addAll(anime)
+        notifyItemInserted(this.anime.size - 1)
     }
 
     override fun onCreateViewHolder(
@@ -47,7 +47,7 @@ class SearchAdapter(
                 }
             }
         }
-        val animeItem = animeItems[position]
+        val animeItem = anime[position]
         holder.animeImage.load(animeItem.thumbnail)
         holder.itemView.setOnClickListener {
             holder.itemView.context.startActivity(
@@ -59,7 +59,7 @@ class SearchAdapter(
     }
 
     override fun getItemCount(): Int {
-        return animeItems.size
+        return anime.size
     }
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

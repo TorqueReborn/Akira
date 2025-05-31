@@ -1,13 +1,13 @@
 package com.ghostreborn.akira.allAnime
 
-import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
 class AnimeById {
 
-    fun animeByID(showId: String): AnimeItem {
+    fun animeByID(showId: String): Anime {
 
         val variables = "\"id\":\"$showId\""
         val queryTypes = "\$id:String!"
@@ -24,7 +24,7 @@ class AnimeById {
 
         val id = show.getString("_id")
         val thumbnail = show.getString("thumbnail")
-        return AnimeItem(id, thumbnail)
+        return Anime(id, thumbnail)
     }
 
 }

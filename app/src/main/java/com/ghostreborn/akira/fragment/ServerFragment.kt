@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.ServerAdapter
-import com.ghostreborn.akira.model.SourceName
+import com.ghostreborn.akira.model.Server
 
 class ServerFragment(
-    val servers: ArrayList<SourceName>
+    val servers: ArrayList<Server>
 ): DialogFragment() {
 
     override fun onCreateView(

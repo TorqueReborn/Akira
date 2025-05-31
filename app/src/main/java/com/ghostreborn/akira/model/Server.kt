@@ -1,6 +1,6 @@
 package com.ghostreborn.akira.model
 
-data class SourceName(
+data class Server(
     val name: String,
     val url: String
 )

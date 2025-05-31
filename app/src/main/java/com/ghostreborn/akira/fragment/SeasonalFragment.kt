@@ -15,7 +15,7 @@ import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.adapter.SearchAdapter
 import com.ghostreborn.akira.allAnime.AnimeSearch
 import com.ghostreborn.akira.allAnime.AnimeSeason
-import com.ghostreborn.akira.model.Anime
+import com.ghostreborn.akira.model.AnimeItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,7 +78,7 @@ class SeasonalFragment: Fragment() {
             count = 0
 
             withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<Anime>)
+                val adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<AnimeItem>)
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(context)
             }

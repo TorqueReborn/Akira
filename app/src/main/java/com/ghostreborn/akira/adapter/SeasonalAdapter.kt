@@ -14,8 +14,8 @@ import com.ghostreborn.akira.R
 import com.ghostreborn.akira.Utils
 import com.ghostreborn.akira.allAnime.AnimeSeason
 import com.ghostreborn.akira.fragment.SeasonalFragment
-import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.ui.DetailsActivity
 import com.ghostreborn.akira.ui.SeasonalActivity
 import kotlinx.coroutines.CoroutineScope
@@ -24,12 +24,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class SeasonalAdapter(
-    private val animeItems: ArrayList<Anime>
+    private val animeItemItems: ArrayList<AnimeItem>
 ) : RecyclerView.Adapter<SeasonalAdapter.AnimeViewHolder>() {
 
-    private fun addItem(anime: Anime) {
-        animeItems.add(anime)
-        notifyItemInserted(animeItems.size - 1)
+    private fun addItem(animeItem: AnimeItem) {
+        animeItemItems.add(animeItem)
+        notifyItemInserted(animeItemItems.size - 1)
     }
 
     override fun onCreateViewHolder(
@@ -59,7 +59,7 @@ class SeasonalAdapter(
                 }
             }
         }
-        val adapter = AnimeItemAdapter(animeItems[position].animeList)
+        val adapter = AnimeItemAdapter(animeItemItems[position].animeList)
         holder.animeRecycler.adapter = adapter
         holder.animeRecycler.layoutManager = GridLayoutManager(
             holder.animeRecycler.context,
@@ -70,7 +70,7 @@ class SeasonalAdapter(
     }
 
     override fun getItemCount(): Int {
-        return animeItems.size
+        return animeItemItems.size
     }
 
     class AnimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -78,7 +78,7 @@ class SeasonalAdapter(
     }
 
     class AnimeItemAdapter(
-        private val animeList: List<AnimeItem>
+        private val animeList: List<Anime>
     ) : RecyclerView.Adapter<AnimeItemAdapter.AnimeViewHolder>() {
         override fun onCreateViewHolder(
             parent: ViewGroup,

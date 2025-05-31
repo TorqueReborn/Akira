@@ -1,16 +1,16 @@
 package com.ghostreborn.akira.allAnime
 
-import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
 class AnimeSeason {
 
-    fun animeBySeasonYear(season: String, year: String, page: Int = 1): Anime {
+    fun animeBySeasonYear(season: String, year: String, page: Int = 1): AnimeItem {
 
-        val animeList: ArrayList<AnimeItem> = ArrayList()
+        val animeList: ArrayList<Anime> = ArrayList()
 
         val variables = "\"search\":{\"season\":\"$season\",\"year\":$year},\"limit\":6,\"page\":$page"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
@@ -35,10 +35,10 @@ class AnimeSeason {
                 thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
             }
 
-            animeList.add(AnimeItem(id, thumbnail))
+            animeList.add(Anime(id, thumbnail))
         }
 
-        return Anime("$season $year", animeList)
+        return AnimeItem("$season $year", animeList)
 
     }
 

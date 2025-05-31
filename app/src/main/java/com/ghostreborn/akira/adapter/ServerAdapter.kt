@@ -8,7 +8,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.allAnime.AnimeUrls
-import com.ghostreborn.akira.model.SourceName
+import com.ghostreborn.akira.model.Server
 import com.ghostreborn.akira.ui.LinkFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ServerAdapter(
-    private val server: ArrayList<SourceName>,
+    private val server: ArrayList<Server>,
     private val support: FragmentManager
 ) : RecyclerView.Adapter<ServerAdapter.ViewHolder>() {
 

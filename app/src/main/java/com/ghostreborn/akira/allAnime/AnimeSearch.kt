@@ -1,15 +1,15 @@
 package com.ghostreborn.akira.allAnime
 
 import com.ghostreborn.akira.fragment.SeasonalFragment
-import com.ghostreborn.akira.model.AnimeItem
+import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
 
 class AnimeSearch {
 
-    fun animeSearch(search: String): ArrayList<AnimeItem> {
-        val animeList: ArrayList<AnimeItem> = ArrayList()
+    fun animeSearch(search: String): ArrayList<Anime> {
+        val animeList: ArrayList<Anime> = ArrayList()
 
         val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
@@ -32,7 +32,7 @@ class AnimeSearch {
             if (!thumbnail.contains("https")) {
                 thumbnail = "https://wp.youtube-anime.com/aln.youtube-anime.com/$thumbnail"
             }
-            animeList.add(AnimeItem(id, thumbnail))
+            animeList.add(Anime(id, thumbnail))
         }
         SeasonalFragment.page++
         return animeList
