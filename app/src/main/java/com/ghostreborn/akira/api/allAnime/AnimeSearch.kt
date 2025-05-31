@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.fragment.SeasonalFragment
 import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
@@ -8,7 +9,8 @@ import java.net.URL
 
 class AnimeSearch {
 
-    fun animeSearch(search: String): ArrayList<Anime> {
+    fun animeSearch(search: String): ArrayList<Anime>? {
+        if(!MainActivity.internetAvailable) return null
         val animeList: ArrayList<Anime> = ArrayList()
 
         val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"

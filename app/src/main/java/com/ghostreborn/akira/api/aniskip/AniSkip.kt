@@ -1,6 +1,7 @@
 package com.ghostreborn.akira.api.aniskip
 
 import android.util.Log
+import com.ghostreborn.akira.MainActivity
 import org.json.JSONException
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -9,7 +10,8 @@ import java.net.URL
 
 class AniSkip {
 
-    private fun startSkip(id: String, episode: String): Map<String, Long> {
+    private fun startSkip(id: String, episode: String): Map<String, Long>? {
+        if(!MainActivity.internetAvailable) return null
         val url = "https://api.aniskip.com/v2/skip-times/$id/$episode?types=op&episodeLength=0"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
@@ -17,16 +19,16 @@ class AniSkip {
         return parseSkip(connection.inputStream.bufferedReader().readText(), "OP_")
     }
 
-    private fun endSkip(id: String, episode: String): Map<String, Long> {
-        val url =
-            "https://api.aniskip.com/v2/skip-times/$id/$episode?types=ed&episodeLength=0"
+    private fun endSkip(id: String, episode: String): Map<String, Long>? {
+        if(!MainActivity.internetAvailable) return null
+        val url = "https://api.aniskip.com/v2/skip-times/$id/$episode?types=ed&episodeLength=0"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")
         return parseSkip(connection.inputStream.bufferedReader().readText(), "ED_")
     }
 
-    private fun parseSkip(rawJSON: String, name: String): Map<String, Long> {
+    private fun parseSkip(rawJSON: String, name: String): MutableMap<String, Long> {
         val startSkip: MutableMap<String, Long> = HashMap()
         try {
             val interval = JSONObject(rawJSON)
@@ -56,10 +58,12 @@ class AniSkip {
         return startSkip
     }
 
-    fun startEndSkip(id: String, episode: String): Map<String, Long> {
+    fun startEndSkip(id: String, episode: String): MutableMap<String, Long> {
         val startEndSkips: MutableMap<String, Long> = HashMap()
-        startEndSkips.putAll(startSkip(id, episode))
-        startEndSkips.putAll(endSkip(id, episode))
+        val start = startSkip(id, episode)
+        val end = endSkip(id, episode)
+        if(start != null) startEndSkips.putAll(start)
+        if(end != null) startEndSkips.putAll(end)
         return startEndSkips
     }
 

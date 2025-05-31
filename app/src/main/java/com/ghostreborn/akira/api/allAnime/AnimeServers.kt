@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.model.Server
 import org.json.JSONObject
@@ -8,7 +9,9 @@ import java.net.URL
 
 class AnimeServers {
 
-    fun servers(id: String, episode: String): ArrayList<Server> {
+    fun servers(id: String, episode: String): ArrayList<Server>? {
+        if(!MainActivity.internetAvailable) return null
+
         val variables = "\"showId\":\"$id\",\"episode\":\"$episode\",\"translationType\":\"sub\""
         val queryTypes = "\$showId:String!,\$episode:String!,\$translationType:VaildTranslationTypeEnumType!"
         val query =  "episode(showId:\$showId,episodeString:\$episode,translationType:\$translationType){sourceUrls}"

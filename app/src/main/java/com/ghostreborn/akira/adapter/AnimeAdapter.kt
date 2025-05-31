@@ -52,8 +52,10 @@ class AnimeAdapter(
             if(MainActivity.internetAvailable) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
-                    withContext(Dispatchers.Main) {
-                        addItem(anime)
+                    if(anime != null) {
+                        withContext(Dispatchers.Main) {
+                            addItem(anime)
+                        }
                     }
                 }
             }

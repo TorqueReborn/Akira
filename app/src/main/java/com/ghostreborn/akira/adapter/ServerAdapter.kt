@@ -38,8 +38,10 @@ class ServerAdapter(
             if(MainActivity.internetAvailable) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val servers = AnimeUrls().urls(currentServer.url)
-                    withContext(Dispatchers.Main) {
-                        LinkFragment(servers).show(support, "link")
+                    if(servers != null) {
+                        withContext(Dispatchers.Main) {
+                            LinkFragment(servers).show(support, "link")
+                        }
                     }
                 }
             }

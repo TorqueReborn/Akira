@@ -2,6 +2,7 @@ package com.ghostreborn.akira.api.allAnime
 
 import android.text.Html
 import android.util.Log
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.AnimeDetails
 import org.json.JSONException
 import org.json.JSONObject
@@ -11,7 +12,9 @@ import java.net.URL
 
 class FullDetails {
 
-    fun fullDetail(id: String): AnimeDetails {
+    fun fullDetail(id: String): AnimeDetails? {
+        if(!MainActivity.internetAvailable) return null
+
         val variables = "\"showId\":\"$id\""
         val queryTypes = "\$showId:String!"
         val query = "show(_id:\$showId){aniListId,name,englishName,description,thumbnail,banner,availableEpisodesDetail,relatedShows}"

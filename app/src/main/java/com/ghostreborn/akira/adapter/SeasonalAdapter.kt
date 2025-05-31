@@ -55,8 +55,10 @@ class SeasonalAdapter(
                         SeasonalActivity.page)
                     SeasonalActivity.page++
                     withContext(Dispatchers.Main) {
-                        if(anime.animeList.isNotEmpty()) {
-                            addItem(anime)
+                        if(anime != null) {
+                            if(anime.animeList.isNotEmpty()) {
+                                addItem(anime)
+                            }
                         }
                     }
                 }

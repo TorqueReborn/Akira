@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.api.anilList.AniListAuthorize
 import kotlinx.coroutines.CoroutineScope
@@ -44,9 +45,9 @@ class LoginFragment: Fragment() {
         parseToken()
     }
 
-    fun parseToken() {
+    private fun parseToken() {
         val activity = activity
-        if(activity != null) {
+        if(activity != null && MainActivity.internetAvailable) {
             val intent = activity.intent
             if(intent != null) {
                 val uri = intent.data
@@ -55,15 +56,17 @@ class LoginFragment: Fragment() {
                     progress.visibility = View.VISIBLE
                     CoroutineScope(Dispatchers.IO).launch {
                         val token = AniListAuthorize().getToken(code.toString())
-                        val userID = AniListAuthorize().getUserID(token)
-                        withContext(Dispatchers.Main) {
-                            val pref = activity.getSharedPreferences("AKIRA", 0)
-                            pref.edit {
-                                putBoolean("LOGIN", true)
-                                putString("TOKEN", token)
-                                putString("USER", userID)
+                        if(token != null) {
+                            val userID = AniListAuthorize().getUserID(token)
+                            withContext(Dispatchers.Main) {
+                                val pref = activity.getSharedPreferences("AKIRA", 0)
+                                pref.edit {
+                                    putBoolean("LOGIN", true)
+                                    putString("TOKEN", token)
+                                    putString("USER", userID)
+                                }
+                                activity.finish()
                             }
-                            activity.finish()
                         }
                     }
                 }

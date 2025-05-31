@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.adapter.AnimeAdapter
@@ -21,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class SeasonalFragment: Fragment() {
+class SeasonalFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchView: SearchView
@@ -48,16 +49,19 @@ class SeasonalFragment: Fragment() {
                     page = 1
                     val anime = AnimeSearch().animeSearch(query.toString())
 
-                    withContext(Dispatchers.Main) {
-                        val adapter = SearchAdapter(query.toString(), anime)
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = GridLayoutManager(
-                            context,
-                            3,
-                            LinearLayoutManager.VERTICAL,
-                            false
-                        )
+                    if(anime != null) {
+                        withContext(Dispatchers.Main) {
+                            val adapter = SearchAdapter(query.toString(), anime)
+                            recyclerView.adapter = adapter
+                            recyclerView.layoutManager = GridLayoutManager(
+                                context,
+                                3,
+                                LinearLayoutManager.VERTICAL,
+                                false
+                            )
+                        }
                     }
+
                 }
                 return true
             }
@@ -72,15 +76,19 @@ class SeasonalFragment: Fragment() {
     override fun onResume() {
         super.onResume()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val season = Utils().calculateQuarter(0)
-            val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
-            count = 0
+        if (MainActivity.internetAvailable) {
+            CoroutineScope(Dispatchers.IO).launch {
+                val season = Utils().calculateQuarter(0)
+                val anime = AnimeSeason().animeBySeasonYear(season.first, season.second)
+                count = 0
 
-            withContext(Dispatchers.Main) {
-                val adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<AnimeItem>)
-                recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(context)
+                if(anime != null) {
+                    withContext(Dispatchers.Main) {
+                        val adapter = AnimeAdapter(mutableListOf(anime) as ArrayList<AnimeItem>)
+                        recyclerView.adapter = adapter
+                        recyclerView.layoutManager = LinearLayoutManager(context)
+                    }
+                }
             }
         }
 

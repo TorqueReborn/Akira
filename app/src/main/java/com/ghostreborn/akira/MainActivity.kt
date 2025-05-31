@@ -26,8 +26,8 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         connectivityManager = getSystemService(ConnectivityManager::class.java)
+        setupNoInternetCheck()
     }
 
     override fun onResume() {
@@ -53,6 +53,9 @@ class MainActivity : AppCompatActivity() {
                 .commit()
         }
 
+    }
+
+    private fun setupNoInternetCheck() {
         noInternetMonitor = NoInternetMonitor(
             noInternet = {
                 internetAvailable = false
@@ -62,13 +65,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
         connectivityManager.registerDefaultNetworkCallback(noInternetMonitor)
-
     }
-
-//    override fun onPause() {
-//        super.onPause()
-//        connectivityManager.unregisterNetworkCallback(noInternetMonitor)
-//    }
 
     companion object {
         var internetAvailable = false

@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.Server
 import okio.IOException
 import org.json.JSONObject
@@ -8,7 +9,9 @@ import java.net.URL
 
 class AnimeUrls {
 
-    fun urls(url: String): ArrayList<Server> {
+    fun urls(url: String): java.util.ArrayList<Server>? {
+        if(!MainActivity.internetAvailable) return null
+
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")

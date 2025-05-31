@@ -33,15 +33,17 @@ class SavedFragment: Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val anime = AnimeById().animeByID("ReooPAxPMsHM4KPMY")
-            val adapter = AnimeAdapter.AnimeItemAdapter(mutableListOf(anime))
-            withContext(Dispatchers.Main) {
-                recycler.adapter = adapter
-                recycler.layoutManager = GridLayoutManager(
-                    recycler.context,
-                    3,
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
+            if(anime != null) {
+                val adapter = AnimeAdapter.AnimeItemAdapter(mutableListOf(anime))
+                withContext(Dispatchers.Main) {
+                    recycler.adapter = adapter
+                    recycler.layoutManager = GridLayoutManager(
+                        recycler.context,
+                        3,
+                        LinearLayoutManager.VERTICAL,
+                        false
+                    )
+                }
             }
         }
 

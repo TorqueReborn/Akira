@@ -43,8 +43,10 @@ class SearchAdapter(
         if (position == itemCount - 1 && MainActivity.internetAvailable) {
             CoroutineScope(Dispatchers.IO).launch {
                 val anime = AnimeSearch().animeSearch(query)
-                withContext(Dispatchers.Main) {
-                    addItem(anime)
+                if(anime != null) {
+                    withContext(Dispatchers.Main) {
+                        addItem(anime)
+                    }
                 }
             }
         }

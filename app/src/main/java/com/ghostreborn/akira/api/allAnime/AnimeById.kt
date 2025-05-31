@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.api.allAnime
 
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.model.Anime
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -7,7 +8,8 @@ import java.net.URL
 
 class AnimeById {
 
-    fun animeByID(showId: String): Anime {
+    fun animeByID(showId: String): Anime? {
+        if(!MainActivity.internetAvailable) return null
 
         val variables = "\"id\":\"$showId\""
         val queryTypes = "\$id:String!"

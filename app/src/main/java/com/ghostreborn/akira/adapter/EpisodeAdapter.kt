@@ -36,8 +36,10 @@ class EpisodeAdapter(
             if(MainActivity.internetAvailable) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val servers = AnimeServers().servers(id, episodes[position])
-                    withContext(Dispatchers.Main) {
-                        ServerFragment(servers).show(support, "server")
+                    if(servers != null) {
+                        withContext(Dispatchers.Main) {
+                            ServerFragment(servers).show(support, "server")
+                        }
                     }
                 }
             }

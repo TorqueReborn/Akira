@@ -8,6 +8,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.EpisodeAdapter
 
@@ -25,7 +26,7 @@ class EpisodesActivity : AppCompatActivity() {
         val episodesRecycler = findViewById<RecyclerView>(R.id.episodes_recycler)
         episodesRecycler.layoutManager = GridLayoutManager(this, 5, LinearLayoutManager.VERTICAL, false)
 
-        if(intent != null) {
+        if(intent != null && MainActivity.internetAvailable) {
             val id = intent.getStringExtra("animeID")
             val episodes = intent.getStringArrayListExtra("animeEpisodes")
             val reversedEpisodes: ArrayList<String> = ArrayList()

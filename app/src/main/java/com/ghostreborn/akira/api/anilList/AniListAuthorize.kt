@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.api.anilList
 
+import com.ghostreborn.akira.MainActivity
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -7,7 +8,9 @@ import java.nio.charset.StandardCharsets
 
 class AniListAuthorize {
 
-    fun getToken(code: String): String {
+    fun getToken(code: String): String? {
+        if(!MainActivity.internetAvailable) return null
+
         val jsonPayload = JSONObject().apply {
             put("grant_type", "authorization_code")
             put("client_id", "25543")
@@ -33,7 +36,9 @@ class AniListAuthorize {
             .getString("access_token")
     }
 
-    fun getUserID(token: String): String {
+    fun getUserID(token: String): String? {
+        if(!MainActivity.internetAvailable) return null
+
         val query = "{Viewer{id}}"
         val jsonPayload = JSONObject().apply {
             put("query", query)

@@ -2,6 +2,7 @@ package com.ghostreborn.akira.ui
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
@@ -34,7 +35,8 @@ class PlayerActivity : AppCompatActivity() {
 
         if (intent != null) {
             val url = intent.getStringExtra("url")
-            playerView = findViewById<PlayerView>(R.id.player_view)
+            Log.e("TAG", url.toString())
+            playerView = findViewById(R.id.player_view)
 
             setFullscreen()
             initializePlayer(url!!)

@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghostreborn.akira.MainActivity
 import com.ghostreborn.akira.R
 import com.ghostreborn.akira.adapter.SeasonalAdapter
 import com.ghostreborn.akira.api.allAnime.AnimeSeason
@@ -37,15 +38,17 @@ class SeasonalActivity : AppCompatActivity() {
         val seasonalRecycler = findViewById<RecyclerView>(R.id.seasonal_recycler)
 
         val intent = intent
-        if (intent != null) {
+        if (intent != null && MainActivity.internetAvailable) {
             val season = intent.getStringExtra("animeSeason")!!.split(" ")
             findViewById<TextView>(R.id.seasonal_text).text = intent.getStringExtra("animeSeason")
             CoroutineScope(Dispatchers.IO).launch {
                 val anime = AnimeSeason().animeBySeasonYear(season[0], season[1], page)
-                withContext(Dispatchers.Main) {
-                    val adapter = SeasonalAdapter(mutableListOf(anime) as ArrayList<AnimeItem>)
-                    seasonalRecycler.adapter = adapter
-                    seasonalRecycler.layoutManager = LinearLayoutManager(applicationContext)
+                if(anime != null) {
+                    withContext(Dispatchers.Main) {
+                        val adapter = SeasonalAdapter(mutableListOf(anime) as ArrayList<AnimeItem>)
+                        seasonalRecycler.adapter = adapter
+                        seasonalRecycler.layoutManager = LinearLayoutManager(applicationContext)
+                    }
                 }
             }
         }
