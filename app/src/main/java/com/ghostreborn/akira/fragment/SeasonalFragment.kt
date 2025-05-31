@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
@@ -48,9 +49,14 @@ class SeasonalFragment: Fragment() {
                     val anime = AnimeSearch().animeSearch(query.toString())
 
                     withContext(Dispatchers.Main) {
-                        val adapter = SearchAdapter(query.toString(), mutableListOf(anime) as ArrayList<Anime>)
+                        val adapter = SearchAdapter(query.toString(), anime)
                         recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(context)
+                        recyclerView.layoutManager = GridLayoutManager(
+                            context,
+                            3,
+                            LinearLayoutManager.VERTICAL,
+                            false
+                        )
                     }
                 }
                 return true

@@ -7,7 +7,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.ghostreborn.akira.fragment.LoginFragment
-import com.ghostreborn.akira.fragment.SavedFragment
 import com.ghostreborn.akira.fragment.SeasonalFragment
 
 class MainActivity : AppCompatActivity() {
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.main_frame, SavedFragment())
+            .replace(R.id.main_frame, fragment)
             .commit()
     }
 

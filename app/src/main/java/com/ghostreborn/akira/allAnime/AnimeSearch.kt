@@ -1,7 +1,6 @@
 package com.ghostreborn.akira.allAnime
 
 import com.ghostreborn.akira.fragment.SeasonalFragment
-import com.ghostreborn.akira.model.Anime
 import com.ghostreborn.akira.model.AnimeItem
 import org.json.JSONObject
 import java.net.HttpURLConnection
@@ -9,7 +8,7 @@ import java.net.URL
 
 class AnimeSearch {
 
-    fun animeSearch(search: String): Anime {
+    fun animeSearch(search: String): ArrayList<AnimeItem> {
         val animeList: ArrayList<AnimeItem> = ArrayList()
 
         val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
@@ -36,7 +35,7 @@ class AnimeSearch {
             animeList.add(AnimeItem(id, thumbnail))
         }
         SeasonalFragment.page++
-        return Anime("", animeList)
+        return animeList
     }
 
 }
