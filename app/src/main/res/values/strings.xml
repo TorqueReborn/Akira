@@ -8,4 +8,7 @@
     <string name="sequel">Sequel</string>
     <string name="prequel">Prequel</string>
     <string name="select_server">Select Server</string>
+    <string name="play_pause"><![CDATA[Play & Pause]]></string>
+    <string name="fast_forward">Fast Forward</string>
+    <string name="rewind">Rewind</string>
 </resources>
