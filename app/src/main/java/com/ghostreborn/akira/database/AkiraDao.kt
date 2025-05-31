@@ -8,8 +8,11 @@ import androidx.room.Query
 @Dao
 interface AkiraDao {
 
-    @Query("SELECT * FROM akira")
-    fun getAll(): List<Akira>
+    @Query("SELECT allAnimeID FROM akira WHERE allAnimeID = :id")
+    fun get(id: String): Akira?
+
+    @Query("DELETE FROM akira WHERE allAnimeID = :id")
+    fun delete(id: String): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(akira: Akira)

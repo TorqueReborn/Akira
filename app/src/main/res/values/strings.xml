@@ -11,4 +11,6 @@
     <string name="play_pause"><![CDATA[Play & Pause]]></string>
     <string name="fast_forward">Fast Forward</string>
     <string name="rewind">Rewind</string>
+    <string name="add_to_favorites">Add</string>
+    <string name="remove_from_favorites">Remove</string>
 </resources>
