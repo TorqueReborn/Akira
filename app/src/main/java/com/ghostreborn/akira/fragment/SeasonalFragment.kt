@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ghostreborn.akira.R
-import com.ghostreborn.akira.Utils
+import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.adapter.AnimeAdapter
 import com.ghostreborn.akira.adapter.SearchAdapter
 import com.ghostreborn.akira.api.allAnime.AnimeSearch

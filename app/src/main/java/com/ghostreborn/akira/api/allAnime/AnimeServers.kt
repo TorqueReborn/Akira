@@ -1,6 +1,6 @@
 package com.ghostreborn.akira.api.allAnime
 
-import com.ghostreborn.akira.Utils
+import com.ghostreborn.akira.utils.Utils
 import com.ghostreborn.akira.model.Server
 import org.json.JSONObject
 import java.net.HttpURLConnection

@@ -1,4 +1,4 @@
-package com.ghostreborn.akira
+package com.ghostreborn.akira.utils
 
 import java.util.Calendar
 
