@@ -32,24 +32,24 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        favoritesButton = findViewById<TextView>(R.id.favorites_text)
-        latestButton = findViewById<TextView>(R.id.latest_text)
+        favoritesButton = findViewById(R.id.favorites_text)
+        latestButton = findViewById(R.id.latest_text)
         setupNoInternetCheck()
     }
 
     override fun onResume() {
         super.onResume()
 
-        if(internetAvailable) {
+        val loggedIn = getSharedPreferences("AKIRA", MODE_PRIVATE)
+            .getBoolean("LOGIN", false)
+
+        if(internetAvailable && loggedIn) {
             latestButton.visibility = View.VISIBLE
             favoritesButton.visibility = View.VISIBLE
         } else {
             latestButton.visibility = View.GONE
             favoritesButton.visibility = View.GONE
         }
-
-        val loggedIn = getSharedPreferences("AKIRA", MODE_PRIVATE)
-            .getBoolean("LOGIN", false)
 
         latestButton.setOnClickListener {
             supportFragmentManager
