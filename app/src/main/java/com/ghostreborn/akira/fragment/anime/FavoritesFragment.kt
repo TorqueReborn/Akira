@@ -35,7 +35,7 @@ class FavoritesFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val animeList = AkiraDatabase.getDatabase(requireContext()).akiraDao().getAll()
-            if(animeList?.isNotEmpty() == true) {
+            if(animeList.isNotEmpty()) {
                 val anime = AnimeById().animeByID(animeList[0])
                 (animeList as ArrayList<String>).removeAt(0)
                 if(anime != null) {

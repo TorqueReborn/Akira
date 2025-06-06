@@ -12,7 +12,7 @@ interface AkiraDao {
     fun get(id: String): Akira?
 
     @Query("SELECT allAnimeID FROM akira")
-    fun getAll(): List<String>?
+    fun getAll(): List<String>
 
     @Query("DELETE FROM akira WHERE allAnimeID = :id")
     fun delete(id: String): Int
