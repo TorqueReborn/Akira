@@ -20,19 +20,20 @@ import kotlinx.coroutines.withContext
 
 class FavoritesFragment : Fragment() {
 
+    private lateinit var recycler: RecyclerView
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_favorites, container, false)
+        val view = inflater.inflate(R.layout.fragment_favorites, container, false)
+        recycler = view.findViewById(R.id.saved_recycler)
+        return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val recycler = view.findViewById<RecyclerView>(R.id.saved_recycler)
-
+    override fun onResume() {
+        super.onResume()
         CoroutineScope(Dispatchers.IO).launch {
             val animeList = AkiraDatabase.getDatabase(requireContext()).akiraDao().getAll()
             if(animeList.isNotEmpty()) {
@@ -49,7 +50,6 @@ class FavoritesFragment : Fragment() {
                 }
             }
         }
-
     }
 
 }
