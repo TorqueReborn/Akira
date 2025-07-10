@@ -10,13 +10,15 @@ import java.net.URL
 class AnimeSearch {
 
     fun animeSearch(search: String): ArrayList<Anime>? {
-        if(!MainActivity.internetAvailable) return null
+        if (!MainActivity.internetAvailable) return null
         val animeList: ArrayList<Anime> = ArrayList()
 
-        val variables = "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
+        val variables =
+            "\"search\":{\"query\":\"$search\"},\"limit\":12,\"page\":${SeasonalFragment.page}"
         val queryTypes = "\$search:SearchInput!, \$limit:Int!, \$page:Int!"
         val query = "shows(search:\$search, limit:\$limit, page:\$page){edges{_id,thumbnail}}"
-        val url = "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
+        val url =
+            "https://api.allanime.day/api?variables={$variables}&query=query($queryTypes){$query}"
         val connection = URL(url).openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
         connection.setRequestProperty("Referer", "https://allmanga.to")
@@ -27,7 +29,7 @@ class AnimeSearch {
             .getJSONObject("shows")
             .getJSONArray("edges")
 
-        for(i in 0 until edges.length()) {
+        for (i in 0 until edges.length()) {
             val edge = edges.getJSONObject(i)
             val id = edge.getString("_id")
             var thumbnail = edge.getString("thumbnail")
