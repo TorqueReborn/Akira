@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/fc718421-1e5b-46ca-870e-fe1b1aeda4a8" width="100" />
+  <img width="150" height="150" alt="Crop image project" src="https://github.com/user-attachments/assets/33f4b494-b570-4f6b-81e3-96a1381a23fe" />
 </p>
 <p align="center">
     <h1 align="center">AKIRA</h1>
