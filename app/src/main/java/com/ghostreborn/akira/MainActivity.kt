@@ -4,13 +4,17 @@ import android.os.Bundle
 import androidx.compose.ui.Modifier
 import android.net.ConnectivityManager
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.material3.Scaffold
 import androidx.activity.compose.setContent
 import androidx.viewpager2.widget.ViewPager2
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import com.ghostreborn.akira.ui.theme.AkiraTheme
 import com.ghostreborn.akira.utils.NoInternetMonitor
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.ghostreborn.akira.ui.navigation.AppNavigation
 import com.ghostreborn.akira.ui.navigation.BottomNavigationBar
@@ -28,14 +32,16 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val navController = rememberNavController()
             AkiraTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = { BottomNavigationBar(navController = navController) }
-                ) {innerPadding ->
+                Box(modifier = Modifier.fillMaxSize()) {
                     AppNavigation(
                         navController = navController,
-                        paddingValues = innerPadding
+                        paddingValues = PaddingValues(0.dp)
                     )
+                    Column(
+                        modifier = Modifier.align(Alignment.BottomCenter)
+                    ) {
+                        BottomNavigationBar(navController = navController)
+                    }
                 }
             }
         }
