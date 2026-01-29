@@ -1,5 +1,6 @@
 package com.ghostreborn.akira.utils
 
+import com.ghostreborn.akira.data.model.Anime
 import java.util.Calendar
 
 class Utils {
@@ -33,6 +34,16 @@ class Utils {
             i += 2
         }
         return decryptedString.toString()
+    }
+
+    fun getSampleAnimeList(): List<Anime> {
+        return List(20) { index ->
+            Anime(
+                id = index,
+                name = "Anime ${index + 1}",
+                thumbnail = "https://placehold.co/150x220/png?text=Anime+${index + 1}"
+            )
+        }
     }
 
 }
