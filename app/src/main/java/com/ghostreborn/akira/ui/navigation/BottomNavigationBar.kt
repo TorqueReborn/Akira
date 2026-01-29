@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.currentBackStackEntryAsState
 
 @Composable
@@ -24,6 +25,7 @@ fun BottomNavigationBar(navController: NavController) {
     )
 
     NavigationBar(
+        containerColor = Color.Black,
         windowInsets = WindowInsets(0, 0, 0, 0),
         modifier = Modifier
             .padding(16.dp)
