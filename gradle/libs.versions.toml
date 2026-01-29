@@ -1,18 +1,18 @@
 [versions]
 agp = "9.0.0"
-coreKtx = "1.16.0"
+coreKtx = "1.17.0"
 appcompat = "1.7.1"
-material = "1.12.0"
-activity = "1.10.1"
+material = "1.13.0"
+activity = "1.12.3"
 constraintlayout = "2.2.1"
 
 # Extra Dependencies
 coil = "2.7.0"
-media3Ui = "1.7.1"
-media3UiCompose = "1.7.1"
-media3Exoplayer = "1.7.1"
-media3ExoplayerDash = "1.7.1"
-roomRuntime = "2.7.2"
+media3Ui = "1.9.1"
+media3UiCompose = "1.9.1"
+media3Exoplayer = "1.9.1"
+media3ExoplayerDash = "1.9.1"
+roomRuntime = "2.8.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
