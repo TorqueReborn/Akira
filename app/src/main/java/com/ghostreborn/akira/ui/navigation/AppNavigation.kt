@@ -19,7 +19,10 @@ fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues
         composable(BottomNavItem.Home.route) {
             HomeScreen()
         }
-        composable(BottomNavItem.Profile.route) {
+        composable(BottomNavItem.Search.route) {
+            HomeScreen()
+        }
+        composable(BottomNavItem.Favorites.route) {
             HomeScreen()
         }
         composable(BottomNavItem.Settings.route) {
