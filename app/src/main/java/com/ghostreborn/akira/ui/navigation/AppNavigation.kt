@@ -1,14 +1,13 @@
-
 package com.ghostreborn.akira.ui.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import androidx.compose.foundation.layout.padding
 import com.ghostreborn.akira.ui.screens.HomeScreen
+import androidx.compose.foundation.layout.PaddingValues
 
 @Composable
 fun AppNavigation(navController: NavHostController, paddingValues: PaddingValues) {

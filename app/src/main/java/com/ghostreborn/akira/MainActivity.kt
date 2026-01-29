@@ -1,19 +1,19 @@
 package com.ghostreborn.akira
 
-import android.net.ConnectivityManager
 import android.os.Bundle
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.rememberNavController
+import android.net.ConnectivityManager
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.Scaffold
+import androidx.activity.compose.setContent
 import androidx.viewpager2.widget.ViewPager2
-import com.ghostreborn.akira.ui.navigation.AppNavigation
-import com.ghostreborn.akira.ui.navigation.BottomNavigationBar
+import androidx.appcompat.app.AppCompatActivity
 import com.ghostreborn.akira.ui.theme.AkiraTheme
 import com.ghostreborn.akira.utils.NoInternetMonitor
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.navigation.compose.rememberNavController
+import com.ghostreborn.akira.ui.navigation.AppNavigation
+import com.ghostreborn.akira.ui.navigation.BottomNavigationBar
 
 class MainActivity : AppCompatActivity() {
 
