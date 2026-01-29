@@ -2,12 +2,17 @@ package com.ghostreborn.akira
 
 import android.net.ConnectivityManager
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
 import androidx.viewpager2.widget.ViewPager2
-import com.ghostreborn.akira.adapter.ViewPagerAdapter
+import com.ghostreborn.akira.ui.theme.AkiraTheme
 import com.ghostreborn.akira.utils.NoInternetMonitor
 
 class MainActivity : AppCompatActivity() {
@@ -19,15 +24,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        setContent {
+            AkiraTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) {innerPadding ->
+                    Column(modifier = Modifier.padding(innerPadding)) {
+                        Text("This is a main screen")
+                    }
+                }
+            }
         }
-        viewPager = findViewById(R.id.home_view_pager)
-        viewPager.adapter = ViewPagerAdapter(this)
-        setupNoInternetCheck()
     }
 
     private fun setupNoInternetCheck() {
