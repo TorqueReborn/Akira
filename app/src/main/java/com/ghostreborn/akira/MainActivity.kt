@@ -33,7 +33,8 @@ class MainActivity : AppCompatActivity() {
                     bottomBar = { BottomNavigationBar(navController = navController) }
                 ) {innerPadding ->
                     AppNavigation(
-                        navController = navController
+                        navController = navController,
+                        paddingValues = innerPadding
                     )
                 }
             }
