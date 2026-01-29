@@ -59,6 +59,7 @@ dependencies {
 
     // Extra dependencies
     implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     // Exoplayer
     implementation(libs.androidx.media3.ui)
