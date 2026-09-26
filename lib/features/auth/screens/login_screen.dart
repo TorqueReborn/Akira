@@ -4,8 +4,12 @@ import '../../../theme/app_colors.dart';
 import '../../../widgets/akira_branding.dart';
 import '../../../widgets/akira_button.dart';
 import '../../../widgets/akira_input_field.dart';
+import '../../home/screens/home_screen.dart';
+import '../services/auth_repository.dart';
+import '../services/token_manager.dart';
+import '../widgets/cloudflare_verification_dialog.dart';
 
-/// Akira Login Screen - Step 1 UI Implementation.
+/// Akira Login Screen with Cloudflare Turnstile token integration and login execution.
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -16,6 +20,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -24,30 +30,114 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    // Visual button press feedback (No auth logic implemented per Step 1 specs)
+  void _showError(String message) {
+    setState(() {
+      _errorMessage = message;
+      _isLoading = false;
+    });
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Row(
+        content: Row(
           children: [
-            Icon(Icons.info_outline, color: Colors.white, size: 20),
-            SizedBox(width: 12),
+            const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Login UI verified. Authentication logic will be added in future steps.',
-                style: TextStyle(fontWeight: FontWeight.w500),
+                message,
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
             ),
           ],
         ),
-        backgroundColor: AppColors.primary,
+        backgroundColor: Colors.redAccent.shade700,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 4),
       ),
     );
+  }
+
+  void _handleLoginClicked() {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty) {
+      _showError('Please enter your email or username.');
+      return;
+    }
+    if (password.isEmpty) {
+      _showError('Please enter your password.');
+      return;
+    }
+
+    setState(() {
+      _errorMessage = null;
+    });
+
+    // Open Cloudflare verification dialog to acquire token
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogCtx) => CloudflareVerificationDialog(
+        onTokenExtracted: (token) {
+          Navigator.of(dialogCtx).pop();
+          _performLogin(token);
+        },
+        onDismiss: () {
+          Navigator.of(dialogCtx).pop();
+        },
+      ),
+    );
+  }
+
+  Future<void> _performLogin(String turnstileToken) async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final authResult = await AuthRepository.authenticate(
+        usernameOrEmail: email,
+        rawPassword: password,
+        recaptchCode: turnstileToken,
+      );
+
+      final detectedEmail = email.contains('@') ? email : authResult.email;
+
+      await TokenManager.saveAuthData(
+        accessToken: authResult.accessToken,
+        refreshToken: authResult.refreshToken,
+        sessionId: authResult.sessionId,
+        username: authResult.username,
+        displayName: authResult.displayName,
+        picture: authResult.picture,
+        userId: authResult.userId,
+        email: detectedEmail,
+        isEmailVerified: authResult.isEmailVerified,
+      );
+
+      if (!mounted) return;
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      final rawMsg = e.toString().replaceFirst('Exception: ', '');
+      _showError(rawMsg);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -56,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.background,
       body: Stack(
         children: [
-          // Background Light Ambient Glows (Solo Leveling inspired light mode aura)
+          // Background Light Ambient Glows
           Positioned(
             top: -100,
             right: -80,
@@ -125,10 +215,51 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                       ),
 
+                      if (_errorMessage != null) ...[
+                        const SizedBox(height: 16),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withAlpha(25),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.redAccent.withAlpha(80),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.error_outline_rounded,
+                                color: Colors.redAccent,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _errorMessage!,
+                                  style: const TextStyle(
+                                    color: Colors.redAccent,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+
                       const SizedBox(height: 28),
 
                       // Login Button
-                      AkiraButton(text: 'LOGIN', onPressed: _handleLogin),
+                      AkiraButton(
+                        text: 'LOGIN',
+                        isLoading: _isLoading,
+                        onPressed: _handleLoginClicked,
+                      ),
 
                       const SizedBox(height: 24),
                     ],

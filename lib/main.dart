@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'features/auth/screens/login_screen.dart';
+import 'features/auth/services/token_manager.dart';
+import 'features/home/screens/home_screen.dart';
 import 'theme/app_theme.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await TokenManager.init();
   runApp(const AkiraApp());
 }
 
@@ -13,12 +16,13 @@ class AkiraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    final isLoggedIn = TokenManager.isLoggedIn();
 
+    return MaterialApp(
       title: 'Akira',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const LoginScreen(),
+      home: isLoggedIn ? const HomeScreen() : const LoginScreen(),
     );
   }
 }
