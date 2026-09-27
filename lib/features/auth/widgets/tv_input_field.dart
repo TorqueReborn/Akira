@@ -14,6 +14,7 @@ class TvInputField extends StatefulWidget {
   final FocusNode? focusNode;
   final ValueChanged<String>? onSubmitted;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<bool>? onEditingChanged;
   final FocusNode? nextFocusNode;
   final FocusNode? previousFocusNode;
 
@@ -28,6 +29,7 @@ class TvInputField extends StatefulWidget {
     this.focusNode,
     this.onSubmitted,
     this.onChanged,
+    this.onEditingChanged,
     this.nextFocusNode,
     this.previousFocusNode,
   });
@@ -69,9 +71,11 @@ class _TvInputFieldState extends State<TvInputField> {
 
   void _onTextInputFocusChange() {
     if (mounted) {
+      final hasFocus = _textInputFocusNode.hasFocus;
       setState(() {
-        _isEditing = _textInputFocusNode.hasFocus;
+        _isEditing = hasFocus;
       });
+      widget.onEditingChanged?.call(hasFocus);
     }
   }
 
@@ -218,6 +222,7 @@ class _TvInputFieldState extends State<TvInputField> {
                     focusNode: _textInputFocusNode,
                     keyboardType: widget.keyboardType,
                     obscureText: isObscured,
+                    scrollPadding: const EdgeInsets.only(bottom: 260, top: 40),
                     onChanged: widget.onChanged,
                     onSubmitted: (value) {
                       if (widget.nextFocusNode != null) {

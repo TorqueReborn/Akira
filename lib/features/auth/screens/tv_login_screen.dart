@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -5,7 +6,7 @@ import '../../../theme/app_colors.dart';
 import '../../home/screens/home_screen.dart';
 import '../services/auth_repository.dart';
 import '../services/token_manager.dart';
-import '../widgets/cloudflare_verification_dialog.dart';
+import '../widgets/tv_cloudflare_verification_dialog.dart';
 import '../widgets/tv_button.dart';
 import '../widgets/tv_input_field.dart';
 
@@ -26,11 +27,14 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _loginButtonFocusNode = FocusNode();
 
+  final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
   String? _errorMessage;
+  Timer? _errorDismissTimer;
 
   final FocusScopeNode _screenFocusScopeNode = FocusScopeNode();
   bool _hasInitialFocusOccurred = false;
+  String? _currentlyEditingField; // 'email' | 'password' | null
 
   @override
   void initState() {
@@ -40,6 +44,8 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
 
   @override
   void dispose() {
+    _errorDismissTimer?.cancel();
+    _scrollController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _emailFocusNode.dispose();
@@ -50,32 +56,25 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
   }
 
   void _showError(String message) {
+    _errorDismissTimer?.cancel();
+
+    final cleanMessage = message.trim().isEmpty
+        ? 'Authentication failed. Please check your credentials or retry.'
+        : message.trim();
+
     setState(() {
-      _errorMessage = message;
+      _errorMessage = cleanMessage;
       _isLoading = false;
     });
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline_rounded, color: Colors.white, size: 24),
-            const SizedBox(width: 14),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.redAccent.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        margin: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-        duration: const Duration(seconds: 5),
-      ),
-    );
+
+    // Auto-dismiss the error message after 2 seconds
+    _errorDismissTimer = Timer(const Duration(seconds: 2), () {
+      if (mounted) {
+        setState(() {
+          _errorMessage = null;
+        });
+      }
+    });
   }
 
   void _handleLoginClicked() {
@@ -97,11 +96,12 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
       _errorMessage = null;
     });
 
-    // Open Cloudflare verification dialog to acquire token
+    // Open TV Cloudflare verification dialog to acquire token
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (dialogCtx) => CloudflareVerificationDialog(
+      builder: (dialogCtx) => TvCloudflareVerificationDialog(
+        autoCloseOnSuccess: true,
         onTokenExtracted: (token) {
           Navigator.of(dialogCtx).pop();
           _performLogin(token);
@@ -220,173 +220,218 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
             ),
           ),
 
-          // Main TV 2-Column Wide Landscape Layout
+          // Main TV 2-Column Wide Landscape Layout (1080p, 720p, 4k resilient)
           SafeArea(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 72, vertical: 36),
-                child: IntrinsicHeight(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      // Left Column: TV Hero & Akira Branding Showcase
-                      Expanded(
-                        flex: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              // Akira Title & Gradient
-                              ShaderMask(
-                                shaderCallback: (bounds) =>
-                                    AppColors.logoGradient.createShader(
-                                  Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-                                ),
-                                child: const Text(
-                                  'AKIRA',
-                                  style: TextStyle(
-                                    fontSize: 56,
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 8.0,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              const Text(
-                                'Stream your favorite anime in ultra clarity on the big screen.',
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 18,
-                                  height: 1.5,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+                final isKeyboardOpen = keyboardHeight > 50;
+                final isCompactHeight = constraints.maxHeight < 600;
+                final vPadding = isCompactHeight ? 12.0 : 24.0;
+                final hPadding = constraints.maxWidth < 900 ? 36.0 : 64.0;
+                final formGap = isCompactHeight ? 10.0 : 16.0;
 
-                      const SizedBox(width: 64),
+                // Shift amount: on TV, virtual keyboard is an overlay window.
+                // Shift up when editing fields so the keyboard never occludes input or cursor.
+                double yOffset = 0.0;
+                if (isKeyboardOpen) {
+                  yOffset = -keyboardHeight * 0.55;
+                } else if (_currentlyEditingField == 'password') {
+                  yOffset = -140.0;
+                } else if (_currentlyEditingField == 'email') {
+                  yOffset = -60.0;
+                }
 
-                      // Right Column: Focusable TV Login Section
-                      Expanded(
-                        flex: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                          child: FocusTraversalGroup(
-                            policy: OrderedTraversalPolicy(),
+                return Center(
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: hPadding,
+                      vertical: vPadding,
+                    ),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeOutCubic,
+                      transform: Matrix4.translationValues(0.0, yOffset, 0.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Left Column: TV Hero & Akira Branding Showcase
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Text(
-                                  'Sign In to Your Account',
-                                  style: TextStyle(
-                                    color: AppColors.textPrimary,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: -0.3,
+                                // Akira Title & Gradient
+                                ShaderMask(
+                                  shaderCallback: (bounds) =>
+                                      AppColors.logoGradient.createShader(
+                                    Rect.fromLTWH(0, 0, bounds.width, bounds.height),
                                   ),
-                                ),
-                                const SizedBox(height: 6),
-                                const Text(
-                                  'Use your remote control to navigate between fields',
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              const SizedBox(height: 24),
-
-                              // Email Input
-                              TvInputField(
-                                label: 'Email or Username',
-                                hintText: 'Enter your email or username',
-                                prefixIcon: Icons.mail_outline_rounded,
-                                controller: _emailController,
-                                focusNode: _emailFocusNode,
-                                nextFocusNode: _passwordFocusNode,
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Password Input
-                              TvInputField(
-                                label: 'Password',
-                                hintText: 'Enter your account password',
-                                prefixIcon: Icons.lock_outline_rounded,
-                                controller: _passwordController,
-                                focusNode: _passwordFocusNode,
-                                previousFocusNode: _emailFocusNode,
-                                nextFocusNode: _loginButtonFocusNode,
-                                isPassword: true,
-                                keyboardType: TextInputType.visiblePassword,
-                                onSubmitted: (_) => _handleLoginClicked(),
-                              ),
-
-                              if (_errorMessage != null) ...[
-                                const SizedBox(height: 14),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 14,
-                                    vertical: 10,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.red.withAlpha(25),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: Colors.redAccent.withAlpha(90),
+                                  child: Text(
+                                    'AKIRA',
+                                    style: TextStyle(
+                                      fontSize: isCompactHeight ? 44 : 54,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 8.0,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.error_outline_rounded,
-                                        color: Colors.redAccent,
-                                        size: 20,
-                                      ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: Text(
-                                          _errorMessage!,
-                                          style: const TextStyle(
-                                            color: Colors.redAccent,
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  'Stream your favorite anime in ultra clarity on the big screen.',
+                                  style: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: isCompactHeight ? 15 : 17,
+                                    height: 1.4,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
-
-                              const SizedBox(height: 28),
-
-                              // Login Submit Button
-                              TvButton(
-                                text: 'SIGN IN',
-                                icon: Icons.arrow_forward_rounded,
-                                isLoading: _isLoading,
-                                focusNode: _loginButtonFocusNode,
-                                previousFocusNode: _passwordFocusNode,
-                                onPressed: _handleLoginClicked,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+
+                        SizedBox(width: constraints.maxWidth < 900 ? 32 : 56),
+
+                        // Right Column: Focusable TV Login Section
+                        Expanded(
+                          flex: 5,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: FocusTraversalGroup(
+                              policy: OrderedTraversalPolicy(),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Sign In to Your Account',
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: isCompactHeight ? 20 : 23,
+                                      fontWeight: FontWeight.w800,
+                                      letterSpacing: -0.3,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  const Text(
+                                    'Use your remote control to navigate between fields',
+                                    style: TextStyle(
+                                      color: AppColors.textSecondary,
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  SizedBox(height: formGap * 1.2),
+
+                                  // Email Input
+                                  TvInputField(
+                                    label: 'Email or Username',
+                                    hintText: 'Enter your email or username',
+                                    prefixIcon: Icons.mail_outline_rounded,
+                                    controller: _emailController,
+                                    focusNode: _emailFocusNode,
+                                    nextFocusNode: _passwordFocusNode,
+                                    keyboardType: TextInputType.emailAddress,
+                                    onEditingChanged: (isEditing) {
+                                      setState(() {
+                                        _currentlyEditingField = isEditing ? 'email' : null;
+                                      });
+                                    },
+                                  ),
+                                  SizedBox(height: formGap),
+
+                                  // Password Input
+                                  TvInputField(
+                                    label: 'Password',
+                                    hintText: 'Enter your account password',
+                                    prefixIcon: Icons.lock_outline_rounded,
+                                    controller: _passwordController,
+                                    focusNode: _passwordFocusNode,
+                                    previousFocusNode: _emailFocusNode,
+                                    nextFocusNode: _loginButtonFocusNode,
+                                    isPassword: true,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    onEditingChanged: (isEditing) {
+                                      setState(() {
+                                        _currentlyEditingField = isEditing ? 'password' : null;
+                                      });
+                                    },
+                                    onSubmitted: (_) => _handleLoginClicked(),
+                                  ),
+
+                                  AnimatedSize(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInOut,
+                                    child: _errorMessage != null
+                                        ? Padding(
+                                            padding: const EdgeInsets.only(top: 10),
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 8,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red.withAlpha(25),
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: Border.all(
+                                                  color: Colors.redAccent.withAlpha(90),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  const Icon(
+                                                    Icons.error_outline_rounded,
+                                                    color: Colors.redAccent,
+                                                    size: 18,
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Text(
+                                                      _errorMessage!,
+                                                      style: const TextStyle(
+                                                        color: Colors.redAccent,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox.shrink(),
+                                  ),
+
+                                  SizedBox(height: isCompactHeight ? 16 : 22),
+
+                                  // Login Submit Button
+                                  TvButton(
+                                    text: 'SIGN IN',
+                                    icon: Icons.arrow_forward_rounded,
+                                    isLoading: _isLoading,
+                                    focusNode: _loginButtonFocusNode,
+                                    previousFocusNode: _passwordFocusNode,
+                                    onPressed: _handleLoginClicked,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
-        ),
         ],
       ),
     ),
