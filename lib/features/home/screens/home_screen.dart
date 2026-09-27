@@ -1,5 +1,6 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../theme/app_colors.dart';
 import '../../auth/screens/login_screen.dart';
 import '../../auth/services/auth_repository.dart';
@@ -9,6 +10,7 @@ import '../services/anime_repository.dart';
 import '../widgets/anime_card.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/featured_anime_banner.dart';
+import 'anime_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +22,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
+
+  void _navigateToDetail(AnimeShow anime) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => AnimeDetailScreen(
+          animeId: anime.id,
+          initialTitle: anime.englishName ?? anime.name,
+          initialPoster: anime.thumbnail,
+        ),
+      ),
+    );
+  }
 
   List<AnimeShow> _shows = [];
   List<AnimeShow> _topRankedToday = [];
@@ -258,52 +272,59 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Stack(
-        children: [
-          // 1. Ambient Background Glow matching the login screen aesthetic
-          Positioned(
-            top: -120,
-            right: -100,
-            child: Container(
-              width: 380,
-              height: 380,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.ambientGlow,
-                    Colors.transparent,
-                  ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark, // Crisp dark status bar icons over light background
+        statusBarBrightness: Brightness.light,    // iOS status style
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.background,
+        body: Stack(
+          children: [
+            // 1. Ambient Background Glow matching the login screen aesthetic
+            Positioned(
+              top: -120,
+              right: -100,
+              child: Container(
+                width: 380,
+                height: 380,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppColors.ambientGlow,
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 40,
-            left: -120,
-            child: Container(
-              width: 320,
-              height: 320,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    AppColors.primaryGlow.withAlpha(25),
-                    Colors.transparent,
-                  ],
+            Positioned(
+              bottom: 40,
+              left: -120,
+              child: Container(
+                width: 320,
+                height: 320,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppColors.primaryGlow.withAlpha(25),
+                      Colors.transparent,
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
 
-          // 2. Main Content
-          SafeArea(
-            bottom: false,
-            child: _buildBody(),
-          ),
-        ],
+            // 2. Main Content
+            SafeArea(
+              bottom: false,
+              child: _buildBody(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -739,15 +760,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(
                   child: FeaturedAnimeBanner(
                     featuredShows: _topRankedToday,
-                    onTap: (anime) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(anime.englishName ?? anime.name),
-                          duration: const Duration(seconds: 1),
-                          behavior: SnackBarBehavior.floating,
-                        ),
-                      );
-                    },
+                    onTap: (anime) => _navigateToDetail(anime),
                   ),
                 ),
                 const SliverToBoxAdapter(
@@ -890,15 +903,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         final anime = _shows[index];
                         return AnimeCard(
                           anime: anime,
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(anime.englishName ?? anime.name),
-                                duration: const Duration(seconds: 1),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          },
+                          onTap: () => _navigateToDetail(anime),
                         );
                       },
                       childCount: _shows.length,

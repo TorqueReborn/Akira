@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../models/anime_detail.dart';
 import '../models/anime_show.dart';
 
 class AnimeRepository {
@@ -12,12 +13,15 @@ class AnimeRepository {
       'c947693e2a04dfa9074df5ec01c6c5209fc9f9556f3e5d420dbca97f9d1b6d98';
   static const String communityPersistedQueryHash =
       '445e9bee7decbefb88df367d543174704a4dd5ee1259642d61e95baaa637d5b3';
+  static const String detailPersistedQueryHash =
+      'c6c067496f962fba87c7aaf6c215a40a6d3933c69012bd15e4d8949e58f3c010';
 
   // Persistent HTTP client reusing socket connections (avoids TLS handshake overhead)
   static final http.Client _client = http.Client();
 
   // In-memory cache for ultra-fast instant tab switching and zero lag
   static final Map<String, AnimePageResult> _cache = {};
+  static final Map<String, AnimeDetail> _detailCache = {};
   static List<AnimeShow>? _topRankedCache;
 
   static Map<String, String> get _headers => {
@@ -166,6 +170,70 @@ class AnimeRepository {
   static void clearCache() {
     _cache.clear();
     _topRankedCache = null;
+    _detailCache.clear();
+  }
+
+  /// Fetches comprehensive details for a specific anime by ID
+  static Future<AnimeDetail> fetchAnimeDetail(String animeId) async {
+    if (_detailCache.containsKey(animeId)) {
+      return _detailCache[animeId]!;
+    }
+
+    final variablesObj = <String, dynamic>{
+      '_id': animeId,
+      'search': {
+        'allowAdult': false,
+        'allowUnknown': false,
+        'denyEcchi': false,
+        'lite': false,
+        'forMe': false,
+      },
+    };
+
+    final extensionsObj = <String, dynamic>{
+      'persistedQuery': {
+        'version': 1,
+        'sha256Hash': detailPersistedQueryHash,
+      },
+    };
+
+    final encodedVariables = Uri.encodeComponent(jsonEncode(variablesObj));
+    final encodedExtensions = Uri.encodeComponent(jsonEncode(extensionsObj));
+    final fullUrl = '$baseUrl?variables=$encodedVariables&extensions=$encodedExtensions';
+
+    final response = await _client
+        .get(Uri.parse(fullUrl), headers: _headers)
+        .timeout(const Duration(seconds: 15));
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw Exception('Server error: HTTP ${response.statusCode}');
+    }
+
+    final dynamic decoded = jsonDecode(response.body);
+    if (decoded is! Map<String, dynamic>) {
+      throw Exception('Invalid response format received from server.');
+    }
+
+    if (decoded.containsKey('errors')) {
+      final errors = decoded['errors'] as List<dynamic>?;
+      if (errors != null && errors.isNotEmpty) {
+        final firstError = errors[0] as Map<String, dynamic>?;
+        final msg = firstError?['message']?.toString() ?? 'Failed to load anime details';
+        throw Exception(msg);
+      }
+    }
+
+    final data = decoded['data'] as Map<String, dynamic>?;
+    final showMap = data?['show'] as Map<String, dynamic>? ??
+        data?['anime'] as Map<String, dynamic>?;
+
+    if (showMap == null) {
+      throw Exception('Anime details not found.');
+    }
+
+    final detail = AnimeDetail.fromJson(showMap);
+    _detailCache[animeId] = detail;
+    return detail;
   }
 
   /// Fetches community recommended rail (top voted picks)
