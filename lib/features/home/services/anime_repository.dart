@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
+import '../../player/models/stream_source.dart';
+import '../../player/services/decryptor.dart';
+import '../../player/services/stream_parser.dart';
 import '../models/anime_detail.dart';
 import '../models/anime_show.dart';
 
@@ -15,6 +19,8 @@ class AnimeRepository {
       '445e9bee7decbefb88df367d543174704a4dd5ee1259642d61e95baaa637d5b3';
   static const String detailPersistedQueryHash =
       'c6c067496f962fba87c7aaf6c215a40a6d3933c69012bd15e4d8949e58f3c010';
+  static const String episodePersistedQueryHash =
+      '670bbf38d0868f446e2346c1e956ca2c40c416e733ca248fd54e04f1c8b99145';
 
   // Persistent HTTP client reusing socket connections (avoids TLS handshake overhead)
   static final http.Client _client = http.Client();
@@ -320,4 +326,191 @@ class AnimeRepository {
       page: page,
     );
   }
+
+  /// Fetches raw episode payload and authoritative CryptoBootstrap
+  static Future<Map<String, dynamic>> fetchEpisodeData({
+    required String showId,
+    required String translationType,
+    required String episodeString,
+    String? authToken,
+    String k = Decryptor.defaultLane,
+    String? aaReq,
+  }) async {
+    assert(showId.isNotEmpty, 'Show ID cannot be empty.');
+    assert(episodeString.isNotEmpty, 'Episode string cannot be empty.');
+
+    Future<String> executeEpisodeQuery(CryptoBootstrap bootstrap, [String? explicitAaReq]) async {
+      final effectiveAaReq = explicitAaReq ??
+          aaReq ??
+          Decryptor.generateAaReq(
+            queryHash: episodePersistedQueryHash,
+            bootstrap: bootstrap,
+            buildId: Decryptor.defaultBuildId,
+          );
+
+      final variablesObj = <String, dynamic>{
+        'showId': showId,
+        'translationType': translationType.toLowerCase(),
+        'episodeString': episodeString,
+      };
+
+      final extensionsObj = <String, dynamic>{
+        'persistedQuery': {
+          'version': 1,
+          'sha256Hash': episodePersistedQueryHash,
+        },
+        'k': k,
+        'aaReq': effectiveAaReq,
+      };
+
+      final encodedVariables = Uri.encodeComponent(jsonEncode(variablesObj));
+      final encodedExtensions = Uri.encodeComponent(jsonEncode(extensionsObj));
+      final fullUrl = '$baseUrl?variables=$encodedVariables&extensions=$encodedExtensions';
+
+      final headers = Map<String, String>.from(_headers);
+      if (authToken != null && authToken.trim().isNotEmpty) {
+        headers['authorization'] =
+            authToken.startsWith('Bearer ') ? authToken : 'Bearer $authToken';
+      }
+
+      developer.log('[AnimeRepository] Requesting episode: showId=$showId, ep=$episodeString, type=$translationType, buildId=${Decryptor.defaultBuildId}, lane=$k, epoch=${bootstrap.epoch}, qh=$episodePersistedQueryHash', name: 'AnimeRepository');
+
+      final response = await _client
+          .get(Uri.parse(fullUrl), headers: headers)
+          .timeout(const Duration(seconds: 15));
+
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw Exception('API error HTTP ${response.statusCode}: ${response.body}');
+      }
+      return response.body;
+    }
+
+    // Step 1: Obtain authoritative bootstrap
+    var bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken);
+    var responseStr = await executeEpisodeQuery(bootstrap);
+
+    // Step 2: Handle AA_CRYPTO errors
+    final isCryptoError = responseStr.contains('AA_CRYPTO_STALE') ||
+        responseStr.contains('AA_CRYPTO_EXPIRED') ||
+        responseStr.contains('AA_CRYPTO_MISSING') ||
+        responseStr.contains('AA_CRYPTO_MISSING_BUILD') ||
+        responseStr.contains('AA_CRYPTO_MISSING_LANE') ||
+        responseStr.contains('AA_CRYPTO_LANE_MISMATCH') ||
+        responseStr.contains('AA_CRYPTO_QUERY_MISMATCH') ||
+        responseStr.contains('AA_CRYPTO_BUILD_MISMATCH');
+
+    if (isCryptoError) {
+      developer.log('[AnimeRepository] AA_CRYPTO error in episode response. Invalidating bootstrap cache and retrying with fresh aaReq...', name: 'AnimeRepository');
+      Decryptor.invalidateBootstrapCache();
+      bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken, forceRefresh: true);
+      // Generate completely fresh aaReq for new bootstrap
+      final freshAaReq = Decryptor.generateAaReq(
+        queryHash: episodePersistedQueryHash,
+        bootstrap: bootstrap,
+        buildId: Decryptor.defaultBuildId,
+      );
+      responseStr = await executeEpisodeQuery(bootstrap, freshAaReq);
+    }
+
+    return {
+      'response': responseStr,
+      'bootstrap': bootstrap,
+    };
+  }
+
+  static Future<EpisodeFetchResult> fetchEpisodeStreams({
+    required String showId,
+    required String episodeString,
+    String translationType = 'sub',
+    String? authToken,
+  }) async {
+    final data = await fetchEpisodeData(
+      showId: showId,
+      translationType: translationType,
+      episodeString: episodeString,
+      authToken: authToken,
+    );
+
+    final rawJsonStr = data['response'] as String;
+    final bootstrap = data['bootstrap'] as CryptoBootstrap;
+
+    final dynamic root = jsonDecode(rawJsonStr);
+    if (root is! Map<String, dynamic>) {
+      throw Exception('Invalid response format');
+    }
+
+    if (root.containsKey('errors')) {
+      final errors = root['errors'] as List<dynamic>?;
+      if (errors != null && errors.isNotEmpty) {
+        final first = errors[0] as Map<String, dynamic>?;
+        final msg = first?['message']?.toString() ?? 'Episode query error';
+        throw Exception(msg);
+      }
+    }
+
+    final dataObj = root['data'] as Map<String, dynamic>?;
+    final epObj = dataObj?['episode'] as Map<String, dynamic>?;
+
+    // Prefer data.tobeparsed, then data.episode.tobeparsed, then data.episode.episodes
+    final rawTobe = dataObj?['tobeparsed']?.toString();
+    final epTobe = epObj?['tobeparsed']?.toString();
+    final epEps = epObj?['episodes']?.toString();
+
+    final tobeparsed = (rawTobe != null && rawTobe.trim().isNotEmpty)
+        ? rawTobe
+        : (epTobe != null && epTobe.trim().isNotEmpty)
+            ? epTobe
+            : epEps;
+
+    if (tobeparsed == null || tobeparsed.trim().isEmpty) {
+      throw Exception('No stream data found in episode response.');
+    }
+
+    developer.log('[AnimeRepository] Encrypted payload received: length=${tobeparsed.length}', name: 'AnimeRepository');
+
+    final plainText = Decryptor.decrypt(
+      payload: tobeparsed,
+      partBBase64: bootstrap.partB,
+      buildId: Decryptor.defaultBuildId,
+    );
+
+    developer.log('[AnimeRepository] Decrypted payload: length=${plainText.length}', name: 'AnimeRepository');
+
+    final streams = StreamParser.parseStreams(plainText);
+    if (streams.isEmpty) {
+      throw Exception('No playable video stream sources could be extracted.');
+    }
+
+    final directSources = streams.where((s) => s.isDirect).toList();
+    if (directSources.isNotEmpty) {
+      final top = directSources.first;
+      final uri = Uri.tryParse(top.url);
+      developer.log('[AnimeRepository] Selected top playable source: name=${top.sourceName}, type=${top.type}, ext=${top.fileExtension}, host=${uri?.host}', name: 'AnimeRepository');
+    }
+
+    return EpisodeFetchResult(
+      streams: streams,
+      rawResponse: rawJsonStr,
+      tobeparsed: tobeparsed,
+      decryptedJson: plainText,
+      bootstrapEpoch: bootstrap.epoch,
+    );
+  }
 }
+
+class EpisodeFetchResult {
+  final List<StreamSource> streams;
+  final String rawResponse;
+  final String tobeparsed;
+  final String decryptedJson;
+  final int bootstrapEpoch;
+
+  const EpisodeFetchResult({
+    required this.streams,
+    required this.rawResponse,
+    required this.tobeparsed,
+    required this.decryptedJson,
+    required this.bootstrapEpoch,
+  });
+}
+

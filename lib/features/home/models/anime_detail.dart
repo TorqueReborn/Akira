@@ -50,6 +50,36 @@ class AnimeCharacter {
   }
 }
 
+class AnimeEpisodeDetail {
+  final List<String> sub;
+  final List<String> dub;
+  final List<String> raw;
+
+  const AnimeEpisodeDetail({
+    this.sub = const [],
+    this.dub = const [],
+    this.raw = const [],
+  });
+
+  factory AnimeEpisodeDetail.fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const AnimeEpisodeDetail();
+    List<String> parseList(dynamic val) {
+      if (val is List) {
+        // The API returns episodes in reverse (descending) order.
+        // We reverse it so episodes are in ascending order (1, 2, ..., N).
+        return val.map((e) => e.toString()).toList().reversed.toList();
+      }
+      return const [];
+    }
+
+    return AnimeEpisodeDetail(
+      sub: parseList(json['sub']),
+      dub: parseList(json['dub']),
+      raw: parseList(json['raw']),
+    );
+  }
+}
+
 class AnimeDetail {
   final String id;
   final String name;
@@ -75,6 +105,7 @@ class AnimeDetail {
   final int availableEpisodesDub;
   final String? lastEpisodeSub;
   final String? lastEpisodeDub;
+  final AnimeEpisodeDetail episodesDetail;
   final String? views;
   final String? trailerVideoId;
   final List<AnimeCharacter> characters;
@@ -105,6 +136,7 @@ class AnimeDetail {
     this.availableEpisodesDub = 0,
     this.lastEpisodeSub,
     this.lastEpisodeDub,
+    this.episodesDetail = const AnimeEpisodeDetail(),
     this.views,
     this.trailerVideoId,
     this.characters = const [],
@@ -234,6 +266,9 @@ class AnimeDetail {
 
     final siteRanks = json['siteRanks'] as Map<String, dynamic>?;
 
+    final epDetailObj = json['availableEpisodesDetail'] as Map<String, dynamic>?;
+    final episodesDetail = AnimeEpisodeDetail.fromJson(epDetailObj);
+
     return AnimeDetail(
       id: id,
       name: name,
@@ -265,6 +300,7 @@ class AnimeDetail {
       availableEpisodesDub: availableEpisodesDub,
       lastEpisodeSub: lastEpisodeSub,
       lastEpisodeDub: lastEpisodeDub,
+      episodesDetail: episodesDetail,
       views: views,
       trailerVideoId: trailerId,
       characters: characters,
