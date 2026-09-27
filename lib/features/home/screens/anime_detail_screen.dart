@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
+import '../../auth/services/token_manager.dart';
+import '../../player/screens/player_screen.dart';
+import '../../player/services/watch_history_manager.dart';
 import '../models/anime_detail.dart';
 import '../services/anime_repository.dart';
 
@@ -28,10 +31,25 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
   String? _errorMessage;
   bool _isSynopsisExpanded = false;
 
+  // Episode selection & playback state
+  String _selectedTab = 'SUB'; // 'SUB', 'DUB', 'RAW'
+  String? _loadingEpisodeString;
+  AnimeProgress? _currentProgress;
+
   @override
   void initState() {
     super.initState();
     _fetchDetail();
+    _loadProgress();
+  }
+
+  Future<void> _loadProgress() async {
+    final progress = await WatchHistoryManager.getProgress(widget.animeId);
+    if (mounted) {
+      setState(() {
+        _currentProgress = progress;
+      });
+    }
   }
 
   Future<void> _fetchDetail() async {
@@ -46,6 +64,13 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
       setState(() {
         _detail = detail;
         _isLoading = false;
+        if (detail.episodesDetail.sub.isNotEmpty) {
+          _selectedTab = 'SUB';
+        } else if (detail.episodesDetail.dub.isNotEmpty) {
+          _selectedTab = 'DUB';
+        } else if (detail.episodesDetail.raw.isNotEmpty) {
+          _selectedTab = 'RAW';
+        }
       });
     } catch (e) {
       if (!mounted) return;
@@ -53,6 +78,60 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
         _isLoading = false;
         _errorMessage = e.toString().replaceFirst('Exception: ', '');
       });
+    }
+  }
+
+  Future<void> _playEpisode(String episodeString, {int startPositionMs = 0}) async {
+    if (_loadingEpisodeString != null) return;
+
+    setState(() {
+      _loadingEpisodeString = episodeString;
+    });
+
+    try {
+      final token = TokenManager.getAccessToken();
+      final result = await AnimeRepository.fetchEpisodeStreams(
+        showId: widget.animeId,
+        episodeString: episodeString,
+        translationType: _selectedTab.toLowerCase(),
+        authToken: token,
+      );
+
+      if (!mounted) return;
+      setState(() {
+        _loadingEpisodeString = null;
+      });
+
+      final title = _detail?.englishName ?? _detail?.name ?? widget.initialTitle ?? 'Anime';
+      final thumb = _detail?.thumbnail ?? widget.initialPoster;
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PlayerScreen(
+            animeId: widget.animeId,
+            animeTitle: title,
+            episodeNumber: episodeString,
+            sources: result.streams,
+            thumbnail: thumb,
+            initialPositionMs: startPositionMs,
+          ),
+        ),
+      );
+
+      // Refresh progress upon returning
+      _loadProgress();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loadingEpisodeString = null;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to load episode $episodeString: ${e.toString().replaceFirst("Exception: ", "")}'),
+          backgroundColor: const Color(0xFFE50914),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -913,61 +992,179 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
     );
   }
 
+
+
   Widget _buildPrimaryActionButton(AnimeDetail detail) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        gradient: AppColors.logoGradient,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primary.withAlpha(80),
-            blurRadius: 14,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  'Now streaming ${detail.englishName ?? detail.name}',
-                ),
-                behavior: SnackBarBehavior.floating,
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(16),
-          splashColor: Colors.white.withAlpha(50),
+    final isLoadingThis = _loadingEpisodeString != null;
+    String targetEp = '1';
+
+    // Helper to get episodes list for a tab
+    List<String> getTabEpisodes(String tab) {
+      if (tab == 'SUB') {
+        return detail.episodesDetail.sub.isNotEmpty
+            ? detail.episodesDetail.sub
+            : (detail.availableEpisodesSub > 0
+                ? List.generate(detail.availableEpisodesSub, (i) => '${i + 1}')
+                : <String>[]);
+      } else if (tab == 'DUB') {
+        return detail.episodesDetail.dub.isNotEmpty
+            ? detail.episodesDetail.dub
+            : (detail.availableEpisodesDub > 0
+                ? List.generate(detail.availableEpisodesDub, (i) => '${i + 1}')
+                : <String>[]);
+      } else {
+        return detail.episodesDetail.raw;
+      }
+    }
+
+    final activeEpisodes = getTabEpisodes(_selectedTab).isNotEmpty
+        ? getTabEpisodes(_selectedTab)
+        : (getTabEpisodes('SUB').isNotEmpty ? getTabEpisodes('SUB') : getTabEpisodes('DUB'));
+
+    if (_currentProgress != null) {
+      targetEp = _currentProgress!.episodeNumber;
+    } else if (activeEpisodes.isNotEmpty) {
+      targetEp = activeEpisodes.first;
+    }
+
+    return Row(
+      children: [
+        // 1. Primary Action: Watch / Resume Episode Button
+        Expanded(
           child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            alignment: Alignment.center,
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.play_arrow_rounded,
-                  color: Colors.white,
-                  size: 26,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Watch Now',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.8,
-                  ),
+            height: 52,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: AppColors.logoGradient,
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withAlpha(70),
+                  blurRadius: 14,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () {
+                  final startMs = _currentProgress != null && _currentProgress!.episodeNumber == targetEp
+                      ? _currentProgress!.seekPositionMs
+                      : 0;
+                  _playEpisode(targetEp, startPositionMs: startMs);
+                },
+                borderRadius: BorderRadius.circular(16),
+                splashColor: Colors.white.withAlpha(50),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (isLoadingThis) ...[
+                        const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2.5,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Loading Ep $targetEp...',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ] else ...[
+                        const Icon(
+                          Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 26,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          _currentProgress != null ? 'Resume Episode $targetEp' : 'Watch Episode $targetEp',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
-      ),
+        const SizedBox(width: 10),
+
+        // 2. Secondary Action: Icon-Only Episodes Button
+        Container(
+          width: 52,
+          height: 52,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFFEDE8F5),
+              width: 1.2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF0F172A).withAlpha(8),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _showEpisodesBottomSheet(detail),
+              borderRadius: BorderRadius.circular(16),
+              child: const Center(
+                child: Icon(
+                  Icons.format_list_numbered_rounded,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+
+
+  void _showEpisodesBottomSheet(AnimeDetail detail) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) {
+        return _EpisodesBottomSheet(
+          detail: detail,
+          initialTab: _selectedTab,
+          currentEpisode: _currentProgress?.episodeNumber,
+          loadingEpisode: _loadingEpisodeString,
+          onTabChanged: (newTab) {
+            setState(() {
+              _selectedTab = newTab;
+            });
+          },
+          onSelectEpisode: (ep) {
+            Navigator.of(ctx).pop();
+            _playEpisode(ep);
+          },
+        );
+      },
     );
   }
 
@@ -1335,6 +1532,419 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _EpisodesBottomSheet extends StatefulWidget {
+  final AnimeDetail detail;
+  final String initialTab;
+  final String? currentEpisode;
+  final String? loadingEpisode;
+  final ValueChanged<String> onTabChanged;
+  final ValueChanged<String> onSelectEpisode;
+
+  const _EpisodesBottomSheet({
+    required this.detail,
+    required this.initialTab,
+    this.currentEpisode,
+    this.loadingEpisode,
+    required this.onTabChanged,
+    required this.onSelectEpisode,
+  });
+
+  @override
+  State<_EpisodesBottomSheet> createState() => _EpisodesBottomSheetState();
+}
+
+class _EpisodesBottomSheetState extends State<_EpisodesBottomSheet> {
+  final TextEditingController _searchController = TextEditingController();
+  late String _activeTab;
+  int _selectedChunkIndex = 0;
+  static const int _chunkSize = 100;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeTab = widget.initialTab;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<String> _getEpisodesForTab(String tab) {
+    if (tab == 'SUB') {
+      return widget.detail.episodesDetail.sub.isNotEmpty
+          ? widget.detail.episodesDetail.sub
+          : (widget.detail.availableEpisodesSub > 0
+              ? List.generate(widget.detail.availableEpisodesSub, (i) => '${i + 1}')
+              : <String>[]);
+    } else if (tab == 'DUB') {
+      return widget.detail.episodesDetail.dub.isNotEmpty
+          ? widget.detail.episodesDetail.dub
+          : (widget.detail.availableEpisodesDub > 0
+              ? List.generate(widget.detail.availableEpisodesDub, (i) => '${i + 1}')
+              : <String>[]);
+    } else {
+      return widget.detail.episodesDetail.raw;
+    }
+  }
+
+  List<String> _getAvailableTabs() {
+    final tabs = <String>[];
+    if (_getEpisodesForTab('SUB').isNotEmpty) tabs.add('SUB');
+    if (_getEpisodesForTab('DUB').isNotEmpty) tabs.add('DUB');
+    if (_getEpisodesForTab('RAW').isNotEmpty) tabs.add('RAW');
+    return tabs.isNotEmpty ? tabs : ['SUB'];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final availableTabs = _getAvailableTabs();
+    if (!availableTabs.contains(_activeTab)) {
+      _activeTab = availableTabs.first;
+    }
+
+    final episodes = _getEpisodesForTab(_activeTab);
+    final query = _searchController.text.trim();
+    final totalEpisodes = episodes.length;
+    final totalChunks = (totalEpisodes / _chunkSize).ceil();
+
+    List<String> displayedEpisodes;
+    if (query.isNotEmpty) {
+      displayedEpisodes = episodes
+          .where((ep) => ep.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+    } else if (totalChunks > 1) {
+      final start = _selectedChunkIndex * _chunkSize;
+      final end = (start + _chunkSize).clamp(0, totalEpisodes);
+      displayedEpisodes = episodes.sublist(start, end);
+    } else {
+      displayedEpisodes = episodes;
+    }
+
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.82,
+      decoration: const BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      child: Column(
+        children: [
+          // Drag handle
+          Container(
+            margin: const EdgeInsets.only(top: 12, bottom: 6),
+            width: 42,
+            height: 4.5,
+            decoration: BoxDecoration(
+              color: Colors.black.withAlpha(25),
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+
+          // Header with Title & Close Button
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 14, 6),
+            child: Row(
+              children: [
+                const Text(
+                  'Episodes',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2.5),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withAlpha(20),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$totalEpisodes ${_activeTab.toLowerCase()}',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close_rounded, color: AppColors.textSecondary, size: 22),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            ),
+          ),
+
+          // SUB / DUB / RAW Pill Switcher (if multiple tabs exist)
+          if (availableTabs.length > 1)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFEDE8F5), width: 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0F172A).withAlpha(6),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  children: availableTabs.map((tab) {
+                    final isSel = tab == _activeTab;
+                    final count = _getEpisodesForTab(tab).length;
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _activeTab = tab;
+                            _selectedChunkIndex = 0;
+                            _searchController.clear();
+                          });
+                          widget.onTabChanged(tab);
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            gradient: isSel ? AppColors.logoGradient : null,
+                            color: isSel ? null : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: isSel
+                                ? [
+                                    BoxShadow(
+                                      color: AppColors.primary.withAlpha(50),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                tab == 'SUB'
+                                    ? Icons.subtitles_rounded
+                                    : (tab == 'DUB' ? Icons.mic_rounded : Icons.fiber_manual_record_rounded),
+                                size: 14,
+                                color: isSel ? Colors.white : AppColors.textSecondary,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                '$tab ($count)',
+                                style: TextStyle(
+                                  color: isSel ? Colors.white : AppColors.textSecondary,
+                                  fontSize: 12.5,
+                                  fontWeight: isSel ? FontWeight.w800 : FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+            child: TextField(
+              controller: _searchController,
+              onChanged: (_) => setState(() {}),
+              style: const TextStyle(color: AppColors.textPrimary, fontSize: 14),
+              decoration: InputDecoration(
+                hintText: 'Jump to episode (e.g. 12, 105)...',
+                hintStyle: const TextStyle(color: AppColors.textHint, fontSize: 13),
+                prefixIcon: const Icon(Icons.search_rounded, color: AppColors.primary, size: 20),
+                suffixIcon: query.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear_rounded, color: AppColors.textSecondary, size: 18),
+                        onPressed: () {
+                          _searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Color(0xFFEDE8F5), width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                ),
+              ),
+            ),
+          ),
+
+          // Chunk Range Chips (e.g. 1-100, 101-200)
+          if (query.isEmpty && totalChunks > 1) ...[
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 34,
+              child: ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                itemCount: totalChunks,
+                separatorBuilder: (_, _) => const SizedBox(width: 8),
+                itemBuilder: (context, idx) {
+                  final start = idx * _chunkSize + 1;
+                  final end = ((idx + 1) * _chunkSize).clamp(1, totalEpisodes);
+                  final isSelected = idx == _selectedChunkIndex;
+
+                  return ChoiceChip(
+                    label: Text(
+                      '$start - $end',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.w700,
+                        color: isSelected ? Colors.white : AppColors.textSecondary,
+                      ),
+                    ),
+                    selected: isSelected,
+                    selectedColor: AppColors.primary,
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      side: BorderSide(
+                        color: isSelected ? AppColors.primary : const Color(0xFFEDE8F5),
+                      ),
+                    ),
+                    onSelected: (val) {
+                      if (val) {
+                        setState(() {
+                          _selectedChunkIndex = idx;
+                        });
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+
+          const SizedBox(height: 12),
+
+          // Episodes Grid
+          Expanded(
+            child: displayedEpisodes.isEmpty
+                ? Center(
+                    child: Text(
+                      'No episodes found for "$query"',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                    physics: const BouncingScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      childAspectRatio: 1.45,
+                    ),
+                    itemCount: displayedEpisodes.length,
+                    itemBuilder: (context, index) {
+                      final ep = displayedEpisodes[index];
+                      final isCurrentProgress = widget.currentEpisode == ep;
+                      final isCurrentlyLoading = widget.loadingEpisode == ep;
+
+                      return Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12),
+                          onTap: () => widget.onSelectEpisode(ep),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            decoration: BoxDecoration(
+                              color: isCurrentProgress
+                                  ? AppColors.primary.withAlpha(20)
+                                  : Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: isCurrentProgress
+                                    ? AppColors.primary
+                                    : const Color(0xFFEDE8F5),
+                                width: isCurrentProgress ? 1.6 : 1,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: isCurrentProgress
+                                      ? AppColors.primary.withAlpha(20)
+                                      : const Color(0xFF0F172A).withAlpha(6),
+                                  blurRadius: isCurrentProgress ? 6 : 4,
+                                  offset: const Offset(0, 1.5),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: isCurrentlyLoading
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.primary,
+                                      ),
+                                    )
+                                  : Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          isCurrentProgress
+                                              ? Icons.play_arrow_rounded
+                                              : Icons.play_arrow_outlined,
+                                          size: 13,
+                                          color: isCurrentProgress
+                                              ? AppColors.primary
+                                              : AppColors.textSecondary.withAlpha(160),
+                                        ),
+                                        const SizedBox(width: 2),
+                                        Text(
+                                          ep,
+                                          style: TextStyle(
+                                            color: isCurrentProgress
+                                                ? AppColors.primary
+                                                : AppColors.textPrimary,
+                                            fontSize: 12.5,
+                                            fontWeight: isCurrentProgress
+                                                ? FontWeight.w800
+                                                : FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }
