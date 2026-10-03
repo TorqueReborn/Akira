@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../theme/app_colors.dart';
-
 /// TV Input Field supporting D-Pad navigation, OK to edit, and right-arrow focus to toggle password visibility.
 class TvInputField extends StatefulWidget {
   final String label;
@@ -166,28 +164,32 @@ class _TvInputFieldState extends State<TvInputField> {
                       widget.label,
                       style: TextStyle(
                         color: isFieldHighlighted
-                            ? AppColors.primary
-                            : AppColors.textSecondary,
-                        fontSize: 14,
+                            ? const Color(0xFF7C3AED)
+                            : const Color(0xFF475569),
+                        fontSize: 14.5,
                         fontWeight:
-                            isFieldHighlighted ? FontWeight.w700 : FontWeight.w500,
+                            isFieldHighlighted ? FontWeight.w800 : FontWeight.w600,
                         letterSpacing: 0.3,
                       ),
                     ),
                     if (isFieldHighlighted && !_isEditing)
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                            horizontal: 10, vertical: 3),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withAlpha(25),
-                          borderRadius: BorderRadius.circular(6),
+                          color: const Color(0xFF7C3AED).withAlpha(20),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: const Color(0xFF8B5CF6).withAlpha(80),
+                            width: 1.0,
+                          ),
                         ),
                         child: Text(
                           widget.isPassword ? 'Press OK to edit  •  → to toggle' : 'Press OK to edit',
                           style: const TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 11,
-                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF6D28D9),
+                            fontSize: 11.5,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ),
@@ -198,14 +200,30 @@ class _TvInputFieldState extends State<TvInputField> {
                 duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
                 decoration: BoxDecoration(
-                  color: isFieldHighlighted ? Colors.white : const Color(0xFFF8FAFC),
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: isFieldHighlighted
-                        ? AppColors.primary
+                        ? const Color(0xFF7C3AED)
                         : const Color(0xFFE2E8F0),
-                    width: isFieldHighlighted ? 2.5 : 1.2,
+                    width: isFieldHighlighted ? 2.2 : 1.2,
                   ),
+                  boxShadow: isFieldHighlighted
+                      ? [
+                          BoxShadow(
+                            color: const Color(0xFF8B5CF6).withAlpha(50),
+                            blurRadius: 18,
+                            spreadRadius: 1,
+                            offset: const Offset(0, 4),
+                          ),
+                        ]
+                      : [
+                          BoxShadow(
+                            color: const Color(0xFF0F172A).withAlpha(12),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
                 ),
                 child: Focus(
                   onKeyEvent: (node, event) {
@@ -236,11 +254,13 @@ class _TvInputFieldState extends State<TvInputField> {
                         ? TextInputAction.next
                         : TextInputAction.done,
                     style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 16,
+                      color: Color(0xFF1E1B2E),
+                      fontSize: 16.5,
                       fontWeight: FontWeight.w600,
+                      letterSpacing: 0.3,
                     ),
-                    cursorColor: AppColors.primary,
+                    cursorColor: const Color(0xFF7C3AED),
+                    cursorWidth: 2.2,
                     decoration: InputDecoration(
                       hintText: widget.hintText,
                       hintStyle: const TextStyle(
@@ -251,8 +271,8 @@ class _TvInputFieldState extends State<TvInputField> {
                       prefixIcon: Icon(
                         widget.prefixIcon,
                         color: isFieldHighlighted
-                            ? AppColors.primary
-                            : const Color(0xFF64748B),
+                            ? const Color(0xFF7C3AED)
+                            : const Color(0xFF94A3B8),
                         size: 24,
                       ),
                       suffixIcon: widget.isPassword
@@ -307,9 +327,9 @@ class _TvInputFieldState extends State<TvInputField> {
                                               ? Icons.visibility_off_outlined
                                               : Icons.visibility_outlined,
                                           color: _isVisibilityFocused
-                                              ? AppColors.primary
+                                              ? const Color(0xFF7C3AED)
                                               : (isFieldHighlighted
-                                                  ? const Color(0xFF64748B)
+                                                  ? const Color(0xFF6B21A8)
                                                   : const Color(0xFF94A3B8)),
                                           size: 22,
                                         ),

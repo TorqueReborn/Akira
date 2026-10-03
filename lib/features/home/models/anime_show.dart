@@ -4,6 +4,7 @@ class AnimeShow {
   final String? englishName;
   final String? nativeName;
   final String? thumbnail;
+  final String? banner;
   final String? type;
   final String? seasonQuarter;
   final int? seasonYear;
@@ -20,6 +21,7 @@ class AnimeShow {
     this.englishName,
     this.nativeName,
     this.thumbnail,
+    this.banner,
     this.type,
     this.seasonQuarter,
     this.seasonYear,
@@ -40,6 +42,10 @@ class AnimeShow {
     // Resolve thumbnail: check thumbnail, or fallback to cover
     String? thumb = json['thumbnail']?.toString() ?? json['cover']?.toString();
     if (thumb != null && thumb.trim().isEmpty) thumb = null;
+
+    // Resolve banner if available in response
+    String? banner = json['banner']?.toString() ?? json['bannerImage']?.toString() ?? json['bannerUrl']?.toString();
+    if (banner != null && banner.trim().isEmpty) banner = null;
 
     final type = json['type']?.toString() ?? json['format']?.toString();
 
@@ -77,6 +83,7 @@ class AnimeShow {
           ? nativeName
           : null,
       thumbnail: thumb,
+      banner: banner,
       type: (type != null && type.trim().isNotEmpty) ? type : null,
       seasonQuarter:
           (seasonQuarter != null && seasonQuarter.trim().isNotEmpty)
@@ -106,6 +113,7 @@ class AnimeShow {
     final englishName = anyCard['englishName']?.toString();
     final nativeName = anyCard['nativeName']?.toString();
     final thumbnail = anyCard['thumbnail']?.toString() ?? anyCard['cover']?.toString();
+    final banner = anyCard['banner']?.toString() ?? anyCard['bannerImage']?.toString() ?? anyCard['bannerUrl']?.toString();
 
     final score = (anyCard['score'] as num?)?.toDouble();
 
@@ -131,6 +139,7 @@ class AnimeShow {
           ? nativeName
           : null,
       thumbnail: thumbnail != null && thumbnail.trim().isNotEmpty ? thumbnail : null,
+      banner: banner != null && banner.trim().isNotEmpty ? banner : null,
       type: 'TV',
       seasonQuarter: null,
       seasonYear: seasonYear != null && seasonYear > 0 ? seasonYear : null,

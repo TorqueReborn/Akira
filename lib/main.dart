@@ -4,6 +4,7 @@ import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/tv_login_screen.dart';
 import 'features/auth/services/token_manager.dart';
 import 'features/home/screens/home_screen.dart';
+import 'features/home/screens/tv_home_screen.dart';
 import 'theme/app_theme.dart';
 import 'utils/device_detector.dart';
 
@@ -29,10 +30,10 @@ class AkiraApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       home: Builder(
         builder: (ctx) {
-          if (isLoggedIn) {
-            return const HomeScreen();
-          }
           final isTv = DeviceDetector.isTv || DeviceDetector.isTvMode(ctx);
+          if (isLoggedIn) {
+            return isTv ? const TvHomeScreen() : const HomeScreen();
+          }
           return isTv ? const TvLoginScreen() : const LoginScreen();
         },
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../utils/device_detector.dart';
 import '../models/stream_source.dart';
 import '../services/watch_history_manager.dart';
 
@@ -44,6 +45,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   double _dragSliderProgress = 0.0;
 
   bool _isFullScreen = true;
+  bool _isTv = false;
   Timer? _progressSaveTimer;
 
   @override
@@ -72,7 +74,11 @@ class _PlayerScreenState extends State<PlayerScreen> {
       });
     }
 
-    _startControlsTimer();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _isTv = DeviceDetector.isTv || DeviceDetector.isTvMode(context);
+  }
 
     // Periodically save progress every 5 seconds
     _progressSaveTimer = Timer.periodic(const Duration(seconds: 5), (_) {
@@ -240,7 +246,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
     setState(() {
       _isFullScreen = !_isFullScreen;
     });
-    if (_isFullScreen) {
+    if (_isFullScreen || _isTv) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
       SystemChrome.setPreferredOrientations([
         DeviceOrientation.landscapeLeft,
@@ -267,9 +273,19 @@ class _PlayerScreenState extends State<PlayerScreen> {
 
     // Restore orientations and system bars
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]);
+    if (_isTv || DeviceDetector.isTv) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    } else {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
     super.dispose();
   }
 

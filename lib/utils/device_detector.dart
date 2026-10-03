@@ -35,6 +35,7 @@ class DeviceDetector {
     final size = MediaQuery.of(context).size;
     // TV screens are wide landscape displays >= 960 width with aspect ratio >= 1.5
     if (size.width >= 960 && (size.width / size.height) >= 1.5) {
+      _cachedIsTv = true;
       return true;
     }
     return false;

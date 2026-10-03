@@ -389,27 +389,84 @@ class AnimeRepository {
     var bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken);
     var responseStr = await executeEpisodeQuery(bootstrap);
 
-    // Step 2: Handle AA_CRYPTO errors
-    final isCryptoError = responseStr.contains('AA_CRYPTO_STALE') ||
-        responseStr.contains('AA_CRYPTO_EXPIRED') ||
-        responseStr.contains('AA_CRYPTO_MISSING') ||
-        responseStr.contains('AA_CRYPTO_MISSING_BUILD') ||
-        responseStr.contains('AA_CRYPTO_MISSING_LANE') ||
-        responseStr.contains('AA_CRYPTO_LANE_MISMATCH') ||
-        responseStr.contains('AA_CRYPTO_QUERY_MISMATCH') ||
-        responseStr.contains('AA_CRYPTO_BUILD_MISMATCH');
+    // Step 2: Handle AA_CRYPTO errors robustly
+    bool checkCryptoError(String resp) {
+      final upper = resp.toUpperCase();
+      return upper.contains('AA_CRYPTO_STALE') ||
+          upper.contains('AA_CRYPTO_EXPIRED') ||
+          upper.contains('AA_CRYPTO_MISSING') ||
+          upper.contains('AA_CRYPTO_MISSING_BUILD') ||
+          upper.contains('AA_CRYPTO_MISSING_LANE') ||
+          upper.contains('AA_CRYPTO_LANE_MISMATCH') ||
+          upper.contains('AA_CRYPTO_QUERY_MISMATCH') ||
+          upper.contains('AA_CRYPTO_BUILD_MISMATCH') ||
+          upper.contains('AACRYPTO EXPIRED') ||
+          upper.contains('AACRYPTO_EXPIRED');
+    }
 
-    if (isCryptoError) {
-      developer.log('[AnimeRepository] AA_CRYPTO error in episode response. Invalidating bootstrap cache and retrying with fresh aaReq...', name: 'AnimeRepository');
+    if (checkCryptoError(responseStr)) {
+      developer.log('[AnimeRepository] AA_CRYPTO error in episode response. Invalidating bootstrap cache and retrying with fresh bootstrap...', name: 'AnimeRepository');
       Decryptor.invalidateBootstrapCache();
-      bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken, forceRefresh: true);
-      // Generate completely fresh aaReq for new bootstrap
-      final freshAaReq = Decryptor.generateAaReq(
-        queryHash: episodePersistedQueryHash,
-        bootstrap: bootstrap,
-        buildId: Decryptor.defaultBuildId,
-      );
-      responseStr = await executeEpisodeQuery(bootstrap, freshAaReq);
+      
+      // Try with forceRefresh
+      try {
+        bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken, forceRefresh: true);
+        final freshAaReq = Decryptor.generateAaReq(
+          queryHash: episodePersistedQueryHash,
+          bootstrap: bootstrap,
+          buildId: Decryptor.defaultBuildId,
+        );
+        responseStr = await executeEpisodeQuery(bootstrap, freshAaReq);
+      } catch (e) {
+        developer.log('[AnimeRepository] Retry failed: $e', name: 'AnimeRepository');
+      }
+
+      // If still error, try alternate candidate epochs
+      if (checkCryptoError(responseStr)) {
+        final now = DateTime.now().millisecondsSinceEpoch;
+        final epochsToTry = [
+          Decryptor.calculateCurrentEpoch(now),
+          Decryptor.calculateTransitionEpoch(now),
+          Decryptor.calculateCurrentEpoch(now) - 1,
+          Decryptor.calculateCurrentEpoch(now) + 1,
+        ];
+
+        for (final ep in epochsToTry) {
+          try {
+            final xAaBoot = Decryptor.generateXAaBoot(
+              buildId: Decryptor.defaultBuildId,
+              lane: k,
+              epoch: ep,
+            );
+            final url = Uri.parse('${Decryptor.bootstrapUrl}?buildId=${Decryptor.defaultBuildId}&k=$k');
+            final headers = <String, String>{
+              'Origin': 'https://mkissa.to',
+              'Referer': 'https://mkissa.to/',
+              'x-build-id': Decryptor.defaultBuildId,
+              'x-aa-boot': xAaBoot,
+            };
+            if (authToken != null && authToken.trim().isNotEmpty) {
+              headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : 'Bearer $authToken';
+            }
+            final bResp = await http.get(url, headers: headers).timeout(const Duration(seconds: 8));
+            if (bResp.statusCode == 200) {
+              final jsonMap = jsonDecode(bResp.body) as Map<String, dynamic>;
+              final freshBoot = CryptoBootstrap.fromJson(jsonMap, defaultLane: k, currentTimeMs: now);
+              final freshAaReq = Decryptor.generateAaReq(
+                queryHash: episodePersistedQueryHash,
+                bootstrap: freshBoot,
+                buildId: Decryptor.defaultBuildId,
+              );
+              final altResp = await executeEpisodeQuery(freshBoot, freshAaReq);
+              if (!checkCryptoError(altResp)) {
+                bootstrap = freshBoot;
+                responseStr = altResp;
+                break;
+              }
+            }
+          } catch (_) {}
+        }
+      }
     }
 
     return {

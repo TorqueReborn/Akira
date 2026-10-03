@@ -76,22 +76,42 @@ class _TvButtonState extends State<TvButton> {
         return KeyEventResult.ignored;
       },
       child: AnimatedScale(
-        scale: _isFocused ? 1.05 : 1.0,
+        scale: _isFocused ? 1.04 : 1.0,
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 180),
-          padding: EdgeInsets.all(_isFocused ? 3.0 : 0.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(21),
-            border: Border.all(
-              color: _isFocused ? const Color(0xFF7C3AED) : Colors.transparent,
-              width: _isFocused ? 2.5 : 0.0,
-            ),
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: _isFocused
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF8B5CF6).withAlpha(120),
+                      blurRadius: 24,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 4),
+                    ),
+                    BoxShadow(
+                      color: const Color(0xFFEC4899).withAlpha(60),
+                      blurRadius: 20,
+                      spreadRadius: 1,
+                    ),
+                  ]
+                : [
+                    BoxShadow(
+                      color: Colors.black.withAlpha(100),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
           ),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(
+                color: _isFocused ? Colors.white : Colors.white.withAlpha(30),
+                width: _isFocused ? 2.5 : 1.0,
+              ),
               gradient: const LinearGradient(
                 colors: [
                   Color(0xFF3B82F6), // Vibrant Blue
@@ -106,7 +126,7 @@ class _TvButtonState extends State<TvButton> {
               color: Colors.transparent,
               child: InkWell(
                 onTap: widget.isLoading ? null : widget.onPressed,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(18),
                 splashColor: Colors.white.withAlpha(60),
                 highlightColor: Colors.white.withAlpha(30),
                 child: Container(

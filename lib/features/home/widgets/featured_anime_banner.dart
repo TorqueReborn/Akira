@@ -342,27 +342,6 @@ class _FeaturedAnimeBannerState extends State<FeaturedAnimeBanner> {
                                         ],
                                       ),
                                     ),
-                                    if (show.availableEpisodesSub > 0) ...[
-                                      const SizedBox(width: 8),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 8,
-                                          vertical: 4,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white.withAlpha(35),
-                                          borderRadius: BorderRadius.circular(8),
-                                        ),
-                                        child: Text(
-                                          'EP ${show.availableEpisodesSub}',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
                                   ],
                                 ),
                               ],
