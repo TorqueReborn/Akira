@@ -10,6 +10,7 @@ import '../services/anime_repository.dart';
 import '../widgets/anime_card.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/featured_anime_banner.dart';
+import '../../settings/screens/settings_screen.dart';
 import 'anime_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,6 +34,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _navigateToSettings() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => const SettingsScreen(),
+      ),
+    );
+    if (mounted) {
+      _fetchShows(page: 1);
+    }
   }
 
   List<AnimeShow> _shows = [];
@@ -196,14 +208,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void _selectCategory(int index) {
-    if (_selectedCategoryIndex == index) return;
-    setState(() {
-      _selectedCategoryIndex = index;
-    });
-    _fetchShows(page: 1, query: _searchController.text);
-  }
-
   void _toggleTranslationType(String type) {
     if (_translationType == type) return;
     setState(() {
@@ -212,63 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchShows(page: 1, query: _searchController.text);
   }
 
-  void _selectCountry(String code) {
-    if (_selectedCountry == code) return;
-    setState(() {
-      _selectedCountry = code;
-    });
-    _fetchShows(page: 1, query: _searchController.text);
-  }
 
-  Future<void> _handleLogout() async {
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Log Out',
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: const Text(
-          'Are you sure you want to log out from Akira?',
-          style: TextStyle(color: AppColors.textSecondary),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel',
-                style: TextStyle(color: AppColors.textSecondary)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12)),
-            ),
-            onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Log Out', style: TextStyle(color: Colors.white)),
-          ),
-        ],
-      ),
-    );
-
-    if (confirm != true) return;
-
-    final accessToken = TokenManager.getAccessToken();
-    await AuthRepository.logout(accessToken);
-    await TokenManager.clear();
-
-    if (!mounted) return;
-
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-      (route) => false,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -366,11 +314,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 const SizedBox(width: 8),
 
-                // Logout action button
+                // Settings action button
                 _buildCircularAction(
-                  icon: Icons.logout_rounded,
-                  onPressed: _handleLogout,
-                  tooltip: 'Log Out',
+                  icon: Icons.settings_rounded,
+                  onPressed: _navigateToSettings,
+                  tooltip: 'Settings',
                 ),
               ],
             ),
@@ -540,128 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildCategoryPills() {
-    return SizedBox(
-      height: 38,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 18),
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: _categories.length,
-        separatorBuilder: (_, _) => const SizedBox(width: 8),
-        itemBuilder: (context, index) {
-          final isSelected = _selectedCategoryIndex == index;
-          final cat = _categories[index];
-          return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => _selectCategory(index),
-              borderRadius: BorderRadius.circular(20),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                decoration: BoxDecoration(
-                  gradient: isSelected ? AppColors.logoGradient : null,
-                  color: isSelected ? null : Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isSelected
-                        ? Colors.transparent
-                        : const Color(0xFFE2E8F0),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    if (isSelected)
-                      BoxShadow(
-                        color: AppColors.primary.withAlpha(70),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
-                      )
-                    else
-                      BoxShadow(
-                        color: const Color(0xFF0F172A).withAlpha(8),
-                        blurRadius: 4,
-                        offset: const Offset(0, 1),
-                      ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  cat['label'] as String,
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : AppColors.textSecondary,
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
 
-  Widget _buildCountryFilterBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      child: Container(
-        height: 38,
-        padding: const EdgeInsets.all(3.5),
-        decoration: BoxDecoration(
-          color: const Color(0xFFF1EEF8),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: const Color(0xFFE2E8F0),
-            width: 1,
-          ),
-        ),
-        child: Row(
-          children: _countryOptions.map((item) {
-            final code = item['code']!;
-            final label = item['label']!;
-            final isSelected = _selectedCountry == code;
-
-            return Expanded(
-              child: GestureDetector(
-                onTap: () => _selectCountry(code),
-                behavior: HitTestBehavior.opaque,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 220),
-                  curve: Curves.easeInOut,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: isSelected ? Colors.white : Colors.transparent,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: AppColors.primary.withAlpha(35),
-                              blurRadius: 8,
-                              offset: const Offset(0, 2),
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      color: isSelected
-                          ? AppColors.primary
-                          : AppColors.textSecondary,
-                      fontSize: 12.5,
-                      fontWeight:
-                          isSelected ? FontWeight.w800 : FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
 
   Widget _buildBody() {
 
@@ -752,38 +579,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: _buildTopAppBar(),
               ),
 
-              // Hero Top 10 Featured Carousel (only when not searching)
-              if (!isSearching && _topRankedToday.isNotEmpty) ...[
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 6),
-                ),
-                SliverToBoxAdapter(
-                  child: FeaturedAnimeBanner(
-                    featuredShows: _topRankedToday,
-                    onTap: (anime) => _navigateToDetail(anime),
-                  ),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 18),
-                ),
-              ],
-
-              // Category Pills (only when not searching)
-              if (!isSearching) ...[
-                SliverToBoxAdapter(
-                  child: _buildCategoryPills(),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 10),
-                ),
-                // Origin country filter bar (JP, KR, CN, ALL)
-                SliverToBoxAdapter(
-                  child: _buildCountryFilterBar(),
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(height: 14),
-                ),
-              ],
+              const SliverToBoxAdapter(
+                child: SizedBox(height: 12),
+              ),
 
               // Section Header
               SliverToBoxAdapter(
@@ -819,16 +617,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      const Spacer(),
-                      if (!isSearching && _shows.isNotEmpty)
-                        Text(
-                          '${_shows.length} shows',
-                          style: const TextStyle(
-                            color: AppColors.textHint,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
                     ],
                   ),
                 ),

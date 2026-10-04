@@ -469,7 +469,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                   headers: ImageUtils.imageHeaders,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: const Color(0xFF1B162C),
+                    color: const Color(0xFFEDE8F5),
                   ),
                 )
               : Container(

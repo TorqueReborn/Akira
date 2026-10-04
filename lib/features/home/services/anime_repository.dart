@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../player/models/stream_source.dart';
 import '../../player/services/decryptor.dart';
 import '../../player/services/stream_parser.dart';
@@ -9,6 +11,39 @@ import '../models/anime_show.dart';
 
 class AnimeRepository {
   static const String baseUrl = 'https://api.mkissa.net/api';
+
+  // Global content filter preferences
+  static bool allowAdult = false;
+  static bool denyEcchi = false;
+  static bool allowUnknown = false;
+
+  static Future<void> loadContentPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    allowAdult = prefs.getBool('pref_allow_adult') ?? false;
+    denyEcchi = prefs.getBool('pref_deny_ecchi') ?? false;
+    allowUnknown = prefs.getBool('pref_allow_unknown') ?? false;
+  }
+
+  static Future<void> updateContentPreferences({
+    bool? newAllowAdult,
+    bool? newDenyEcchi,
+    bool? newAllowUnknown,
+  }) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (newAllowAdult != null) {
+      allowAdult = newAllowAdult;
+      await prefs.setBool('pref_allow_adult', newAllowAdult);
+    }
+    if (newDenyEcchi != null) {
+      denyEcchi = newDenyEcchi;
+      await prefs.setBool('pref_deny_ecchi', newDenyEcchi);
+    }
+    if (newAllowUnknown != null) {
+      allowUnknown = newAllowUnknown;
+      await prefs.setBool('pref_allow_unknown', newAllowUnknown);
+    }
+    clearCache();
+  }
 
   // SHA256 Hashes extracted from web client queries
   static const String browsePersistedQueryHash =
@@ -59,6 +94,9 @@ class AnimeRepository {
   }) async {
     final searchObj = <String, dynamic>{
       'listProfile': listProfile,
+      'allowAdult': allowAdult,
+      'allowUnknown': allowUnknown,
+      'denyEcchi': denyEcchi,
     };
 
     final queryTrimmed = searchQuery?.trim();
@@ -135,8 +173,8 @@ class AnimeRepository {
       'size': size,
       'dateRange': dateRange,
       'page': 1,
-      'allowAdult': false,
-      'allowUnknown': false,
+      'allowAdult': allowAdult,
+      'allowUnknown': allowUnknown,
     };
 
     final extensionsObj = <String, dynamic>{
@@ -188,9 +226,9 @@ class AnimeRepository {
     final variablesObj = <String, dynamic>{
       '_id': animeId,
       'search': {
-        'allowAdult': false,
-        'allowUnknown': false,
-        'denyEcchi': false,
+        'allowAdult': allowAdult,
+        'allowUnknown': allowUnknown,
+        'denyEcchi': denyEcchi,
         'lite': false,
         'forMe': false,
       },
@@ -246,8 +284,8 @@ class AnimeRepository {
   static Future<List<AnimeShow>> fetchCommunityPicks({int size = 15}) async {
     final variablesObj = <String, dynamic>{
       'size': size,
-      'allowAdult': false,
-      'denyEcchi': false,
+      'allowAdult': allowAdult,
+      'denyEcchi': denyEcchi,
     };
 
     final extensionsObj = <String, dynamic>{

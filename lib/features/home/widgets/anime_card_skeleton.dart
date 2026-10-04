@@ -41,8 +41,8 @@ class _AnimeCardSkeletonState extends State<AnimeCardSkeleton>
         return Container(
           decoration: BoxDecoration(
             color: Color.lerp(
-              const Color(0xFF161324),
-              const Color(0xFF28233D),
+              const Color(0xFFEDE8F5),
+              const Color(0xFFE2D9F3),
               _animation.value,
             ),
             borderRadius: BorderRadius.circular(18),
@@ -56,7 +56,7 @@ class _AnimeCardSkeletonState extends State<AnimeCardSkeleton>
           ),
           child: Stack(
             children: [
-              // Bottom gradient simulating title shadow
+              // Bottom subtle gradient matching light theme
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -71,7 +71,7 @@ class _AnimeCardSkeletonState extends State<AnimeCardSkeleton>
                       begin: Alignment.bottomCenter,
                       end: Alignment.topCenter,
                       colors: [
-                        Colors.black.withAlpha(180),
+                        AppColors.primary.withAlpha(20),
                         Colors.transparent,
                       ],
                     ),
@@ -91,7 +91,7 @@ class _AnimeCardSkeletonState extends State<AnimeCardSkeleton>
                       height: 10,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(50),
+                        color: AppColors.primary.withAlpha(40),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
@@ -100,7 +100,7 @@ class _AnimeCardSkeletonState extends State<AnimeCardSkeleton>
                       height: 8,
                       width: 60,
                       decoration: BoxDecoration(
-                        color: Colors.white.withAlpha(35),
+                        color: AppColors.primary.withAlpha(25),
                         borderRadius: BorderRadius.circular(4),
                       ),
                     ),

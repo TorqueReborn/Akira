@@ -87,7 +87,7 @@ class _FeaturedAnimeBannerState extends State<FeaturedAnimeBanner> {
                     borderRadius: BorderRadius.circular(22),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: const Color(0xFF13101E),
+                        color: const Color(0xFFEDE8F5),
                         borderRadius: BorderRadius.circular(22),
                         boxShadow: [
                           BoxShadow(
@@ -98,259 +98,30 @@ class _FeaturedAnimeBannerState extends State<FeaturedAnimeBanner> {
                         ],
                       ),
                       clipBehavior: Clip.antiAlias,
-                      child: Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          // Background Image
-                          if (bannerImage != null && bannerImage.isNotEmpty)
-                            Image.network(
+                      child: (bannerImage != null && bannerImage.isNotEmpty)
+                          ? Image.network(
                               bannerImage,
                               headers: ImageUtils.imageHeaders,
                               fit: BoxFit.cover,
                               cacheWidth: 720,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Container(color: const Color(0xFF1B1829)),
-                            )
-                          else
-                            Container(color: const Color(0xFF1B1829)),
-
-                          // Cinematic gradient overlays
-                          // Dark gradient from bottom to top
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                  colors: [
-                                    const Color(0xFF0F0C1B).withAlpha(240),
-                                    const Color(0xFF0F0C1B).withAlpha(150),
-                                    Colors.transparent,
-                                  ],
-                                  stops: const [0.0, 0.45, 0.85],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // Left side shade for text readability
-                          Positioned.fill(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
-                                  colors: [
-                                    const Color(0xFF0F0C1B).withAlpha(200),
-                                    Colors.transparent,
-                                  ],
-                                  stops: const [0.0, 0.7],
-                                ),
-                              ),
-                            ),
-                          ),
-
-                          // Top Badges (Rank / SPOTLIGHT & Score)
-                          Positioned(
-                            top: 14,
-                            left: 16,
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 10,
-                                vertical: 4,
-                              ),
-                              decoration: BoxDecoration(
-                                gradient: AppColors.logoGradient,
-                                borderRadius: BorderRadius.circular(20),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: AppColors.primary.withAlpha(90),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.local_fire_department_rounded,
-                                    color: Colors.white,
-                                    size: 14,
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '#${index + 1} TOP TRENDING',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: 0.8,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          if (show.score != null && show.score! > 0)
-                            Positioned(
-                              top: 14,
-                              right: 16,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withAlpha(180),
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: Colors.amber.withAlpha(160),
-                                    width: 1,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.star_rounded,
-                                      color: Colors.amber,
-                                      size: 14,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      show.score!.toStringAsFixed(1),
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                          // Bottom details
-                          Positioned(
-                            bottom: 16,
-                            left: 16,
-                            right: 16,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                if (show.type != null ||
-                                    show.seasonYear != null ||
-                                    show.views != null) ...[
-                                  Row(
+                              frameBuilder:
+                                  (context, child, frame, wasSynchronouslyLoaded) {
+                                if (wasSynchronouslyLoaded || frame != null) {
+                                  return Stack(
+                                    fit: StackFit.expand,
                                     children: [
-                                      if (show.type != null)
-                                        Text(
-                                          show.type!.toUpperCase(),
-                                          style: const TextStyle(
-                                            color: AppColors.primaryLight,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: 0.5,
-                                          ),
-                                        ),
-                                      if (show.seasonYear != null) ...[
-                                        const Text(
-                                          ' • ',
-                                          style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                        Text(
-                                          '${show.seasonQuarter ?? ''} ${show.seasonYear}'.trim(),
-                                          style: const TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
-                                      if (show.views != null) ...[
-                                        const Text(
-                                          ' • ',
-                                          style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 11,
-                                          ),
-                                        ),
-                                        const Icon(
-                                          Icons.visibility_rounded,
-                                          size: 12,
-                                          color: Colors.white60,
-                                        ),
-                                        const SizedBox(width: 3),
-                                        Text(
-                                          show.views!,
-                                          style: const TextStyle(
-                                            color: Colors.white70,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ],
+                                      child,
+                                      _buildDarkOverlaysAndContent(
+                                          show, index, title),
                                     ],
-                                  ),
-                                  const SizedBox(height: 4),
-                                ],
-                                Text(
-                                  title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.25,
-                                    letterSpacing: -0.2,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.primary,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: const Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            Icons.play_arrow_rounded,
-                                            color: Colors.white,
-                                            size: 16,
-                                          ),
-                                          SizedBox(width: 3),
-                                          Text(
-                                            'Watch Now',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                                  );
+                                }
+                                return _buildLoadingPlaceholder();
+                              },
+                              errorBuilder: (context, error, stackTrace) =>
+                                  _buildFallbackContent(show, title),
+                            )
+                          : _buildFallbackContent(show, title),
                     ),
                   ),
                 ),
@@ -382,6 +153,318 @@ class _FeaturedAnimeBannerState extends State<FeaturedAnimeBanner> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildLoadingPlaceholder() {
+    return Container(
+      color: const Color(0xFFEDE8F5),
+      child: const Center(
+        child: SizedBox(
+          width: 28,
+          height: 28,
+          child: CircularProgressIndicator(
+            strokeWidth: 2.5,
+            color: AppColors.primary,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDarkOverlaysAndContent(
+      AnimeShow show, int index, String title) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        // Cinematic gradient overlays (ONLY rendered on top of loaded image)
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  const Color(0xFF0F0C1B).withAlpha(240),
+                  const Color(0xFF0F0C1B).withAlpha(150),
+                  Colors.transparent,
+                ],
+                stops: const [0.0, 0.45, 0.85],
+              ),
+            ),
+          ),
+        ),
+
+        // Left side shade for text readability
+        Positioned.fill(
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  const Color(0xFF0F0C1B).withAlpha(200),
+                  Colors.transparent,
+                ],
+                stops: const [0.0, 0.7],
+              ),
+            ),
+          ),
+        ),
+
+        // Top Badges (Rank / SPOTLIGHT & Score)
+        Positioned(
+          top: 14,
+          left: 16,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 4,
+            ),
+            decoration: BoxDecoration(
+              gradient: AppColors.logoGradient,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withAlpha(90),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.local_fire_department_rounded,
+                  color: Colors.white,
+                  size: 14,
+                ),
+                const SizedBox(width: 4),
+                Text(
+                  '#${index + 1} TOP TRENDING',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 0.8,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        if (show.score != null && show.score! > 0)
+          Positioned(
+            top: 14,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 4,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.black.withAlpha(180),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: Colors.amber.withAlpha(160),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.star_rounded,
+                    color: Colors.amber,
+                    size: 14,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    show.score!.toStringAsFixed(1),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        // Bottom details
+        Positioned(
+          bottom: 16,
+          left: 16,
+          right: 16,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (show.type != null ||
+                  show.seasonYear != null ||
+                  show.views != null) ...[
+                Row(
+                  children: [
+                    if (show.type != null)
+                      Text(
+                        show.type!.toUpperCase(),
+                        style: const TextStyle(
+                          color: AppColors.primaryLight,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    if (show.seasonYear != null) ...[
+                      const Text(
+                        ' • ',
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: 11,
+                        ),
+                      ),
+                      Text(
+                        '${show.seasonQuarter ?? ''} ${show.seasonYear}'.trim(),
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                    if (show.views != null) ...[
+                      const Text(
+                        ' • ',
+                        style: TextStyle(
+                          color: Colors.white54,
+                          fontSize: 11,
+                        ),
+                      ),
+                      const Icon(
+                        Icons.visibility_rounded,
+                        size: 12,
+                        color: Colors.white60,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        show.views!,
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 4),
+              ],
+              Text(
+                title,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  height: 1.25,
+                  letterSpacing: -0.2,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.play_arrow_rounded,
+                          color: Colors.white,
+                          size: 16,
+                        ),
+                        SizedBox(width: 3),
+                        Text(
+                          'Watch Now',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFallbackContent(AnimeShow show, String title) {
+    return Container(
+      color: const Color(0xFFEDE8F5),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              color: AppColors.textPrimary,
+              fontSize: 18,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 6,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                SizedBox(width: 4),
+                Text(
+                  'Watch Now',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

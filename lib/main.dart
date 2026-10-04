@@ -5,6 +5,7 @@ import 'features/auth/screens/tv_login_screen.dart';
 import 'features/auth/services/token_manager.dart';
 import 'features/home/screens/home_screen.dart';
 import 'features/home/screens/tv_home_screen.dart';
+import 'features/home/services/anime_repository.dart';
 import 'theme/app_theme.dart';
 import 'utils/device_detector.dart';
 
@@ -13,6 +14,7 @@ Future<void> main() async {
   await Future.wait([
     TokenManager.init(),
     DeviceDetector.initialize(),
+    AnimeRepository.loadContentPreferences(),
   ]);
   runApp(const AkiraApp());
 }
