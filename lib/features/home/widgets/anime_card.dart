@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../utils/image_utils.dart';
 import '../models/anime_show.dart';
 
 class AnimeCard extends StatelessWidget {
@@ -39,6 +40,7 @@ class AnimeCard extends StatelessWidget {
               if (anime.thumbnail != null && anime.thumbnail!.isNotEmpty)
                 Image.network(
                   anime.thumbnail!,
+                  headers: ImageUtils.imageHeaders,
                   fit: BoxFit.cover,
                   cacheWidth: 320,
                   errorBuilder: (context, error, stackTrace) =>

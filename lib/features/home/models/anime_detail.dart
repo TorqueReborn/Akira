@@ -1,3 +1,5 @@
+import '../../../utils/image_utils.dart';
+
 class AnimeCharacter {
   final String? id;
   final String role;
@@ -24,7 +26,8 @@ class AnimeCharacter {
     final native = nameObj?['native']?.toString();
 
     final imgObj = json['image'] as Map<String, dynamic>?;
-    final imgUrl = imgObj?['large']?.toString() ?? imgObj?['medium']?.toString();
+    String? imgUrl = imgObj?['large']?.toString() ?? imgObj?['medium']?.toString();
+    imgUrl = ImageUtils.resolveUrl(imgUrl);
 
     final vaList = <String>[];
     final vas = json['voiceActors'] as List<dynamic>?;
@@ -167,8 +170,11 @@ class AnimeDetail {
         'Unknown';
     final englishName = json['englishName']?.toString();
     final nativeName = json['nativeName']?.toString();
-    final thumbnail = json['thumbnail']?.toString() ?? json['cover']?.toString();
-    final banner = json['banner']?.toString();
+    String? thumbnail = json['thumbnail']?.toString() ?? json['cover']?.toString();
+    thumbnail = ImageUtils.resolveUrl(thumbnail);
+
+    String? banner = json['banner']?.toString();
+    banner = ImageUtils.resolveUrl(banner);
     final description = cleanDescription(json['description']?.toString());
     final type = json['type']?.toString();
     final status = json['status']?.toString();

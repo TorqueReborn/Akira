@@ -31,32 +31,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showError(String message) {
+    final cleanMessage = message.trim().isEmpty
+        ? 'Invalid Credentials'
+        : message.trim();
+
     setState(() {
-      _errorMessage = message;
+      _errorMessage = cleanMessage;
       _isLoading = false;
     });
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                message,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: Colors.redAccent.shade700,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.all(16),
-        duration: const Duration(seconds: 4),
-      ),
-    );
   }
 
   void _handleLoginClicked() {
@@ -215,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                       ),
 
-                      if (_errorMessage != null) ...[
+                      if (_errorMessage != null && _errorMessage!.trim().isNotEmpty) ...[
                         const SizedBox(height: 16),
                         Container(
                           padding: const EdgeInsets.symmetric(

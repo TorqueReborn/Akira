@@ -187,8 +187,7 @@ mutation {
 
     final authenticate = data['authenticate'] as Map<String, dynamic>?;
     if (authenticate == null) {
-      throw Exception(
-          'Authentication failed. Invalid credentials or expired token.');
+      throw Exception('Invalid Credentials');
     }
 
     final sessionId = authenticate['sessionId']?.toString() ?? '';

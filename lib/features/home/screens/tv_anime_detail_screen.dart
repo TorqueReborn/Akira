@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../theme/app_colors.dart';
+import '../../../utils/image_utils.dart';
 import '../../auth/services/token_manager.dart';
 import '../../player/screens/tv_player_screen.dart';
 import '../../player/services/watch_history_manager.dart';
@@ -272,6 +273,7 @@ class _TvAnimeDetailScreenState extends State<TvAnimeDetailScreen> {
           Positioned.fill(
             child: Image.network(
               bannerImage,
+              headers: ImageUtils.imageHeaders,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
             ),
@@ -495,6 +497,7 @@ class _TvAnimeDetailScreenState extends State<TvAnimeDetailScreen> {
                         if (posterImage != null && posterImage.isNotEmpty)
                           Image.network(
                             posterImage,
+                            headers: ImageUtils.imageHeaders,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) => const Center(
                               child: Icon(Icons.movie_filter_rounded, color: Color(0xFF94A3B8), size: 52),
@@ -1068,88 +1071,7 @@ class _TvAnimeDetailScreenState extends State<TvAnimeDetailScreen> {
     );
   }
 
-  Widget _buildTvSecondaryButton({
-    required FocusNode focusNode,
-    required IconData icon,
-    required String label,
-    required VoidCallback onPressed,
-  }) {
-    return FocusableActionDetector(
-      focusNode: focusNode,
-      onShowFocusHighlight: (_) => setState(() {}),
-      actions: <Type, Action<Intent>>{
-        ActivateIntent: CallbackAction<ActivateIntent>(
-          onInvoke: (intent) {
-            onPressed();
-            return null;
-          },
-        ),
-      },
-      child: Builder(
-        builder: (context) {
-          final isFocused = Focus.of(context).hasFocus;
 
-          return AnimatedScale(
-            scale: isFocused ? 1.06 : 1.0,
-            duration: const Duration(milliseconds: 160),
-            child: Container(
-              width: 230,
-              height: 48,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: isFocused ? const Color(0xFFF3E8FF) : Colors.white,
-                border: Border.all(
-                  color: isFocused ? const Color(0xFF7C3AED) : const Color(0xFFE2E8F0),
-                  width: isFocused ? 2.5 : 1.0,
-                ),
-                boxShadow: [
-                  if (isFocused)
-                    BoxShadow(
-                      color: AppColors.primary.withAlpha(80),
-                      blurRadius: 16,
-                      offset: const Offset(0, 4),
-                    )
-                  else
-                    BoxShadow(
-                      color: const Color(0xFF0F172A).withAlpha(10),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                ],
-              ),
-              child: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  onTap: onPressed,
-                  borderRadius: BorderRadius.circular(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        icon,
-                        color: isFocused ? const Color(0xFF6D28D9) : const Color(0xFF1E1B2E),
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        label,
-                        style: TextStyle(
-                          color: isFocused ? const Color(0xFF6D28D9) : const Color(0xFF1E1B2E),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 0.3,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
 
   Widget _buildTvEpisodesHeader(AnimeDetail detail) {
     final availableTabs = _getAvailableTabs();
@@ -1474,6 +1396,7 @@ class _TvAnimeDetailScreenState extends State<TvAnimeDetailScreen> {
                   child: char.imageUrl != null && char.imageUrl!.isNotEmpty
                       ? Image.network(
                           char.imageUrl!,
+                          headers: ImageUtils.imageHeaders,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => const Icon(Icons.person, color: Color(0xFF94A3B8)),
                         )

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../theme/app_colors.dart';
+import '../../../utils/image_utils.dart';
 import '../models/anime_show.dart';
 
 /// TV Optimized Non-Rounded Unified Top Hero Section covering the full screen,
@@ -551,6 +552,7 @@ class _TvFeaturedBannerState extends State<TvFeaturedBanner> {
                       if (artwork != null && artwork.isNotEmpty)
                         Image.network(
                           artwork,
+                          headers: ImageUtils.imageHeaders,
                           fit: BoxFit.cover,
                           cacheWidth: 1080,
                           errorBuilder: (context, error, stackTrace) =>

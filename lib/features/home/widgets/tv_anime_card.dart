@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../utils/image_utils.dart';
 import '../models/anime_show.dart';
 
 /// TV Optimized Anime Card with focus glow, scale elevation, D-Pad select handling, and TV 10-foot legibility.
@@ -175,6 +176,7 @@ class _TvAnimeCardState extends State<TvAnimeCard> {
                       if (widget.anime.thumbnail != null && widget.anime.thumbnail!.isNotEmpty)
                         Image.network(
                           widget.anime.thumbnail!,
+                          headers: ImageUtils.imageHeaders,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) => _buildFallbackCover(),
                         )

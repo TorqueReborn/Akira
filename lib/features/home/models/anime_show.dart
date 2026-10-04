@@ -1,3 +1,5 @@
+import '../../../utils/image_utils.dart';
+
 class AnimeShow {
   final String id;
   final String name;
@@ -41,11 +43,11 @@ class AnimeShow {
     
     // Resolve thumbnail: check thumbnail, or fallback to cover
     String? thumb = json['thumbnail']?.toString() ?? json['cover']?.toString();
-    if (thumb != null && thumb.trim().isEmpty) thumb = null;
+    thumb = ImageUtils.resolveUrl(thumb);
 
     // Resolve banner if available in response
     String? banner = json['banner']?.toString() ?? json['bannerImage']?.toString() ?? json['bannerUrl']?.toString();
-    if (banner != null && banner.trim().isEmpty) banner = null;
+    banner = ImageUtils.resolveUrl(banner);
 
     final type = json['type']?.toString() ?? json['format']?.toString();
 
@@ -112,8 +114,11 @@ class AnimeShow {
     final name = anyCard['name']?.toString() ?? anyCard['title']?.toString() ?? 'Unknown';
     final englishName = anyCard['englishName']?.toString();
     final nativeName = anyCard['nativeName']?.toString();
-    final thumbnail = anyCard['thumbnail']?.toString() ?? anyCard['cover']?.toString();
-    final banner = anyCard['banner']?.toString() ?? anyCard['bannerImage']?.toString() ?? anyCard['bannerUrl']?.toString();
+    String? thumbnail = anyCard['thumbnail']?.toString() ?? anyCard['cover']?.toString();
+    thumbnail = ImageUtils.resolveUrl(thumbnail);
+
+    String? banner = anyCard['banner']?.toString() ?? anyCard['bannerImage']?.toString() ?? anyCard['bannerUrl']?.toString();
+    banner = ImageUtils.resolveUrl(banner);
 
     final score = (anyCard['score'] as num?)?.toDouble();
 
@@ -138,8 +143,8 @@ class AnimeShow {
       nativeName: (nativeName != null && nativeName.trim().isNotEmpty)
           ? nativeName
           : null,
-      thumbnail: thumbnail != null && thumbnail.trim().isNotEmpty ? thumbnail : null,
-      banner: banner != null && banner.trim().isNotEmpty ? banner : null,
+      thumbnail: thumbnail,
+      banner: banner,
       type: 'TV',
       seasonQuarter: null,
       seasonYear: seasonYear != null && seasonYear > 0 ? seasonYear : null,

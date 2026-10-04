@@ -571,43 +571,46 @@ class _TvPlayerScreenState extends State<TvPlayerScreen> {
                 // 4. Center Seek Feedback Toast OSD (+10s / -10s)
                 if (_seekFeedbackSeconds != null)
                   Center(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withAlpha(210),
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(
-                          color: AppColors.primary.withAlpha(160),
-                          width: 1.5,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withAlpha(100),
-                            blurRadius: 20,
+                    child: Transform.translate(
+                      offset: const Offset(0, -85),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withAlpha(210),
+                          borderRadius: BorderRadius.circular(30),
+                          border: Border.all(
+                            color: AppColors.primary.withAlpha(160),
+                            width: 1.5,
                           ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            _seekFeedbackSeconds! > 0
-                                ? Icons.fast_forward_rounded
-                                : Icons.fast_rewind_rounded,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${_seekFeedbackSeconds! > 0 ? '+' : ''}${_seekFeedbackSeconds!}s',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 0.5,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withAlpha(100),
+                              blurRadius: 20,
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              _seekFeedbackSeconds! > 0
+                                  ? Icons.fast_forward_rounded
+                                  : Icons.fast_rewind_rounded,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${_seekFeedbackSeconds! > 0 ? '+' : ''}${_seekFeedbackSeconds!}s',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -781,76 +784,34 @@ class _TvPlayerScreenState extends State<TvPlayerScreen> {
                           ),
                         ),
 
-                        // Center Play / Pause Focusable Action Button
+                        // Center Play / Pause Action Button
                         if (isInitialized)
                           Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Rewind -10s Button
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => _seekRelative(-10),
-                                    borderRadius: BorderRadius.circular(30),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black.withAlpha(120),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                onTap: _togglePlayPause,
+                                borderRadius: BorderRadius.circular(40),
+                                child: Container(
+                                  width: 68,
+                                  height: 68,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: AppColors.logoGradient,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primary.withAlpha(160),
+                                        blurRadius: 20,
                                       ),
-                                      child: const Icon(Icons.replay_10_rounded, color: Colors.white, size: 36),
-                                    ),
+                                    ],
+                                  ),
+                                  child: Icon(
+                                    isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                                    color: Colors.white,
+                                    size: 40,
                                   ),
                                 ),
-                                const SizedBox(width: 24),
-
-                                // Play / Pause Button
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: _togglePlayPause,
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: Container(
-                                      width: 68,
-                                      height: 68,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        gradient: AppColors.logoGradient,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: AppColors.primary.withAlpha(160),
-                                            blurRadius: 20,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Icon(
-                                        isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 24),
-
-                                // Forward +10s Button
-                                Material(
-                                  color: Colors.transparent,
-                                  child: InkWell(
-                                    onTap: () => _seekRelative(10),
-                                    borderRadius: BorderRadius.circular(30),
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.black.withAlpha(120),
-                                      ),
-                                      child: const Icon(Icons.forward_10_rounded, color: Colors.white, size: 36),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
                           ),
 

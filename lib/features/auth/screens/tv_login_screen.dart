@@ -59,7 +59,7 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
     _errorDismissTimer?.cancel();
 
     final cleanMessage = message.trim().isEmpty
-        ? 'Authentication failed. Please check your credentials or retry.'
+        ? 'Invalid Credentials'
         : message.trim();
 
     setState(() {
@@ -388,7 +388,7 @@ class _TvLoginScreenState extends State<TvLoginScreen> {
                                       AnimatedSize(
                                         duration: const Duration(milliseconds: 200),
                                         curve: Curves.easeInOut,
-                                        child: _errorMessage != null
+                                        child: (_errorMessage != null && _errorMessage!.trim().isNotEmpty)
                                             ? Padding(
                                                 padding: const EdgeInsets.only(top: 12),
                                                 child: Container(

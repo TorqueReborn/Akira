@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../utils/image_utils.dart';
 import '../models/anime_show.dart';
 
 class FeaturedAnimeBanner extends StatefulWidget {
@@ -104,6 +105,7 @@ class _FeaturedAnimeBannerState extends State<FeaturedAnimeBanner> {
                           if (bannerImage != null && bannerImage.isNotEmpty)
                             Image.network(
                               bannerImage,
+                              headers: ImageUtils.imageHeaders,
                               fit: BoxFit.cover,
                               cacheWidth: 720,
                               errorBuilder: (context, error, stackTrace) =>

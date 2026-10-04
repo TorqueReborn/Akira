@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../../../theme/app_colors.dart';
+import '../../../../utils/image_utils.dart';
 import '../../auth/services/token_manager.dart';
 import '../../player/screens/player_screen.dart';
 import '../../player/services/watch_history_manager.dart';
@@ -263,7 +264,8 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
               fit: StackFit.expand,
               children: [
                 Image.network(
-                  widget.initialPoster!,
+                  ImageUtils.resolveUrl(widget.initialPoster)!,
+                  headers: ImageUtils.imageHeaders,
                   fit: BoxFit.cover,
                 ),
                 Container(
@@ -464,6 +466,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
           child: bannerImage != null && bannerImage.isNotEmpty
               ? Image.network(
                   bannerImage,
+                  headers: ImageUtils.imageHeaders,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
                     color: const Color(0xFF1B162C),
@@ -550,6 +553,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                     if (posterImage != null && posterImage.isNotEmpty)
                       Image.network(
                         posterImage,
+                        headers: ImageUtils.imageHeaders,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) =>
                             const Center(
@@ -1475,11 +1479,11 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                           ),
                         ],
                       ),
-                      clipBehavior: Clip.antiAlias,
                       child: character.imageUrl != null &&
                               character.imageUrl!.isNotEmpty
                           ? Image.network(
                               character.imageUrl!,
+                              headers: ImageUtils.imageHeaders,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
                                   const Center(
