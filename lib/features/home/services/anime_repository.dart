@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../player/models/stream_source.dart';
 import '../../player/services/decryptor.dart';
 import '../../player/services/stream_parser.dart';
+import '../../../core/config/mkissa_config_provider.dart';
 import '../models/anime_detail.dart';
 import '../models/anime_show.dart';
 
@@ -67,12 +68,12 @@ class AnimeRepository {
 
   static Map<String, String> get _headers => {
         'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36 Edg/153.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0',
         'Accept': '*/*',
         'Accept-Language': 'en-US,en;q=0.9',
         'Referer': 'https://mkissa.to/',
         'Origin': 'https://mkissa.to',
-        'x-build-id': '176',
+        'x-build-id': MkissaConfigProvider.currentBuildId,
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'cross-site',
@@ -226,9 +227,9 @@ class AnimeRepository {
     final variablesObj = <String, dynamic>{
       '_id': animeId,
       'search': {
-        'allowAdult': allowAdult,
-        'allowUnknown': allowUnknown,
-        'denyEcchi': denyEcchi,
+        'allowAdult': true,
+        'allowUnknown': true,
+        'denyEcchi': false,
         'lite': false,
         'forMe': false,
       },
@@ -272,12 +273,18 @@ class AnimeRepository {
         data?['anime'] as Map<String, dynamic>?;
 
     if (showMap == null) {
+      developer.log('Anime details response missing "show" key for animeId: $animeId. Body: ${response.body}');
       throw Exception('Anime details not found.');
     }
 
-    final detail = AnimeDetail.fromJson(showMap);
-    _detailCache[animeId] = detail;
-    return detail;
+    try {
+      final detail = AnimeDetail.fromJson(showMap);
+      _detailCache[animeId] = detail;
+      return detail;
+    } catch (e, stack) {
+      developer.log('Failed to parse AnimeDetail: $e', error: e, stackTrace: stack);
+      throw Exception('Failed to parse anime details: $e');
+    }
   }
 
   /// Fetches community recommended rail (top voted picks)
@@ -368,14 +375,18 @@ class AnimeRepository {
   /// Fetches raw episode payload and authoritative CryptoBootstrap
   static Future<Map<String, dynamic>> fetchEpisodeData({
     required String showId,
-    required String translationType,
+    String translationType = 'sub',
     required String episodeString,
     String? authToken,
-    String k = Decryptor.defaultLane,
+    String? k,
     String? aaReq,
+    http.Client? client,
   }) async {
     assert(showId.isNotEmpty, 'Show ID cannot be empty.');
     assert(episodeString.isNotEmpty, 'Episode string cannot be empty.');
+
+    final effectiveLane = k ?? Decryptor.defaultLane;
+    final httpClient = client ?? _client;
 
     Future<String> executeEpisodeQuery(CryptoBootstrap bootstrap, [String? explicitAaReq]) async {
       final effectiveAaReq = explicitAaReq ??
@@ -397,7 +408,7 @@ class AnimeRepository {
           'version': 1,
           'sha256Hash': episodePersistedQueryHash,
         },
-        'k': k,
+        'k': effectiveLane,
         'aaReq': effectiveAaReq,
       };
 
@@ -411,9 +422,9 @@ class AnimeRepository {
             authToken.startsWith('Bearer ') ? authToken : 'Bearer $authToken';
       }
 
-      developer.log('[AnimeRepository] Requesting episode: showId=$showId, ep=$episodeString, type=$translationType, buildId=${Decryptor.defaultBuildId}, lane=$k, epoch=${bootstrap.epoch}, qh=$episodePersistedQueryHash', name: 'AnimeRepository');
+      developer.log('[AnimeRepository] Requesting episode: showId=$showId, ep=$episodeString, type=$translationType, buildId=${Decryptor.defaultBuildId}, lane=$effectiveLane, epoch=${bootstrap.epoch}, qh=$episodePersistedQueryHash', name: 'AnimeRepository');
 
-      final response = await _client
+      final response = await httpClient
           .get(Uri.parse(fullUrl), headers: headers)
           .timeout(const Duration(seconds: 15));
 
@@ -424,10 +435,18 @@ class AnimeRepository {
     }
 
     // Step 1: Obtain authoritative bootstrap
-    var bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken);
+    var bootstrap = await Decryptor.getBootstrap(lane: effectiveLane, authToken: authToken, httpClient: httpClient);
     var responseStr = await executeEpisodeQuery(bootstrap);
 
-    // Step 2: Handle AA_CRYPTO errors robustly
+    // Step 2: Handle Unknown build id and AA_CRYPTO errors robustly
+    bool checkBuildIdError(String resp) {
+      final upper = resp.toUpperCase();
+      return upper.contains('UNKNOWN BUILD ID') ||
+          upper.contains('UNKNOWN_BUILD_ID') ||
+          upper.contains('AA_CRYPTO_MISSING_BUILD') ||
+          upper.contains('AA_CRYPTO_BUILD_MISMATCH');
+    }
+
     bool checkCryptoError(String resp) {
       final upper = resp.toUpperCase();
       return upper.contains('AA_CRYPTO_STALE') ||
@@ -442,13 +461,48 @@ class AnimeRepository {
           upper.contains('AACRYPTO_EXPIRED');
     }
 
+    // Step 2a: If server specifically reports Unknown build id, invalidate configuration & retry once
+    if (checkBuildIdError(responseStr)) {
+      developer.log(
+        '[AnimeRepository] Unknown build id error encountered. Invalidating config and attempting recovery...',
+        name: 'AnimeRepository',
+      );
+      await MkissaConfigProvider.invalidate();
+      Decryptor.invalidateBootstrapCache();
+
+      try {
+        final refreshedConfig = await MkissaConfigProvider.getConfig(forceRefresh: true);
+        bootstrap = await Decryptor.getBootstrap(
+          lane: effectiveLane,
+          authToken: authToken,
+          forceRefresh: true,
+          config: refreshedConfig,
+          httpClient: httpClient,
+        );
+        final freshAaReq = Decryptor.generateAaReq(
+          queryHash: episodePersistedQueryHash,
+          bootstrap: bootstrap,
+          buildId: refreshedConfig.buildId,
+          config: refreshedConfig,
+        );
+        responseStr = await executeEpisodeQuery(bootstrap, freshAaReq);
+      } catch (e) {
+        developer.log('[AnimeRepository] Build ID recovery retry failed: $e', name: 'AnimeRepository');
+      }
+
+      if (checkBuildIdError(responseStr)) {
+        throw Exception('Mkissa API rejected build ID after refresh retry: $responseStr');
+      }
+    }
+
+    // Step 2b: Handle other AA_CRYPTO errors
     if (checkCryptoError(responseStr)) {
       developer.log('[AnimeRepository] AA_CRYPTO error in episode response. Invalidating bootstrap cache and retrying with fresh bootstrap...', name: 'AnimeRepository');
       Decryptor.invalidateBootstrapCache();
       
       // Try with forceRefresh
       try {
-        bootstrap = await Decryptor.getBootstrap(lane: k, authToken: authToken, forceRefresh: true);
+        bootstrap = await Decryptor.getBootstrap(lane: effectiveLane, authToken: authToken, forceRefresh: true, httpClient: httpClient);
         final freshAaReq = Decryptor.generateAaReq(
           queryHash: episodePersistedQueryHash,
           bootstrap: bootstrap,
@@ -473,10 +527,10 @@ class AnimeRepository {
           try {
             final xAaBoot = Decryptor.generateXAaBoot(
               buildId: Decryptor.defaultBuildId,
-              lane: k,
+              lane: effectiveLane,
               epoch: ep,
             );
-            final url = Uri.parse('${Decryptor.bootstrapUrl}?buildId=${Decryptor.defaultBuildId}&k=$k');
+            final url = Uri.parse('${Decryptor.bootstrapUrl}?buildId=${Decryptor.defaultBuildId}&k=$effectiveLane');
             final headers = <String, String>{
               'Origin': 'https://mkissa.to',
               'Referer': 'https://mkissa.to/',
@@ -486,10 +540,10 @@ class AnimeRepository {
             if (authToken != null && authToken.trim().isNotEmpty) {
               headers['Authorization'] = authToken.startsWith('Bearer ') ? authToken : 'Bearer $authToken';
             }
-            final bResp = await http.get(url, headers: headers).timeout(const Duration(seconds: 8));
+            final bResp = await httpClient.get(url, headers: headers).timeout(const Duration(seconds: 8));
             if (bResp.statusCode == 200) {
               final jsonMap = jsonDecode(bResp.body) as Map<String, dynamic>;
-              final freshBoot = CryptoBootstrap.fromJson(jsonMap, defaultLane: k, currentTimeMs: now);
+              final freshBoot = CryptoBootstrap.fromJson(jsonMap, defaultLane: effectiveLane, currentTimeMs: now);
               final freshAaReq = Decryptor.generateAaReq(
                 queryHash: episodePersistedQueryHash,
                 bootstrap: freshBoot,

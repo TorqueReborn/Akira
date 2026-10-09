@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:akira/core/config/mkissa_config_provider.dart';
 import 'package:akira/features/player/services/decryptor.dart';
 
 void main() {
@@ -12,6 +13,7 @@ void main() {
         lane: 'k7',
         epoch: 2960,
         refererHost: 'mkissa.to',
+        config: MkissaClientConfig.build176(),
       );
 
       expect(xAaBoot, equals('edb170a6f277c38625d98b76b93d09bffe7c44387c385add49c00aaf0a473291'));

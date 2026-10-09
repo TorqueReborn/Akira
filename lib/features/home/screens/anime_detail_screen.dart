@@ -403,7 +403,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Quick Info Badges (Type, Season, Episodes, Rating)
+                // Quick Info Badges (Type, Season, Episodes, Rating, Broadcast)
                 _buildQuickInfoRow(detail),
                 const SizedBox(height: 16),
 
@@ -415,9 +415,19 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                 _buildPrimaryActionButton(detail),
                 const SizedBox(height: 22),
 
+                // Community Engagement Bar (Views, Likes, Comments, Rankings)
+                _buildCommunityStatsBar(detail.communityStats),
+                const SizedBox(height: 22),
+
                 // Genre Tags
                 if (detail.genres.isNotEmpty) ...[
                   _buildGenreTags(detail.genres),
+                  const SizedBox(height: 20),
+                ],
+
+                // Themes & Tropes Tags (from tags/tagMeta)
+                if (detail.tags.isNotEmpty) ...[
+                  _buildThemeTags(detail.tags),
                   const SizedBox(height: 22),
                 ],
 
@@ -427,7 +437,7 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                   const SizedBox(height: 24),
                 ],
 
-                // Information Grid (Studio, Format, Status, Country, Duration)
+                // Information Grid (Studio, Aired Start, Format, Status, Country, Duration, Frequency)
                 _buildInfoGrid(detail),
                 const SizedBox(height: 24),
 
@@ -440,6 +450,24 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                 // Characters & Voice Cast rail
                 if (detail.characters.isNotEmpty) ...[
                   _buildCharactersSection(detail.characters),
+                  const SizedBox(height: 24),
+                ],
+
+                // Theme Songs / Musics (OP & ED)
+                if (detail.musics.isNotEmpty) ...[
+                  _buildMusicSection(detail.musics),
+                  const SizedBox(height: 24),
+                ],
+
+                // Related Works & Adaptations (Manga, Sequels, Shows)
+                if (detail.relatedShows.isNotEmpty || detail.relatedMangas.isNotEmpty) ...[
+                  _buildRelatedSection(detail),
+                  const SizedBox(height: 24),
+                ],
+
+                // External Database Links (MAL, AniList)
+                if (detail.malId != null || detail.aniListId != null) ...[
+                  _buildExternalLinksSection(detail),
                   const SizedBox(height: 16),
                 ],
               ],
@@ -809,6 +837,14 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
               icon: Icons.calendar_month_rounded,
               text: seasonStr,
               color: const Color(0xFF8B5CF6),
+            ),
+          ],
+          if (detail.broadcastIntervalDays != null) ...[
+            const SizedBox(width: 8),
+            _buildBadgePill(
+              icon: Icons.autorenew_rounded,
+              text: detail.broadcastIntervalDays!,
+              color: const Color(0xFF06B6D4),
             ),
           ],
           if (detail.rating != null && detail.rating!.isNotEmpty) ...[
@@ -1284,6 +1320,10 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
     final items = <Map<String, String>>[
       if (detail.studios.isNotEmpty)
         {'label': 'Studios', 'value': detail.studios.join(', ')},
+      if (detail.airedStartFormatted != null)
+        {'label': 'Aired', 'value': detail.airedStartFormatted!},
+      if (detail.broadcastIntervalDays != null)
+        {'label': 'Broadcast', 'value': detail.broadcastIntervalDays!},
       if (detail.countryOfOrigin != null)
         {'label': 'Origin', 'value': detail.countryOfOrigin!},
       if (detail.type != null)
@@ -1292,6 +1332,8 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
         {'label': 'Status', 'value': detail.status!},
       if (detail.episodeCount != null)
         {'label': 'Episodes', 'value': detail.episodeCount.toString()},
+      if (detail.episodeDurationMinutes != null)
+        {'label': 'Duration', 'value': '${detail.episodeDurationMinutes} mins'},
       if (detail.views != null && detail.views!.isNotEmpty)
         {'label': 'Views', 'value': detail.views!},
     ];
@@ -1536,6 +1578,431 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildCommunityStatsBar(AnimeCommunityStats stats) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: const Color(0xFFEDE8F5),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF0F172A).withAlpha(8),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildStatItem(
+            icon: Icons.remove_red_eye_outlined,
+            value: stats.views,
+            label: 'Views',
+            color: const Color(0xFF3B82F6),
+          ),
+          _buildStatDivider(),
+          _buildStatItem(
+            icon: Icons.thumb_up_alt_outlined,
+            value: stats.likes,
+            label: 'Likes',
+            color: const Color(0xFF10B981),
+          ),
+          _buildStatDivider(),
+          _buildStatItem(
+            icon: Icons.chat_bubble_outline_rounded,
+            value: stats.comments,
+            label: 'Comments',
+            color: const Color(0xFF8B5CF6),
+          ),
+          if (stats.bookmarkRank != null) ...[
+            _buildStatDivider(),
+            _buildStatItem(
+              icon: Icons.bookmark_added_outlined,
+              value: '#${stats.bookmarkRank}',
+              label: 'Saved Rank',
+              color: const Color(0xFFEC4899),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatDivider() {
+    return Container(
+      height: 24,
+      width: 1,
+      color: const Color(0xFFE2E8F0),
+    );
+  }
+
+  Widget _buildStatItem({
+    required IconData icon,
+    required String value,
+    required String label,
+    required Color color,
+  }) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, size: 14, color: color),
+            const SizedBox(width: 4),
+            Text(
+              value,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 13,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 2),
+        Text(
+          label,
+          style: const TextStyle(
+            color: AppColors.textHint,
+            fontSize: 10.5,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildThemeTags(List<String> tags) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Themes & Tropes',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: tags.map((tag) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withAlpha(12),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: AppColors.primary.withAlpha(40),
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.tag_rounded,
+                    size: 13,
+                    color: AppColors.primary,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    tag,
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMusicSection(List<AnimeMusic> musics) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Theme Songs',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(14),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: const Color(0xFFE2E8F0),
+              width: 1,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF0F172A).withAlpha(8),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: musics.asMap().entries.map((entry) {
+              final idx = entry.key;
+              final music = entry.value;
+              final isLast = idx == musics.length - 1;
+              final isOpening = music.type.toLowerCase().contains('opening') || music.type.toLowerCase() == 'op';
+
+              return Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: (isOpening ? const Color(0xFF8B5CF6) : const Color(0xFF10B981)).withAlpha(20),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          music.type.toUpperCase(),
+                          style: TextStyle(
+                            color: isOpening ? const Color(0xFF8B5CF6) : const Color(0xFF10B981),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          music.title,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.music_note_rounded,
+                        size: 16,
+                        color: AppColors.textHint,
+                      ),
+                    ],
+                  ),
+                  if (!isLast) ...[
+                    const SizedBox(height: 10),
+                    const Divider(height: 1, color: Color(0xFFF1F5F9)),
+                    const SizedBox(height: 10),
+                  ],
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRelatedSection(AnimeDetail detail) {
+    final relatedItems = <Map<String, String>>[
+      for (final s in detail.relatedShows)
+        if (s.showId != null && s.showId != detail.id)
+          {'type': 'Anime', 'relation': s.relation, 'id': s.showId!},
+      for (final m in detail.relatedMangas)
+        if (m.mangaId != null)
+          {'type': 'Manga', 'relation': m.relation, 'id': m.mangaId!},
+    ];
+
+    if (relatedItems.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Related & Source Material',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: relatedItems.map((item) {
+            final isManga = item['type'] == 'Manga';
+            final isShow = item['type'] == 'Anime';
+
+            return InkWell(
+              onTap: isShow
+                  ? () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => AnimeDetailScreen(
+                            animeId: item['id']!,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
+              borderRadius: BorderRadius.circular(12),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: const Color(0xFFE2E8F0),
+                    width: 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xFF0F172A).withAlpha(6),
+                      blurRadius: 4,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      isManga ? Icons.menu_book_rounded : Icons.tv_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${item['relation']?.toUpperCase()} (${item['type']})',
+                      style: const TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    if (isShow) ...[
+                      const SizedBox(width: 4),
+                      const Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 11,
+                        color: AppColors.textHint,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExternalLinksSection(AnimeDetail detail) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'External Databases',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            letterSpacing: -0.2,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            if (detail.malId != null) ...[
+              _buildExternalDbBadge(
+                label: 'MyAnimeList',
+                idText: '#${detail.malId}',
+                icon: Icons.open_in_new_rounded,
+                color: const Color(0xFF2E51A2), // MAL Navy Blue
+              ),
+              const SizedBox(width: 10),
+            ],
+            if (detail.aniListId != null) ...[
+              _buildExternalDbBadge(
+                label: 'AniList',
+                idText: '#${detail.aniListId}',
+                icon: Icons.open_in_new_rounded,
+                color: const Color(0xFF02A9FF), // AniList Sky Blue
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExternalDbBadge({
+    required String label,
+    required String idText,
+    required IconData icon,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withAlpha(18),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: color.withAlpha(50),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 14, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Text(
+            idText,
+            style: TextStyle(
+              color: color.withAlpha(190),
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

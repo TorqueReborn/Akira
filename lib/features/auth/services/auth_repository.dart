@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import '../../../core/config/mkissa_config_provider.dart';
 import '../models/auth_result.dart';
 
 class AuthRepository {
@@ -96,7 +97,7 @@ mutation {
       'Accept-Language': 'en-US,en;q=0.9',
       'Origin': 'https://youtu-chan.com',
       'Referer': 'https://youtu-chan.com/',
-      'x-build-id': '168',
+      'x-build-id': MkissaConfigProvider.currentBuildId,
       'Host': 'api.mkissa.net',
       'Sec-Fetch-Dest': 'empty',
       'Sec-Fetch-Mode': 'cors',
@@ -128,7 +129,7 @@ mutation {
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0',
         'Origin': 'https://youtu-chan.com',
         'Referer': 'https://youtu-chan.com/',
-        'x-build-id': '168',
+        'x-build-id': MkissaConfigProvider.currentBuildId,
         'Host': 'api.mkissa.net',
       };
 

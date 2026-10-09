@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'core/config/mkissa_config_provider.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/auth/screens/tv_login_screen.dart';
 import 'features/auth/services/token_manager.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
     TokenManager.init(),
     DeviceDetector.initialize(),
     AnimeRepository.loadContentPreferences(),
+    MkissaConfigProvider.getConfig(),
   ]);
   runApp(const AkiraApp());
 }
